@@ -54,7 +54,7 @@ regex.fun <- function(input_data){
                             reg_length <- length(regex_list)
                             
                             #And now we loop.
-                            for(i in (1:reg_length){
+                            for(i in (1:reg_length)){
                               
                               #Run regexes
                               grepvec <- grepl(pattern = regex_list[i],
