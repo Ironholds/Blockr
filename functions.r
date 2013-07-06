@@ -66,7 +66,7 @@ regex.fun <- function(input_data){
                               ignore.case = TRUE)
                               
                               #Number of rows that match
-                              to_return.vec[i] <- length(grepvec[TRUE])
+                              to_return.vec[i] <- sum(grepvec)
                               
                               #Non-matches
                               to_run.df <- to_run.df[!grepvec,]
