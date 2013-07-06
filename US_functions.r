@@ -7,16 +7,27 @@
 # @Copyright: Oliver Keyes
 # @License = MIT (http://opensource.org/licenses/MIThttp://opensource.org/licenses/MIT)
 
-#Function to enclose sql_wrapper, given the commonality of variable names here.
-retrieve.fun <- function(statement){
+#Function to enclose RMySQL's querying abilities, given the commonality of names here.
+sql.fun <- function(query_statement){
   
-  query.df <- sql_wrapper(query_user = query_user,
-    query_pass = query_pass,
-    query_database = query_database,
-    query_server = query_server,
-    statement = statement) 
+  #Open a connection
+  con <- dbConnect(drv = "MySQL",
+                   username = analytics_user,
+                   password = analytics_pass,
+                   host = analytics_pass,
+                   dbname = analytics_pass)
   
-  return(query.df)
+  #Send the query
+  QuerySend <- dbSendQuery(con, statement = query_statement_
+  
+  #Retrieve output of query
+  output <- fetch(QuerySend, n = -1)
+  
+  #Kill connection
+  dbDisconnect(con)
+  
+  #Return output
+  return(output)
 }
 
 #Function to take a dataset and run the regexes over it.
