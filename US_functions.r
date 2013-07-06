@@ -14,8 +14,8 @@ sql.fun <- function(query_statement){
   con <- dbConnect(drv = "MySQL",
                    username = analytics_user,
                    password = analytics_pass,
-                   host = analytics_pass,
-                   dbname = analytics_pass)
+                   host = analytics_server,
+                   dbname = analytics_database)
   
   #Send the query
   QuerySend <- dbSendQuery(con, statement = query_statement)
@@ -80,7 +80,7 @@ regex.fun <- function(input_data){
 }
 
 #Function to take the dataset and run the regexes over it.
-regex.fun <- function(x, graphname, fileprefix, is.testing){
+rege2x.fun <- function(x, graphname, fileprefix, is.testing){
   
   #Retrieve an appropriate sample size
   samplesize <- sample_size(x = x,
