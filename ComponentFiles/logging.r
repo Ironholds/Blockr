@@ -106,12 +106,20 @@ logging.fun <- function(){
     #As we can see, that's probably not that useful for data by month.
     #Perhaps some regression would work better?
     regression_graph_monthly <- ggplot(monthly_data.df,aes(x = block_timestamp,y = value, colour = variable))+
-      geom_point(shape=1) +
+      geom_point(shape=3) +
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
+      labs(x = "Year", y = "Number of users") +
+      ggtitle("Block rationales on the English-language Wikipedia, by month (2006-2012)") +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
-
+    
+    #Print
+    ggsave(filename = file.path(getwd(),"Output", "regex_matches_linear_regression.png"),
+      plot = regression_graph_monthly,
+      width = 8,
+      height = 8,
+      units = "in")
   }
 }
 
