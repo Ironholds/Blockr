@@ -34,23 +34,52 @@ logging.fun <- function(){
     #Run regexes across rationales
     parsed_data.df <- regex.fun(input_data = x)
     
-    #Melt dataset
-    melted_data.df <- melt(parsed_data.df, id.vars = 1, measure.vars = 2:6)
-
+    #Take the input, generate yearly totals too.
+    data_by_year.df <- parsed_data.df
+    data_by_year.df$block_timestamp <- substring(data_by_year.df$block_timestamp,1,4)
+    data_by_year.df <- ddply(.data = data_by_year.df,
+                             .var = "block_timestamp",
+                             .fun = function(x){
+                              
+                              return(colSums(x[,2:7]))
+                             }
+    )
+    
+    #Melt datasets
+    melted_data_month.df <- melt(parsed_data.df, id.vars = 1, measure.vars = 2:6)
+    melted_data_year.df <- melt(data_by_year.df, id.vars = 1, measure.vars = 2:6)
+    
     #Export it
-    melted_file_path <- file.path(getwd(),"Output","logging_regex_matches.tsv")
+    melted_file_path <- file.path(getwd(),"Output","logging_regex_matches_monthly.tsv")
+    write.table(melted_data.df, file = melted_file_path, col.names = TRUE,
+                row.names = FALSE, sep = "\t", quote = FALSE)
+    melted_file_path <- file.path(getwd(),"Output","logging_regex_matches_yearly.tsv")
     write.table(melted_data.df, file = melted_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
     
+    #List
+    to.return <- list(melted_data_month.df,melted_data_year.df)
+    
     #Return it
-    return(melted_data.df)
+    return(to.return)
   }
   
   #Run
-  regex_matches.df <- parse_data.fun(x = query.df)
+  regex_matches.list <- parse_data.fun(x = query.df)
   
   #Graph the outcome
-  
+  graphing.fun <- function(x){
+    
+    #Split up the list
+    monthly_data.df <- as.data.frame(regex_matches.list[1])
+    yearly_data.df <- as.data.frame(regex_matches.list[2])
+    
+                            
+                               
+    
+    
+    
+  }
 }
 
 #Run
