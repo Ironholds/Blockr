@@ -19,6 +19,56 @@ retrieve.fun <- function(statement){
   return(query.df)
 }
 
+#Function to take a dataset and run the regexes over it.
+
+regex.fun <- function(input_data){
+  
+  #Create list of regexes
+  regex_list <- list(c("(spam|advertis(ement|ing)|promot(e|ion))"),
+                     c("(arb(itration|com)|defamat(ion|ory)|vandal(|ism)|disrupti(ve|on)|WP:BLP|troll|attack|bad faith|harr?ass?(ment)|abus(e|ive)|vau(|block)|suppress|stalk|phish(ing|)|(death|legal) threat|biographies of living|hoax|rac(ist|ial)|copy(right|vio)|threatban|nonsense|(in|un|)civil(ity)|WP:VAND|WP:LEGAL|edit( |-)war(ring)|schoolblock|revert rule|\\drr|deliberately triggering|outing|anonblock|battle(|field|ground)|topic ban)"),
+                     c("((?-i)LTA(?i)|sock|eva(de|sion|ding)|JarlaxleArtemis|grawp|WP:LTA|term abuse|multiple accounts|checkuser|MascotGuy|Jessica Liao|Grundle2600|Swale|sleeper|willy|puppet|\\{\\{WoW\\}\\}|reincarnaton|ararat|CU block|banned)"),
+                     c("(username|uw-(uhblock|softestblock)|(softer|cause|u)block|impost(or|er)|too similar|similar to existing user or recent meme|\\{\\{unb|contact an administrator for verification|impersonat(or|ion|ing))"),
+                     c("(torblock|blocked proxy|webhostblock|\\{\\{tor)"))
+  
+  output_data.df <- ddply(.data = input_data,
+                          .var = "block_timestamp",
+                          .fun = function(x){
+                            
+                            #Pin input data
+                            to_run.df <- input_data
+                            
+                            #Create empty vector.
+                            to_return.vec <- vector()
+                            
+                            #Grab length
+                            reg_length <- length(regex_list)
+                            
+                            #And now we loop.
+                            for(i in (1:reg_length){
+                              
+                              #Run regexes
+                              grepvec <- grepl(pattern = regex_list[i],
+                              x = to_run.df$reason,
+                              perl = TRUE,
+                              ignore.case = TRUE)
+                              
+                              #Number of rows that match
+                              to_return.vec[i] <- length(grepvec[TRUE])
+                              
+                              #Non-matches
+                              to_run.df <- to_run.df[!grepvec,]
+                            }
+                            
+                            #Include non-matches
+                            to_return.vec[reg_length+1] <- nrow(to_run.df)
+                            
+                            #Return
+                            return(to_return.vec)}
+                          )
+  #Return
+  return(output_data.df)
+}
+
 #Function to take the dataset and run the regexes over it.
 regex.fun <- function(x, graphname, fileprefix, is.testing){
   
@@ -35,6 +85,7 @@ regex.fun <- function(x, graphname, fileprefix, is.testing){
       #sample from the subset to produce normalised data, operating off the value of samplesize
       sample.df <- dfsample(df = x, size = samplesize)
       
+      return(sample.df)
       #wrapping function to iterate over
       metafun.fun <- function(item, reg_pattern){
         
@@ -62,22 +113,7 @@ regex.fun <- function(x, graphname, fileprefix, is.testing){
         #Return
         return(to.return)
       }
-      
-      #Spam
-      spam <- metafun.fun(item = sample.df, reg_pattern = spam_regex_pattern)
-      
-      #Disruption
-      disruption <- metafun.fun(item = as.data.frame(spam[3]), reg_pattern = disruption_regex_pattern)
-      
-      #Socks
-      socks <- metafun.fun(item = as.data.frame(disruption[3]), reg_pattern = sockpuppet_regex_pattern)
-      
-      #Account names
-      usernames <- metafun.fun(item = as.data.frame(socks[3]), reg_pattern = username_regex_pattern)
-      
-      #Proxies
-      proxies <- metafun.fun(item = as.data.frame(usernames[3]), reg_pattern = proxy_regex_pattern)
-      
+
       #If we're testing, export matches/non-matches for handcoding
       if(is.testing == TRUE){
         
