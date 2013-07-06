@@ -11,7 +11,7 @@
 logging.fun <- function(){
   
   #Query database
-  query.df <- retrieve.fun(statement = "
+  query.df <- sql.fun(query_statement = "
         SELECT
           substring(logging.log_timestamp,1,4) AS block_timestamp,
           logging.log_comment AS reason
@@ -23,6 +23,7 @@ logging.fun <- function(){
           AND logging.log_action = 'block';"
   )
 
+  
   #Run the regexes across the output
   regex.fun(x = query.df, fileprefix = "logging", graphname = "Currently extant blocks", is.testing = TRUE)
   

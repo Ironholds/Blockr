@@ -31,7 +31,6 @@ sql.fun <- function(query_statement){
 }
 
 #Function to take a dataset and run the regexes over it.
-
 regex.fun <- function(input_data){
   
   #Create list of regexes
