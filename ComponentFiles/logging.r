@@ -34,9 +34,6 @@ logging.fun <- function(){
     #Run regexes across rationales
     parsed_data.df <- regex.fun(input_data = query.df)
     
-  #Run the regexes across the output
-  regex.fun(x = query.df, fileprefix = "logging", graphname = "Currently extant blocks", is.testing = TRUE)
-  
   }
 }
 
