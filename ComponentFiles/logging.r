@@ -24,7 +24,7 @@ logging.fun <- function(){
   )
   
   #Interpret the outcome
-  parse.fun <- function(x){
+  parse_data.fun <- function(x){
     
     #How many items shall we sample from each month?
     samplesize <- sample_size(x = x,
@@ -34,7 +34,19 @@ logging.fun <- function(){
     #Run regexes across rationales
     parsed_data.df <- regex.fun(input_data = query.df)
     
+    #Melt dataset
+    melted_data.df <- melt(blocked.df, id.vars = 1, measure.vars = 2:6)
+
+    #Export it
+    melted_file_path <- file.path(getwd(),"Output","logging_regex_matches.tsv")
+    write.table(melted_data.df, file = melted_file_path, col.names = TRUE,
+                row.names = FALSE, sep = "\t", quote = FALSE)
+    #Return it
+    return(melted_data.df)
   }
+  
+  #Run
+  regex_matches.df <- parse_data.fun(x = query.df)
 }
 
 #Run
