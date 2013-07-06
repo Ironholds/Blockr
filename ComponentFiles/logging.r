@@ -13,7 +13,7 @@ logging.fun <- function(){
   #Query database
   query.df <- sql.fun(query_statement = "
         SELECT
-          substring(logging.log_timestamp,1,4) AS block_timestamp,
+          substring(logging.log_timestamp,1,6) AS block_timestamp,
           logging.log_comment AS reason,
           user.user_editcount AS editcount,
           user.user_id AS user_id
@@ -22,11 +22,18 @@ logging.fun <- function(){
           AND logging.log_type = 'block'
           AND logging.log_action = 'block';"
   )
-
   
+  #Interpret the outcome
+  parse.fun <- function(x){
+    
+    samplesize <- sample_size(x = x,
+                              variable = "block_timestamp",
+                              percentage = 0.20)
+    
   #Run the regexes across the output
   regex.fun(x = query.df, fileprefix = "logging", graphname = "Currently extant blocks", is.testing = TRUE)
   
+  }
 }
 
 #Run

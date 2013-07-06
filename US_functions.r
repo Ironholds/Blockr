@@ -44,8 +44,11 @@ regex.fun <- function(input_data){
                           .var = "block_timestamp",
                           .fun = function(x){
                             
+                            #sample from the subset to produce normalised data, operating off the value of samplesize
+                            x <- dfsample(df = x, size = samplesize)
+                            
                             #Pin input data
-                            to_run.df <- input_data
+                            to_run.df <- x
                             
                             #Create empty vector.
                             to_return.vec <- vector()
@@ -75,6 +78,10 @@ regex.fun <- function(input_data){
                             #Return
                             return(to_return.vec)}
                           )
+  
+  #Rename
+  rename(output_data.df,c("V1" = "spam","V2" = "bad.faith","V3" = "Sockpuppetry", "V4" = "Username.problems", "V5" = "Proxies", "V6" = "Misc"))
+
   #Return
   return(output_data.df)
 }
