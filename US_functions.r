@@ -18,7 +18,7 @@ sql.fun <- function(query_statement){
                    dbname = analytics_pass)
   
   #Send the query
-  QuerySend <- dbSendQuery(con, statement = query_statement_
+  QuerySend <- dbSendQuery(con, statement = query_statement)
   
   #Retrieve output of query
   output <- fetch(QuerySend, n = -1)
