@@ -80,7 +80,7 @@ regex.fun <- function(input_data){
                           )
   
   #Rename
-  rename(output_data.df,c("V1" = "spam","V2" = "bad.faith","V3" = "Sockpuppetry", "V4" = "Username.problems", "V5" = "Proxies", "V6" = "Misc"))
+  output_data.df <- rename(output_data.df,c("V1" = "spam","V2" = "bad.faith","V3" = "Sockpuppetry", "V4" = "Username.problems", "V5" = "Proxies", "V6" = "Misc"))
 
   #Return
   return(output_data.df)
