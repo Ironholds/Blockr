@@ -51,10 +51,10 @@ logging.fun <- function(){
     
     #Export it
     melted_file_path <- file.path(getwd(),"Output","logging_regex_matches_monthly.tsv")
-    write.table(melted_data.df, file = melted_file_path, col.names = TRUE,
+    write.table(melted_data_month.df, file = melted_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
     melted_file_path <- file.path(getwd(),"Output","logging_regex_matches_yearly.tsv")
-    write.table(melted_data.df, file = melted_file_path, col.names = TRUE,
+    write.table(melted_data_year.df, file = melted_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
     
     #List
@@ -74,11 +74,34 @@ logging.fun <- function(){
     monthly_data.df <- as.data.frame(regex_matches.list[1])
     yearly_data.df <- as.data.frame(regex_matches.list[2])
     
-                            
-                               
+    #For each one, a simple line-and-point graph.
+    line.graph.monthly <- ggplot(monthly_data.df, aes(block_timestamp, value)) + 
+      geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
+      labs(x = "Year", y = "Number of users") +
+      ggtitle("Block rationales on the English-language Wikipedia, by month (2006-2012)") +
+      scale_x_discrete(expand = c(0,0)) +
+      scale_y_continuous(expand = c(0,0)) +
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
     
+    line.graph.yearly <- ggplot(yearly_data.df, aes(block_timestamp, value)) + 
+      geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
+      labs(x = "Year", y = "Number of users") +
+      ggtitle("Block rationales on the English-language Wikipedia, by year (2006-2012)") +
+      scale_x_discrete(breaks = 2006:2012, expand = c(0,0)) +
+      scale_y_continuous(expand = c(0, 0)) +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1))
     
-    
+    #print
+    ggsave(filename = file.path(getwd(),"Output", "regex_matches_by_month.png", sep = "")),
+      plot = line.graph.monthly,
+      width = 8,
+      height = 8,
+      units = "in")
+    ggsave(filename = file.path(getwd(),"Output", "regex_matches_by_year.png", sep = "")),
+      plot = line.graph.yearly,
+      width = 8,
+      height = 8,
+      units = "in")
   }
 }
 
