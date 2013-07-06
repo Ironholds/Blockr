@@ -26,9 +26,13 @@ logging.fun <- function(){
   #Interpret the outcome
   parse.fun <- function(x){
     
+    #How many items shall we sample from each month?
     samplesize <- sample_size(x = x,
                               variable = "block_timestamp",
                               percentage = 0.20)
+    
+    #Run regexes across rationales
+    parsed_data.df <- regex.fun(input_data = query.df)
     
   #Run the regexes across the output
   regex.fun(x = query.df, fileprefix = "logging", graphname = "Currently extant blocks", is.testing = TRUE)
