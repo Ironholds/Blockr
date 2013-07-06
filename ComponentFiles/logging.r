@@ -75,7 +75,7 @@ logging.fun <- function(){
     yearly_data.df <- as.data.frame(regex_matches.list[2])
     
     #For each one, a simple line-and-point graph.
-    line.graph.monthly <- ggplot(monthly_data.df, aes(block_timestamp, value)) + 
+    line_graph_monthly <- ggplot(monthly_data.df, aes(block_timestamp, value)) + 
       geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
       labs(x = "Year", y = "Number of users") +
       ggtitle("Block rationales on the English-language Wikipedia, by month (2006-2012)") +
@@ -83,7 +83,7 @@ logging.fun <- function(){
       scale_y_continuous(expand = c(0,0)) +
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
     
-    line.graph.yearly <- ggplot(yearly_data.df, aes(block_timestamp, value)) + 
+    line_graph_yearly <- ggplot(yearly_data.df, aes(block_timestamp, value)) + 
       geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
       labs(x = "Year", y = "Number of users") +
       ggtitle("Block rationales on the English-language Wikipedia, by year (2006-2012)") +
@@ -93,15 +93,25 @@ logging.fun <- function(){
     
     #print
     ggsave(filename = file.path(getwd(),"Output", "regex_matches_by_month.png", sep = "")),
-      plot = line.graph.monthly,
+      plot = line_graph_monthly,
       width = 8,
       height = 8,
       units = "in")
     ggsave(filename = file.path(getwd(),"Output", "regex_matches_by_year.png", sep = "")),
-      plot = line.graph.yearly,
+      plot = line_graph_yearly,
       width = 8,
       height = 8,
       units = "in")
+    
+    #As we can see, that's probably not that useful for data by month.
+    #Perhaps some regression would work better?
+    regression_graph_monthly <- ggplot(monthly_data.df,aes(x = block_timestamp,y = value, colour = variable))+
+      geom_point(shape=1) +
+      geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
+      scale_x_discrete(expand = c(0,0)) +
+      scale_y_continuous(expand = c(0,0)) +
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+
   }
 }
 
