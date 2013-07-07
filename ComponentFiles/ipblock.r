@@ -75,7 +75,7 @@ ipblock.fun <- function(){
       units = "in")
     
     #The dataset makes it difficult to properly show everything. Let's graph some subsets
-    regression_graph_monthly_badfaith <- ggplot(monthly_data.df[monthly_data.df$variable %in% c("Bad.faith","spam"),],
+    regression_graph_monthly_badfaith <- ggplot(monthly_data.df[monthly_data.df$variable %in% c("bad.faith","spam"),],
       aes(x = block_timestamp,y = value, colour = variable))+
       geom_point(shape=3) +
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
@@ -85,7 +85,7 @@ ipblock.fun <- function(){
       scale_y_continuous(expand = c(0,0)) +
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
       
-    regression_graph_monthly_other <- ggplot(monthly_data.df[!monthly_data.df$variable %in% c("Bad.faith","spam"),],
+    regression_graph_monthly_other <- ggplot(monthly_data.df[!monthly_data.df$variable %in% c("bad.faith","spam"),],
       aes(x = block_timestamp,y = value, colour = variable))+
       geom_point(shape=3) +
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
