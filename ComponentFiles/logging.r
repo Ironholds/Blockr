@@ -14,13 +14,12 @@ logging.fun <- function(){
   query.df <- sql.fun(query_statement = "
         SELECT
           substring(logging.log_timestamp,1,6) AS block_timestamp,
-          logging.log_comment AS reason,
-          user.user_editcount AS editcount,
-          user.user_id AS user_id
+          logging.log_comment AS reason
         FROM logging LEFT JOIN user ON logging.log_title = user.user_name
         WHERE logging.log_timestamp BETWEEN 20060101010101 AND 20121231235959
           AND logging.log_type = 'block'
-          AND logging.log_action = 'block';"
+          AND logging.log_action = 'block'
+          AND user.user_id > 0;"
   )
   
 
