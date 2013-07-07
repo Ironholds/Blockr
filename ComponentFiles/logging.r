@@ -121,6 +121,9 @@ logging.fun <- function(){
       height = 8,
       units = "in")
   }
+
+  #Run
+  graphing.fun()
 }
 
 #Run
