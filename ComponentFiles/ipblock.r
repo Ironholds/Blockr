@@ -32,7 +32,7 @@ ipblock.fun <- function(){
     line_graph_yearly <- ggplot(yearly_data.df, aes(block_timestamp, value)) + 
       geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
       labs(x = "Year", y = "Number of users") +
-      ggtitle("Block rationales on the English-language Wikipedia, by year (2006-2012) - ipblocks table") +
+      ggtitle("Block rationales on the English-language Wikipedia\nby year (2006-2012) - ipblocks table") +
       scale_x_discrete(breaks = 2006:2012, expand = c(0,0)) +
       scale_y_continuous(expand = c(0, 0)) +
       theme(axis.text.x = element_text(angle = 90, hjust = 1))
@@ -40,7 +40,7 @@ ipblock.fun <- function(){
     line_graph_monthly <- ggplot(monthly_data.df, aes(block_timestamp, value)) +
       geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
       labs(x = "Year", y = "Number of users") +
-      ggtitle("Block rationales on the English-language Wikipedia, by month (2006-2012) - ipblocks table") +
+      ggtitle("Block rationales on the English-language Wikipedia\nby month (2006-2012) - ipblocks table") +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
@@ -62,10 +62,10 @@ ipblock.fun <- function(){
       geom_point(shape=3) +
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
       labs(x = "Year", y = "Number of users") +
-      ggtitle("Block rationales on the English-language Wikipedia, by month (2006-2012) - ipblocks table") +
+      ggtitle("Block rationales on the English-language Wikipedia\nby month (2006-2012) - ipblocks table") +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.grid.minor = element_blank(), panel.grid.major = element_blank())
     
     #Print
     ggsave(filename = file.path(getwd(),"Output", "ipblocks_regex_matches_linear_regression.png"),
@@ -80,20 +80,20 @@ ipblock.fun <- function(){
       geom_point(shape=3) +
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
       labs(x = "Year", y = "Number of users") +
-      ggtitle("Spam and bad-faith blocks on the English-language Wikipedia, by month (2006-2012) - ipblocks table") +
+      ggtitle("Spam and bad-faith blocks on the English-language Wikipedia\nby month (2006-2012) - ipblocks table") +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.grid.minor = element_blank(), panel.grid.major = element_blank())
       
     regression_graph_monthly_other <- ggplot(monthly_data.df[!monthly_data.df$variable %in% c("bad.faith","spam"),],
       aes(x = block_timestamp,y = value, colour = variable))+
       geom_point(shape=3) +
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
       labs(x = "Year", y = "Number of users") +
-      ggtitle("Other blocks on the English-language Wikipedia, by month (2006-2012) - ipblocks table") +
+      ggtitle("Other blocks on the English-language Wikipedia\nby month (2006-2012) - ipblocks table") +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.grid.minor = element_blank(), panel.grid.major = element_blank())
     
     ggsave(filename = file.path(getwd(),"Output", "ipblocks_linear_regression_badfaith.png"),
       plot = regression_graph_monthly_badfaith,

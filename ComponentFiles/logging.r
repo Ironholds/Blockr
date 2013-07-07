@@ -38,7 +38,7 @@ logging.fun <- function(){
     line_graph_yearly <- ggplot(yearly_data.df, aes(block_timestamp, value)) + 
       geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
       labs(x = "Year", y = "Number of users") +
-      ggtitle("Block rationales on the English-language Wikipedia, by year (2006-2012) - logging table") +
+      ggtitle("Block rationales on the English-language Wikipedia\nby year (2006-2012) - logging table") +
       scale_x_discrete(breaks = 2006:2012, expand = c(0,0)) +
       scale_y_continuous(expand = c(0, 0)) +
       theme(axis.text.x = element_text(angle = 90, hjust = 1))
@@ -55,7 +55,7 @@ logging.fun <- function(){
       geom_point(shape=3) +
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
       labs(x = "Year", y = "Number of users") +
-      ggtitle("Block rationales on the English-language Wikipedia, by month (2006-2012) - logging table") +
+      ggtitle("Block rationales on the English-language Wikipedia\nby month (2006-2012) - logging table") +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
@@ -73,30 +73,30 @@ logging.fun <- function(){
       geom_point(shape=3) +
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
       labs(x = "Year", y = "Number of users") +
-      ggtitle("Spam and bad-faith blocks on the English-language Wikipedia, by month (2006-2012) - logging table") +
+      ggtitle("Spam and bad-faith blocks on the English-language Wikipedia\nby month (2006-2012) - logging table") +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.grid.minor = element_blank(), panel.grid.major = element_blank())
       
     regression_graph_monthly_other <- ggplot(monthly_data.df[!monthly_data.df$variable %in% c("bad.faith","spam"),],
       aes(x = block_timestamp,y = value, colour = variable))+
       geom_point(shape=3) +
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
       labs(x = "Year", y = "Number of users") +
-      ggtitle("Other blocks on the English-language Wikipedia, by month (2006-2012) - logging table") +
+      ggtitle("Other blocks on the English-language Wikipedia\nby month (2006-2012) - logging table") +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.grid.minor = theme_blank())
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.grid.minor = element_blank(), panel.grid.major = element_blank())
     
     ggsave(filename = file.path(getwd(),"Output", "logging_linear_regression_badfaith.png"),
       plot = regression_graph_monthly_badfaith,
-      width = 10,
-      height = 10,
+      width = 8,
+      height = 8,
       units = "in")
     ggsave(filename = file.path(getwd(),"Output", "logging_linear_regression_other.png"),
       plot = regression_graph_monthly_other,
-      width = 10,
-      height = 10,
+      width = 8,
+      height = 8,
       units = "in")
   }
 
