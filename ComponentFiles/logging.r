@@ -27,7 +27,7 @@ logging.fun <- function(){
   parse_data.fun <- function(x){
     
     #How many items shall we sample from each month?
-    samplesize <- sample_size(x = query.df,
+    samplesize <- sample_size(x = x,
                               variable = "block_timestamp",
                               percentage = 0.20)
     
@@ -71,8 +71,8 @@ logging.fun <- function(){
   graphing.fun <- function(x){
     
     #Split up the list
-    monthly_data.df <- as.data.frame(regex_matches.list[1])
-    yearly_data.df <- as.data.frame(regex_matches.list[2])
+    monthly_data.df <- as.data.frame(x[1])
+    yearly_data.df <- as.data.frame(x[2])
     
     #For each one, a simple line-and-point graph.
     line_graph_monthly <- ggplot(monthly_data.df, aes(block_timestamp, value)) + 
@@ -123,7 +123,7 @@ logging.fun <- function(){
   }
 
   #Run
-  graphing.fun()
+  graphing.fun(x = regex_matches.list)
 }
 
 #Run
