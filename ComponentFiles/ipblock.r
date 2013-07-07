@@ -52,7 +52,7 @@ ipblock.fun <- function(){
       height = 8,
       units = "in")
     ggsave(filename = file.path(getwd(),"Output", "ipblocks_regex_matches_by_year.png"),
-      plot = line_graph_yearly,
+      plot = line_graph_monthly,
       width = 8,
       height = 8,
       units = "in")

@@ -86,17 +86,17 @@ logging.fun <- function(){
       ggtitle("Other blocks on the English-language Wikipedia, by month (2006-2012) - logging table") +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.grid.minor = theme_blank())
     
     ggsave(filename = file.path(getwd(),"Output", "logging_linear_regression_badfaith.png"),
       plot = regression_graph_monthly_badfaith,
-      width = 8,
-      height = 8,
+      width = 10,
+      height = 10,
       units = "in")
     ggsave(filename = file.path(getwd(),"Output", "logging_linear_regression_other.png"),
       plot = regression_graph_monthly_other,
-      width = 8,
-      height = 8,
+      width = 10,
+      height = 10,
       units = "in")
   }
 
