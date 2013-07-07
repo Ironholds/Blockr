@@ -92,12 +92,12 @@ logging.fun <- function(){
       theme(axis.text.x = element_text(angle = 90, hjust = 1))
     
     #print
-    ggsave(filename = file.path(getwd(),"Output", "regex_matches_by_month.png", sep = "")),
+    ggsave(filename = file.path(getwd(),"Output", "logging_regex_matches_by_month.png", sep = "")),
       plot = line_graph_monthly,
       width = 8,
       height = 8,
       units = "in")
-    ggsave(filename = file.path(getwd(),"Output", "regex_matches_by_year.png", sep = "")),
+    ggsave(filename = file.path(getwd(),"Output", "logging_regex_matches_by_year.png", sep = "")),
       plot = line_graph_yearly,
       width = 8,
       height = 8,
@@ -115,7 +115,7 @@ logging.fun <- function(){
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
     
     #Print
-    ggsave(filename = file.path(getwd(),"Output", "regex_matches_linear_regression.png"),
+    ggsave(filename = file.path(getwd(),"Output", "logging_regex_matches_linear_regression.png"),
       plot = regression_graph_monthly,
       width = 8,
       height = 8,
