@@ -24,7 +24,7 @@ The biggest one is access to the Wikimedia analytics slaves - if you don't have 
 
 In addition, the scripts depend on a config file. This takes the structure of:
 
-	analytics_server <- "foo" #the server that contains the db you\'re running this on - presumably s1-analytics-slave.eqiad.wmnet
+	analytics_server <- "foo" #the server that contains the db you're running this on - presumably s1-analytics-slave.eqiad.wmnet
 	analytics_user <- "bar" # the username for that server
 	analytics_database <- "baz" the database, presumably enwiki
 	analytics_pass <- "quz" #password for the user...you get the picture
