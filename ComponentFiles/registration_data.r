@@ -13,7 +13,7 @@
 registration_data.fun <- function(){
   
   #Grab dataset
-  query.df <- retrieve.fun(statement = "
+  query.df <- sql.fun(query_statement = "
           SELECT user.user_id AS id,
             substring(logging.log_timestamp,1,4) AS registration_date,
             user.user_editcount AS edit_count,
@@ -55,11 +55,9 @@ registration_data.fun <- function(){
       units = "in")
     
     #Write
-    tsv_wrapper(x = aggregate.data,
-      file = file.path(
-        getwd(), "Output", paste("account_registrations_by_",filename,".tsv", sep = "")
-      )
-    )
+    aggregate_file_path <- file.path(getwd(),"Output",paste("account_registrations_by_",filename,".png", sep = ""))
+    write.table(aggregate.data, file = aggregate_file_path, col.names = TRUE,
+                row.names = FALSE, sep = "\t", quote = FALSE)
   }
 
   #Basic analysis of how likely users are to get blocked, using a randomised sample
@@ -99,13 +97,10 @@ registration_data.fun <- function(){
       )
     )
     
-    #Write dataset
-    tsv_wrapper(x = sample.df,
-      file = file.path(
-        getwd(), "Output", paste(filename,"_is_blocked.tsv", sep = "")
-      )
-    )
-    
+    #Write
+    aggregate_file_path <- file.path(getwd(),"Output", paste(filename,"_is_blocked.tsv", sep = ""))
+    write.table(sample.df, file = aggregate_file_path, col.names = TRUE,
+                row.names = FALSE, sep = "\t", quote = FALSE)    
   }
   
   #Run by year
