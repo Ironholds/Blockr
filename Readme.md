@@ -31,6 +31,6 @@ In addition, the scripts depend on a config file. This takes the structure of:
 	#And then you read in the libraries specified above.```
 	
 ##To-do
-*Explore several hypotheses around the dramatic shift in vandalism-related blocks.
-*Have registration\_data.r run off the logging table for blocks, too, allowing for an estimation of whether a user would be blocked at all, not just indefinitely blocked.
-*Generate the same data for anonymous contributors.
+* Explore several hypotheses around the dramatic shift in vandalism-related blocks.
+* Have registration\_data.r run off the logging table for blocks, too, allowing for an estimation of whether a user would be blocked at all, not just indefinitely blocked.
+* Generate the same data for anonymous contributors.
