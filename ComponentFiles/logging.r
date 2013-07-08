@@ -76,7 +76,7 @@ logging.fun <- function(){
       ggtitle("Spam and bad-faith blocks on the English-language Wikipedia\nby month (2006-2012) - logging table") +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.grid.minor = element_blank(), panel.grid.major = element_blank())
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
       
     regression_graph_monthly_other <- ggplot(monthly_data.df[!monthly_data.df$variable %in% c("bad.faith","spam"),],
       aes(x = block_timestamp,y = value, colour = variable))+
@@ -86,7 +86,7 @@ logging.fun <- function(){
       ggtitle("Other blocks on the English-language Wikipedia\nby month (2006-2012) - logging table") +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(), panel.grid.minor = element_blank(), panel.grid.major = element_blank())
+      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
     
     ggsave(filename = file.path(getwd(),"Output", "logging_linear_regression_badfaith.png"),
       plot = regression_graph_monthly_badfaith,
