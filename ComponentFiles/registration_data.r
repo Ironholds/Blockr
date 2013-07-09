@@ -39,6 +39,11 @@ registration_data.fun <- function(){
       )
     )
     
+    #Write
+    aggregate_file_path <- file.path(getwd(),"Output",paste("account_registrations_by_",filename,".png", sep = ""))
+    write.table(aggregate.data, file = aggregate_file_path, col.names = TRUE,
+                row.names = FALSE, sep = "\t", quote = FALSE)
+    
     #Plot registrations
     registration.plot <- ggplot(data = aggregate.data,
       aes(x=Var1, y = Freq)) +
@@ -53,11 +58,6 @@ registration_data.fun <- function(){
       width = 8,
       height = 8,
       units = "in")
-    
-    #Write
-    aggregate_file_path <- file.path(getwd(),"Output",paste("account_registrations_by_",filename,".png", sep = ""))
-    write.table(aggregate.data, file = aggregate_file_path, col.names = TRUE,
-                row.names = FALSE, sep = "\t", quote = FALSE)
   }
 
   #Basic analysis of how likely users are to get blocked, using a randomised sample
