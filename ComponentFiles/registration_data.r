@@ -41,7 +41,7 @@ registration_data.fun <- function(){
     
     #Plot registrations
     registration.plot <- ggplot(data = aggregate.data,
-      aes(x=Var1, y = Freq, width=.5)) +
+      aes(x=Var1, y = Freq)) +
       geom_bar(width=.5, fill = "red", stat = "identity", position = "dodge") +
       labs(x = "Year", y = "Number of registrations") +
       theme(axis.text.x=element_text(angle = -90, hjust = 1)) +
