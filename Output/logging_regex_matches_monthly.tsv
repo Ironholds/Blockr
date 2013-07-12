@@ -99,8 +99,8 @@ block_timestamp	variable	value
 200702	bad.faith	3833
 200703	bad.faith	4443
 200704	bad.faith	4276
-200705	bad.faith	4214
-200706	bad.faith	3248
+200705	bad.faith	4213
+200706	bad.faith	3247
 200707	bad.faith	2606
 200708	bad.faith	2662
 200709	bad.faith	3089
@@ -108,7 +108,7 @@ block_timestamp	variable	value
 200711	bad.faith	3621
 200712	bad.faith	2700
 200801	bad.faith	3137
-200802	bad.faith	3442
+200802	bad.faith	3441
 200803	bad.faith	3619
 200804	bad.faith	3699
 200805	bad.faith	3515
@@ -118,7 +118,7 @@ block_timestamp	variable	value
 200809	bad.faith	2563
 200810	bad.faith	3286
 200811	bad.faith	2532
-200812	bad.faith	2245
+200812	bad.faith	2244
 200901	bad.faith	2653
 200902	bad.faith	2708
 200903	bad.faith	2739
@@ -130,7 +130,7 @@ block_timestamp	variable	value
 200909	bad.faith	1915
 200910	bad.faith	2276
 200911	bad.faith	2187
-200912	bad.faith	1953
+200912	bad.faith	1952
 201001	bad.faith	2257
 201002	bad.faith	2558
 201003	bad.faith	2708
@@ -212,7 +212,7 @@ block_timestamp	variable	value
 200907	Sockpuppetry	996
 200908	Sockpuppetry	1147
 200909	Sockpuppetry	1180
-200910	Sockpuppetry	990
+200910	Sockpuppetry	989
 200911	Sockpuppetry	994
 200912	Sockpuppetry	954
 201001	Sockpuppetry	836
