@@ -86,7 +86,7 @@ registration_data.fun <- function(){
           results.vector <- as.vector(results)
           
           #Add percentage
-          results.vector[4] <- sum(results.vector[2:3])/sum(results.vector[1:3])
+          results.vector[4] <- sum(results.vector[2:3])/sum(results.vector[1:3])*100
         
           #Return
           return(results.vector)
