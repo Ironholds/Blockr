@@ -16,6 +16,7 @@ ipblock.fun <- function(){
             substring(ipb_timestamp,1,6) AS block_timestamp
           FROM ipblocks
           WHERE ipb_timestamp BETWEEN 20060101010101 AND 20121231235959
+          AND ipb_expiry = 'infinity'
           AND ipb_user > 0;"
   )
   
