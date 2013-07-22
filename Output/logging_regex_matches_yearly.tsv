@@ -1,5 +1,5 @@
 block_timestamp	variable	value
-2006	spam	1684
+2006	spam	1685
 2007	spam	3592
 2008	spam	6516
 2009	spam	13481
@@ -7,7 +7,7 @@ block_timestamp	variable	value
 2011	spam	14386
 2012	spam	16726
 2006	bad.faith	27862
-2007	bad.faith	42120
+2007	bad.faith	42119
 2008	bad.faith	34604
 2009	bad.faith	26347
 2010	bad.faith	24725

@@ -3,7 +3,7 @@ block_timestamp	variable	value
 200602	spam	54
 200603	spam	53
 200604	spam	49
-200605	spam	87
+200605	spam	88
 200606	spam	133
 200607	spam	123
 200608	spam	128
@@ -100,7 +100,7 @@ block_timestamp	variable	value
 200703	bad.faith	4443
 200704	bad.faith	4276
 200705	bad.faith	4213
-200706	bad.faith	3247
+200706	bad.faith	3246
 200707	bad.faith	2606
 200708	bad.faith	2662
 200709	bad.faith	3089

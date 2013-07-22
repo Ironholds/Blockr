@@ -149,13 +149,13 @@ block_timestamp	variable	value
 201104	bad.faith	1870
 201105	bad.faith	1887
 201106	bad.faith	1684
-201107	bad.faith	1349
+201107	bad.faith	1348
 201108	bad.faith	1463
 201109	bad.faith	1588
 201110	bad.faith	1726
 201111	bad.faith	1787
 201112	bad.faith	1495
-201201	bad.faith	1731
+201201	bad.faith	1730
 201202	bad.faith	1758
 201203	bad.faith	1603
 201204	bad.faith	1348
@@ -240,7 +240,7 @@ block_timestamp	variable	value
 201111	Sockpuppetry	1175
 201112	Sockpuppetry	1035
 201201	Sockpuppetry	1022
-201202	Sockpuppetry	1259
+201202	Sockpuppetry	1258
 201203	Sockpuppetry	1179
 201204	Sockpuppetry	1317
 201205	Sockpuppetry	1169
@@ -248,7 +248,7 @@ block_timestamp	variable	value
 201207	Sockpuppetry	1135
 201208	Sockpuppetry	1157
 201209	Sockpuppetry	1082
-201210	Sockpuppetry	1092
+201210	Sockpuppetry	1090
 201211	Sockpuppetry	962
 201212	Sockpuppetry	1140
 200601	Username.problems	838
@@ -258,7 +258,7 @@ block_timestamp	variable	value
 200605	Username.problems	1286
 200606	Username.problems	1624
 200607	Username.problems	2060
-200608	Username.problems	2711
+200608	Username.problems	2710
 200609	Username.problems	3291
 200610	Username.problems	2908
 200611	Username.problems	3294
@@ -317,7 +317,7 @@ block_timestamp	variable	value
 201104	Username.problems	1249
 201105	Username.problems	1201
 201106	Username.problems	1131
-201107	Username.problems	1392
+201107	Username.problems	1391
 201108	Username.problems	1514
 201109	Username.problems	1477
 201110	Username.problems	883
