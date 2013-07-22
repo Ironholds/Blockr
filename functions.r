@@ -80,7 +80,7 @@ parse_data.fun <- function(x, tablename){
                                 }
                                 
                                 #Include non-matches
-                                to_return.vec[reg_length+1] <- nrow(to_run.df)
+                                to_return.vec[length(to_return.vec)+1] <- nrow(to_run.df)
                                 
                                 #Return
                                 return(to_return.vec)}
@@ -92,6 +92,7 @@ parse_data.fun <- function(x, tablename){
       #Return
       return(output_data.df)
     }
+    
     #Run regexes across rationales
     parsed_data.df <- regex.fun(input_data = x)
     
@@ -107,8 +108,8 @@ parse_data.fun <- function(x, tablename){
     )
     
     #Melt datasets
-    melted_data_month.df <- melt(parsed_data.df, id.vars = 1, measure.vars = 2:6)
-    melted_data_year.df <- melt(data_by_year.df, id.vars = 1, measure.vars = 2:6)
+    melted_data_month.df <- melt(parsed_data.df, id.vars = 1, measure.vars = 2:7)
+    melted_data_year.df <- melt(data_by_year.df, id.vars = 1, measure.vars = 2:7)
     
     #Export it
     melted_file_path <- file.path(getwd(),"Output",paste(tablename,"regex_matches_monthly.tsv",sep = "_"))
