@@ -19,7 +19,8 @@ logging.fun <- function(){
         WHERE logging.log_timestamp BETWEEN 20060101010101 AND 20121231235959
           AND logging.log_type = 'block'
           AND logging.log_action = 'block'
-          AND user.user_id > 0;"
+          AND user.user_id > 0
+          AND logging.log_params NOT LIKE '%indefinite%';"
   )
   
 
