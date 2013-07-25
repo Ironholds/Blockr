@@ -50,7 +50,7 @@ registration_data.fun <- function(){
       geom_bar(width=.5, fill = "red", stat = "identity", position = "dodge") +
       labs(x = "Year", y = "Number of registrations") +
       theme(axis.text.x=element_text(angle = -90, hjust = 1)) +
-      ggtitle(paste("English-language Wikipedia account registrations by ",graphname, sep = " "))
+      ggtitle(paste("English-language Wikipedia account registrations by",graphname, sep = " "))
     
     #Print
     ggsave(filename = file.path(getwd(),"Output", paste("account_registrations_by_",filename,".png", sep = "")),
@@ -86,7 +86,7 @@ registration_data.fun <- function(){
           results.vector <- as.vector(results)
           
           #Add percentage
-          results.vector[4] <- sum(results.vector[2:3])/sum(results.vector[1:3])*100
+          results.vector[4] <- sum(results.vector[2:3])/sum(results.vector[1:3])
         
           #Return
           return(results.vector)

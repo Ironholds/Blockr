@@ -13,17 +13,15 @@ ipblock.fun <- function(){
   #Grab dataset
   query.df <- sql.fun(query_statement = "
           SELECT ipb_reason AS reason,
-            substring(ipb_timestamp,1,6) AS block_timestamp
+            substring(ipb_timestamp,1,6) AS block_timestamp,
+            ipb_user
           FROM ipblocks
           WHERE ipb_timestamp BETWEEN 20060101010101 AND 20121231235959
-          AND ipb_expiry = 'infinity'
-          AND ipb_user > 0;"
+          AND ipb_expiry = 'infinity';"
   )
   
-  #Run parse_data.fun
-  regex_matches.list <- parse_data.fun(x = query.df, tablename = "ipblocks")
-    
-  graphing.fun <- function(x){
+  #graphing function
+  graphing.fun <- function(x, usergroup){
     
     #Split up the list
     monthly_data.df <- as.data.frame(x[1])
@@ -33,7 +31,7 @@ ipblock.fun <- function(){
     line_graph_yearly <- ggplot(yearly_data.df, aes(block_timestamp, value)) + 
       geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
       labs(x = "Year", y = "Number of users") +
-      ggtitle("Block rationales on the English-language Wikipedia\nby year (2006-2012) - ipblocks table") +
+      ggtitle(paste("Block rationales on the English-language Wikipedia\nby year (2006-2012) - ipblocks table,",usergroup,"users",sep = " ")) +
       scale_x_discrete(breaks = 2006:2012, expand = c(0,0)) +
       scale_y_continuous(expand = c(0, 0)) +
       theme(axis.text.x = element_text(angle = 90, hjust = 1))
@@ -41,18 +39,18 @@ ipblock.fun <- function(){
     line_graph_monthly <- ggplot(monthly_data.df, aes(block_timestamp, value)) +
       geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
       labs(x = "Year", y = "Number of users") +
-      ggtitle("Block rationales on the English-language Wikipedia\nby month (2006-2012) - ipblocks table") +
+      ggtitle(paste("Block rationales on the English-language Wikipedia\nby month (2006-2012) - ipblocks table,",usergroup,"users",sep = " ")) +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
     
     #print
-    ggsave(filename = file.path(getwd(),"Output", "ipblocks_regex_matches_by_year.png"),
+    ggsave(filename = file.path(getwd(),"Output", paste(usergroup,"_ipblocks_regex_matches_by_year.png", sep = "")),
       plot = line_graph_yearly,
       width = 8,
       height = 8,
       units = "in")
-    ggsave(filename = file.path(getwd(),"Output", "ipblocks_regex_matches_by_month.png"),
+    ggsave(filename = file.path(getwd(),"Output", paste(usergroup,"_ipblocks_regex_matches_by_month.png", sep = "")),
       plot = line_graph_monthly,
       width = 8,
       height = 8,
@@ -63,13 +61,13 @@ ipblock.fun <- function(){
       geom_point(shape=3) +
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
       labs(x = "Year", y = "Number of users") +
-      ggtitle("Block rationales on the English-language Wikipedia\nby month (2006-2012) - ipblocks table") +
+      ggtitle(paste("Block rationales on the English-language Wikipedia\nby month (2006-2012) - ipblocks table,",usergroup,"users",sep = " ")) +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
     
     #Print
-    ggsave(filename = file.path(getwd(),"Output", "ipblocks_regex_matches_linear_regression.png"),
+    ggsave(filename = file.path(getwd(),"Output", paste(usergroup,"_ipblocks_regex_matches_linear_regression.png", sep = "")),
       plot = regression_graph_monthly,
       width = 8,
       height = 8,
@@ -81,7 +79,7 @@ ipblock.fun <- function(){
       geom_point(shape=3) +
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
       labs(x = "Year", y = "Number of users") +
-      ggtitle("Spam and bad-faith blocks on the English-language Wikipedia\nby month (2006-2012) - ipblocks table") +
+      ggtitle(paste("Spam and bad-faith blocks on the English-language Wikipedia\nby month (2006-2012) - ipblocks table,",usergroup,"users",sep = " ")) +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
@@ -91,26 +89,33 @@ ipblock.fun <- function(){
       geom_point(shape=3) +
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
       labs(x = "Year", y = "Number of users") +
-      ggtitle("Other blocks on the English-language Wikipedia\nby month (2006-2012) - ipblocks table") +
+      ggtitle(paste("Other blocks on the English-language Wikipedia\nby month (2006-2012) - ipblocks table,"usergroup,"users",sep = " ")) +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
     
-    ggsave(filename = file.path(getwd(),"Output", "ipblocks_linear_regression_badfaith.png"),
+    ggsave(filename = file.path(getwd(),"Output", paste(usergroup,"_ipblocks_linear_regression_badfaith.png",sep = "")),
       plot = regression_graph_monthly_badfaith,
       width = 8,
       height = 8,
       units = "in")
-    ggsave(filename = file.path(getwd(),"Output", "ipblocks_linear_regression_other.png"),
+    ggsave(filename = file.path(getwd(),"Output", paste(usergroup,"_ipblocks_linear_regression_other.png",sep = "")),
       plot = regression_graph_monthly_other,
       width = 8,
       height = 8,
       units = "in")
   }
   
-  #Run
-  graphing.fun(x = regex_matches.list)
-    
+  #Split
+  anons.df <- query.df[query.df$ipb_user == 0,]
+  registered.df <- query.df[query.df$ipb_user > 0,]
+  
+  #Run parse_data.fun and graphing.fun for each
+  regex_matches.list <- parse_data.fun(x = registered.df, tablename = "ipblocks", usergroup = "registered")
+  graphing.fun(x = regex_matches.list, usergroup = "registered")
+  regex_matches.list <- parse_data.fun(x = anons.df, tablename = "ipblocks", usergroup = "anonymous")
+  graphing.fun(x = regex_matches.list, usergroup = "anonymous")
+  
 }
 
 #Run
