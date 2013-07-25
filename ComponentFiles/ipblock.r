@@ -89,7 +89,7 @@ ipblock.fun <- function(){
       geom_point(shape=3) +
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
       labs(x = "Year", y = "Number of users") +
-      ggtitle(paste("Other blocks on the English-language Wikipedia\nby month (2006-2012) - ipblocks table,"usergroup,"users",sep = " ")) +
+      ggtitle(paste("Other blocks on the English-language Wikipedia\nby month (2006-2012) - ipblocks table,",usergroup,"users",sep = " ")) +
       scale_x_discrete(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
