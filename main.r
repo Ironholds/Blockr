@@ -17,16 +17,16 @@ dir.create(file.path(getwd(), "Output"), showWarnings = FALSE)
 #Load in the enclosing functions for basic analysis, and run
 source(file = file.path(getwd(), "ComponentFiles", "registration_data.r"))
 
-print("Run 25 percent complete")
+print("Run 33 percent complete")
 
 source(file = file.path(getwd(), "ComponentFiles", "ipblock.r"))
 
-print("Run 50 percent complete")
+print("Run 66 percent complete")
 
 #Load in the enclosing function for logging table analysis, and run
 source(file = file.path(getwd(), "ComponentFiles", "logging.r"))
 
-print("Run 75 percent complete")
+print("Run 100 percent complete")
 
 #quit
 q(save = "no")
