@@ -25,7 +25,8 @@ registration_data.fun <- function(){
               ON ipblocks.ipb_user = user.user_id
           WHERE
             logging.log_type = 'newusers'
-          AND logging.log_action NOT IN ('autocreate');"
+            AND logging.log_action NOT IN ('autocreate')
+            AND ipblocks.ipb_expiry = 'indefinite';"
   )
   
   query.df$expiry[ is.na(query.df$expiry) ] <- as.numeric(0)
@@ -105,12 +106,10 @@ registration_data.fun <- function(){
   
   #Run by year
   registrations.fun(x = query.df, filename = "year", graphname = "year")
+  block.proportion.fun(input_data = query.df[query.df$registration_date >= 2006 & query.df$registration_date <= 2012,], filename = "year")
   
   #Subset to exclude non-editors and run again
   registrations.fun(x = query.df[query.df$edit_count >= 1,], filename = "year_with_edits", graphname = "year (>0 edits)")
-  
-  #Run
-  block.proportion.fun(input_data = query.df[query.df$registration_date >= 2006 & query.df$registration_date <= 2012,], filename = "year")
   block.proportion.fun(input_data = query.df[query.df$edit_count >= 1 & query.df$registration_date >= 2006 & query.df$registration_date <= 2012,], filename = "year_with_edits")
 
 }
