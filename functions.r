@@ -30,7 +30,7 @@ sql.fun <- function(query_statement){
   return(output)
 }
 
-parse_data.fun <- function(x, tablename){
+parse_data.fun <- function(x, tablename, usergroup){
     
     #Regex function
     regex.fun <- function(input_data){
