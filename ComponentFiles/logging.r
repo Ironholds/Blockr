@@ -72,9 +72,9 @@ logging.fun <- function(){
   registered.df <- query.df[query.df$userid > 0,]
   
   #Run
-  regex_matches.list <- parse_data.fun(x = anonusers.df, tablename = "logging")
+  regex_matches.list <- parse_data.fun(x = anonusers.df, tablename = "logging", usergroup = "registered")
   graphing.fun(x = regex_matches.list, usergroup = "anonymous")
-  regex_matches.list <- parse_data.fun(x = registered.df, tablename = "logging")
+  regex_matches.list <- parse_data.fun(x = registered.df, tablename = "logging", usergroup = "registered")
   graphing.fun(x = regex_matches.list, usergroup = "registered")
   
 }

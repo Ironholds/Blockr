@@ -111,9 +111,9 @@ ipblock.fun <- function(){
   registered.df <- query.df[query.df$ipb_user > 0,]
   
   #Run parse_data.fun and graphing.fun for each
-  regex_matches.list <- parse_data.fun(x = registered.df, tablename = "ipblocks")
+  regex_matches.list <- parse_data.fun(x = registered.df, tablename = "ipblocks", usergroup = "registered")
   graphing.fun(x = regex_matches.list, usergroup = "registered")
-  regex_matches.list <- parse_data.fun(x = anons.df, tablename = "ipblocks")
+  regex_matches.list <- parse_data.fun(x = anons.df, tablename = "ipblocks", usergroup = "registered")
   graphing.fun(x = regex_matches.list, usergroup = "anonymous")
   
 }

@@ -36,8 +36,9 @@ editfilters.r <- function(){
   
   #Grab in anonymous and registered blocking data for vandalism-related blocks
   anonymous_blocks.df <- subset(
-    read.delim(file.path(getwd(),"Output",""))
+    read.delim(file.path(getwd(),"Output",""), header = TRUE, as.is = TRUE), variable = "bad.faith"
     )
+  
   registered_blocks.df <- 
   
   output.fun(x){
