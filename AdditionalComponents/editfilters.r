@@ -73,12 +73,9 @@ editfilters.r <- function(){
   #Run
   anonymous_data.df <- bind.fun(1, anonymous_blocks.df)
   registered_data.df <- bind.fun(2, registered_blocks.df)
-  #Function to bind the datasets together and generate /tres interessant/ data. Well, interessant to me.
-  output.fun(x){
   
-    
-    #Aggregate edit filter hits, generally
-    hits.df <- as.data.frame(table(x$timestamp))
+  #Function to bind the datasets together and generate /tres interessant/ data. Well, interessant to me.
+  output.fun(data, name){
     
     
     
