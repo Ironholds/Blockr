@@ -54,7 +54,22 @@ editfilters.r <- function(){
     total.df <- as.data.frame(table(hits.df$timestamp))
     nonwarn.df <- hits.df[!hits.df$filter_action == "warn",]
     grepvec <- grepl(pattern = "blockautopromote", x = nonwarn.df$filter_action, perl = TRUE, ignore.case = TRUE)
+    strict.df <- as.data.frame(table(nonwarn.df[!grepvec,]$timestamp))
+    
+    #Bind to block data
+    to_rename.df <- cbind(total.df,strict.df[,2],block_data[,3])
+    
+    #Rename, defactor and output
+    to_output.df <- rename(to_rename.df, replace = c(
+      "Var1" = "timestamp",
+      "Freq" = "total.hits",
+      "strict.df[, 2]" = "strict.hits",
+      "block_data[, 3]" = "blocks"))
+    
+    to_output.df$timestamp <- as.character(to_output.df$timestamp)
+    return(to_output.df)
   }
+  
   #Function to bind the datasets together and generate /tres interessant/ data. Well, interessant to me.
   output.fun(x){
   
