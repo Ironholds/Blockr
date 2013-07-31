@@ -45,7 +45,7 @@ editfilters.r <- function(){
 
   
   #Bring in interesting data and bind
-  bind.fun(hit_data, block_data){
+  bind.fun <- function(hit_data, block_data){
     
     #Grab filter data
     hits.df <- as.data.frame(filters.list[hit_data])
@@ -70,6 +70,9 @@ editfilters.r <- function(){
     return(to_output.df)
   }
   
+  #Run
+  anonymous_data.df <- bind.fun(1, anonymous_blocks.df)
+  registered_data.df <- bind.fun(2, registered_blocks.df)
   #Function to bind the datasets together and generate /tres interessant/ data. Well, interessant to me.
   output.fun(x){
   
