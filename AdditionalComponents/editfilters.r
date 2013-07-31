@@ -52,7 +52,7 @@ editfilters.r <- function(){
     
     #Aggregate - totals (warn, strip and disallow) and a more strict metric (disallows only)
     total.df <- as.data.frame(table(hits.df$timestamp))
-    nonwarn.df <- as.data.frame(table(hits.df[hits.df$filter_action == "warn",]))
+    nonwarn.df <- hits.df[!hits.df$filter_action == "warn",]
     grepvec <- grepl(pattern = "blockautopromote", x = nonwarn.df$filter_action, perl = TRUE, ignore.case = TRUE)
   }
   #Function to bind the datasets together and generate /tres interessant/ data. Well, interessant to me.
