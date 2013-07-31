@@ -18,7 +18,7 @@ editfilters.r <- function(){
     )
     
     #Filter out hits where no action was taken, or the action was to tag
-    query.df <- query.df[!query.df$filter_action == c("","tag"),]
+    query.df <- query.df[!query.df$filter_action %in% c("","tag"),]
     
     #Filter out non-edits
     query.df <- query.df[query.df$user_action == "edit",]
