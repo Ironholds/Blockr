@@ -43,7 +43,6 @@ editfilters.r <- function(){
     read.delim(file.path(getwd(),"Output","registered_logging_regex_matches_monthly.tsv"), header = TRUE, as.is = TRUE), variable == "bad.faith" & block_timestamp >= 200903
   )
 
-  
   #Bring in interesting data and bind
   bind.fun <- function(hit_data, block_data){
     
@@ -75,14 +74,55 @@ editfilters.r <- function(){
   registered_data.df <- bind.fun(2, registered_blocks.df)
   
   #Function to generate /tres interessant/ data. Well, interessant to me.
-  output.fun(data, name){
+  output.fun <- function(data, name){
     
+    #Save dataframes for any later usage, and for transparency
+    aggregate_file_path <- file.path(getwd(),"Output",paste(name,"AbuseFilter_hits.tsv", sep = "_"))
+    write.table(data, file = aggregate_file_path, col.names = TRUE,
+                row.names = FALSE, sep = "\t", quote = FALSE)
     
+    #Linear regression; what's the relationship between AV blocks and edit filter hits overall?
+    regression_graph_totals <- ggplot(data,aes(x = total.hits,y = blocks))+
+      geom_point(shape=3) +
+      geom_smooth(method = "lm", se=TRUE, formula = y ~ x) +
+      labs(x = "AbuseFilter hits (monthly)", y = "bad-faith blocks (monthly)") +
+      ggtitle(paste("Relationship between abusefilter hits and user blocks\n, by month (2009-2012)",name,"users",sep = " ")) +
+      scale_x_continuous(expand = c(0.01,0.01)) +
+      scale_y_continuous(expand = c(0.01,0.01))
     
+    #Strict hits?
+    regression_graph_prohibits <- ggplot(data,aes(x = strict.hits, y = blocks))+
+      geom_point(shape=3) +
+      geom_smooth(method = "lm", se=TRUE, formula = y ~ x) +
+      labs(x = "AbuseFilter hits (monthly)", y = "bad-faith blocks (monthly)") +
+      ggtitle(paste("Relationship between abusefilter prohibitions and user blocks\n, by month (2009-2012)",name,"users",sep = " ")) +
+      scale_x_continuous(expand = c(0.01,0.01)) +
+      scale_y_continuous(expand = c(0.01,0.01))
     
+    #Print
+    ggsave(filename = file.path(getwd(),"Output", paste(name,"AbuseFilter_hits.png", sep = "_")),
+           plot = regression_graph_totals,
+           width = 8,
+           height = 8,
+           units = "in")
+    
+    ggsave(filename = file.path(getwd(),"Output", paste(name,"AbuseFilter_prohibitions.png", sep = "_")),
+           plot = regression_graph_prohibits,
+           width = 8,
+           height = 8,
+           units = "in")
+    
+    #Generate and throw out data on the linear regression
+    sink(file = file.path(getwd(),"Output", paste(name,"AbuseFilter_hits.txt", sep = "_")))
+    print(summary(lm(formula = blocks ~  total.hits, data = data,)))
+    sink()
+    sink(file = file.path(getwd(),"Output", paste(name,"AbuseFilter_prohibitions.txt", sep = "_")))
+    print(summary(lm(formula = blocks ~  strict.hits, data = data,)))
+    sink()
   }
   
-  
-  
+  #Run
+  output.fun(data = anonymous_data.df, name = "anonymous")
+  output.fun(data = registered_data.df, name = "registered")
   
 }
