@@ -29,7 +29,7 @@ registration_data.fun <- function(){
   )
   
   #Make non-blocked users identifiable
-  query.df$expiry[ is.na(query.df$expiry) ] <- as.numeric(0)
+  query.df$expiry[ is.na(query.df$expiry) ] <- as.numeric(0)  
   
   #Data on registrations
   registrations.fun <- function(x, graphname, filename){
