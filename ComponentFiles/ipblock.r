@@ -45,12 +45,12 @@ ipblock.fun <- function(){
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
     
     #print
-    ggsave(filename = file.path(getwd(),"Output", paste(usergroup,"_ipblocks_regex_matches_by_year.png", sep = "")),
+    ggsave(filename = file.path(getwd(),"Output", paste(usergroup),"ComponentFiles","ipblocks_regex_matches_by_year.png"),
       plot = line_graph_yearly,
       width = 8,
       height = 8,
       units = "in")
-    ggsave(filename = file.path(getwd(),"Output", paste(usergroup,"_ipblocks_regex_matches_by_month.png", sep = "")),
+    ggsave(filename = file.path(getwd(),"Output", paste(usergroup),"ComponentFiles","ipblocks_regex_matches_by_month.png"),
       plot = line_graph_monthly,
       width = 8,
       height = 8,
@@ -67,40 +67,8 @@ ipblock.fun <- function(){
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
     
     #Print
-    ggsave(filename = file.path(getwd(),"Output", paste(usergroup,"_ipblocks_regex_matches_linear_regression.png", sep = "")),
+    ggsave(filename = file.path(getwd(),"Output", paste(usergroup),"ComponentFiles","ipblocks_regex_matches_linear_regression.png"),
       plot = regression_graph_monthly,
-      width = 8,
-      height = 8,
-      units = "in")
-    
-    #The dataset makes it difficult to properly show everything. Let's graph some subsets
-    regression_graph_monthly_badfaith <- ggplot(monthly_data.df[monthly_data.df$variable %in% c("bad.faith","spam"),],
-      aes(x = block_timestamp,y = value, colour = variable))+
-      geom_point(shape=3) +
-      geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
-      labs(x = "Year", y = "Number of users") +
-      ggtitle(paste("Spam and bad-faith blocks on the English-language Wikipedia\nby month (2006-2012) - ipblocks table,",usergroup,"users",sep = " ")) +
-      scale_x_discrete(expand = c(0,0)) +
-      scale_y_continuous(expand = c(0,0)) +
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
-      
-    regression_graph_monthly_other <- ggplot(monthly_data.df[!monthly_data.df$variable %in% c("bad.faith","spam"),],
-      aes(x = block_timestamp,y = value, colour = variable))+
-      geom_point(shape=3) +
-      geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
-      labs(x = "Year", y = "Number of users") +
-      ggtitle(paste("Other blocks on the English-language Wikipedia\nby month (2006-2012) - ipblocks table,",usergroup,"users",sep = " ")) +
-      scale_x_discrete(expand = c(0,0)) +
-      scale_y_continuous(expand = c(0,0)) +
-      theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
-    
-    ggsave(filename = file.path(getwd(),"Output", paste(usergroup,"_ipblocks_linear_regression_badfaith.png",sep = "")),
-      plot = regression_graph_monthly_badfaith,
-      width = 8,
-      height = 8,
-      units = "in")
-    ggsave(filename = file.path(getwd(),"Output", paste(usergroup,"_ipblocks_linear_regression_other.png",sep = "")),
-      plot = regression_graph_monthly_other,
       width = 8,
       height = 8,
       units = "in")
