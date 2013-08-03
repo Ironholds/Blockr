@@ -43,7 +43,7 @@ logging.fun <- function(){
       theme(axis.text.x = element_text(angle = 90, hjust = 1))
     
     #print
-    ggsave(filename = file.path(getwd(),"Output", paste(usergroup,"_logging_regex_matches_by_year.png", sep = "")),
+    ggsave(filename = file.path(getwd(),"Output", paste(usergroup),"ComponentFiles","logging_regex_matches_by_year.png"),
       plot = line_graph_yearly,
       width = 8,
       height = 8,
@@ -60,7 +60,7 @@ logging.fun <- function(){
       theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
     
     #Print
-    ggsave(filename = file.path(getwd(),"Output", paste(usergroup,"_logging_regex_matches_linear_regression.png", sep = "")),
+    ggsave(filename = file.path(getwd(),"Output", paste(usergroup), "ComponentFiles", "logging_regex_matches_linear_regression.png"),
       plot = regression_graph_monthly,
       width = 8,
       height = 8,
@@ -77,6 +77,30 @@ logging.fun <- function(){
   regex_matches.list <- parse_data.fun(x = registered.df, tablename = "logging", usergroup = "registered")
   graphing.fun(x = regex_matches.list, usergroup = "registered")
   
+  #Function to output data for hand-coding
+  usertest.fun <- function(x){
+    
+    #Pin input data
+    input_data.df <- x
+    
+    #Run regular expressions over
+    for(i in length(regex_list)){
+      
+      #Run regex
+      grepvec <- grepl(pattern = regex_list[i],
+                       x = input_data.df$reason,
+                       perl = TRUE,
+                       ignore.case = TRUE)
+      
+      #Throw non-matches to the source
+      input_data.df <- input_data.df[!grepvec,]
+    }
+    
+    #Throw things that don't match any regex to file.
+    usertest_file_path <- file.path(getwd(),"Output","non_match.tsv")
+    write.table(input_data.df, file = usertest_file_path, col.names = TRUE,
+                row.names = FALSE, sep = "\t", quote = FALSE)
+  }
 }
 
 #Run

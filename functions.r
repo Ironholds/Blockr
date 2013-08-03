@@ -40,13 +40,6 @@ parse_data.fun <- function(x, tablename, usergroup){
                                   variable = "block_timestamp",
                                   percentage = 0.20)
       
-      #Create list of regexes
-      regex_list <- list(c("(spam|advertis(ement|ing)|promot(e|ion))"),
-                         c("(arb(itration|com)|defamat(ion|ory)|vandal(|ism)|disrupti(ve|on)|WP:BLP|troll|attack|bad faith|harr?ass?(ment)|abus(e|ive)|vau(|block)|suppress|stalk|phish(ing|)|(death|legal) threat|biographies of living|hoax|rac(ist|ial)|copy(right|vio)|threatban|nonsense|(in|un|)civil(ity)|WP:VAND|WP:LEGAL|edit( |-)war(ring)|schoolblock|revert rule|\\drr|deliberately triggering|outing|anonblock|battle(|field|ground)|topic ban)"),
-                         c("((?-i)LTA(?i)|sock|eva(de|sion|ding)|JarlaxleArtemis|grawp|WP:LTA|term abuse|multiple accounts|checkuser|MascotGuy|Jessica Liao|Grundle2600|Swale|sleeper|willy|puppet|\\{\\{WoW\\}\\}|reincarnaton|ararat|CU block|banned)"),
-                         c("(username|uw-(uhblock|softestblock)|(softer|cause|u)block|impost(or|er)|too similar|similar to existing user or recent meme|\\{\\{unb|contact an administrator for verification|impersonat(or|ion|ing))"),
-                         c("(torblock|blocked proxy|webhostblock|\\{\\{tor)"))
-      
       output_data.df <- ddply(.data = input_data,
                               .var = "block_timestamp",
                               .fun = function(x, samplesize){
@@ -125,4 +118,3 @@ parse_data.fun <- function(x, tablename, usergroup){
     #Return it
     return(to.return)
   }
-
