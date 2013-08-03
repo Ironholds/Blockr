@@ -28,8 +28,9 @@ registration_data.fun <- function(){
             AND logging.log_action NOT IN ('autocreate');"
   )
   
+  #Make non-blocked users identifiable
   query.df$expiry[ is.na(query.df$expiry) ] <- as.numeric(0)
-  query.df <- query.df[query.df$expiry %in% c(0,"indefinite"),]
+  
   #Data on registrations
   registrations.fun <- function(x, graphname, filename){
     
