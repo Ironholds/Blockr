@@ -112,10 +112,10 @@ parse_data.fun <- function(x, tablename, usergroup){
     melted_data_year.df <- melt(data_by_year.df, id.vars = 1, measure.vars = 2:7)
     
     #Export it
-    melted_file_path <- file.path(getwd(),"Output",paste(usergroup,tablename,"regex_matches_monthly.tsv",sep = "_"))
+    melted_file_path <- file.path(getwd(),"Output",paste(usergroup),"ComponentFiles",paste(tablename,"regex_matches_monthly.tsv",sep = "_"))
     write.table(melted_data_month.df, file = melted_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
-    melted_file_path <- file.path(getwd(),"Output",paste(usergroup,tablename,"regex_matches_yearly.tsv",sep = "_"))
+    melted_file_path <- file.path(getwd(),"Output",paste(usergroup),"ComponentFiles",paste(tablename,"regex_matches_yearly.tsv",sep = "_"))
     write.table(melted_data_year.df, file = melted_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
     
