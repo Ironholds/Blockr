@@ -25,12 +25,11 @@ registration_data.fun <- function(){
               ON ipblocks.ipb_user = user.user_id
           WHERE
             logging.log_type = 'newusers'
-            AND logging.log_action NOT IN ('autocreate')
-            AND ipblocks.ipb_expiry = 'indefinite';"
+            AND logging.log_action NOT IN ('autocreate');"
   )
   
   query.df$expiry[ is.na(query.df$expiry) ] <- as.numeric(0)
-  
+  query.df <- query.df[query.df$expiry %in% c(0,"indefinite"),]
   #Data on registrations
   registrations.fun <- function(x, graphname, filename){
     
