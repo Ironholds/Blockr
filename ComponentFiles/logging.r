@@ -94,6 +94,7 @@ logging.fun <- function(){
       
       #Throw non-matches to the source
       input_data.df <- input_data.df[!grepvec,]
+      
     }
     
     #Throw things that don't match any regex to file.
@@ -101,6 +102,9 @@ logging.fun <- function(){
     write.table(input_data.df, file = usertest_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
   }
+  
+  #Run
+  usertest.fun()
 }
 
 #Run
