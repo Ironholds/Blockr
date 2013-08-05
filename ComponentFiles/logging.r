@@ -83,10 +83,10 @@ logging.fun <- function(){
     #Pin input data
     input_data.df <- x
     
-    #Empty object
+    #Create an empty object to fill with output
     output.df <- data.frame()
     
-    #Run regular expressions over
+    #Run regular expressions over input
     for(i in length(regex_list)){
       
       #Run regex
@@ -95,16 +95,16 @@ logging.fun <- function(){
                        perl = TRUE,
                        ignore.case = TRUE)
       
-      #Extract matches
+      #Extract rows that match
       matches <- input_data.df[grepvec,]
       
-      #Add regex number
+      #Add regex value, to later identify /what/ it matched.
       matches$matched <- i
       
-      #Throw out of loop
+      #bind to output object
       output.df <- rbind(output.df,matches)
       
-      #Throw non-matches to the source
+      #replace input with non-matches from the last run
       input_data.df <- input_data.df[!grepvec,]
       
     }
@@ -113,7 +113,7 @@ logging.fun <- function(){
     input_data.df$matched <- 0
     output.df <- rbind(output.df,input_data.df)    
     
-    #Throw things to file.
+    #Save non-matches and matches both to file.
     usertest_file_path <- file.path(getwd(),"Output","blocks_with_match_status.tsv")
     write.table(output.df, file = usertest_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)

@@ -37,10 +37,10 @@ editfilters.r <- function(){
   
   #Grab in anonymous and registered blocking data for vandalism-related blocks
   anonymous_blocks.df <- subset(
-    read.delim(file.path(getwd(),"Output","anonymous_logging_regex_matches_monthly.tsv"), header = TRUE, as.is = TRUE), variable == "bad.faith" & block_timestamp >= 200903
+    read.delim(file.path(getwd(),"Output","anonymous","ComponentFiles","logging_regex_matches_monthly.tsv"), header = TRUE, as.is = TRUE), variable == "bad.faith" & block_timestamp >= 200903
     )
   registered_blocks.df <- subset(
-    read.delim(file.path(getwd(),"Output","registered_logging_regex_matches_monthly.tsv"), header = TRUE, as.is = TRUE), variable == "bad.faith" & block_timestamp >= 200903
+    read.delim(file.path(getwd(),"Output","registered","ComponentsFiles","logging_regex_matches_monthly.tsv"), header = TRUE, as.is = TRUE), variable == "bad.faith" & block_timestamp >= 200903
   )
 
   #Bring in interesting data and bind
@@ -77,7 +77,7 @@ editfilters.r <- function(){
   output.fun <- function(data, name){
     
     #Save dataframes for any later usage, and for transparency
-    aggregate_file_path <- file.path(getwd(),"Output",paste(name,"AbuseFilter_hits.tsv", sep = "_"))
+    aggregate_file_path <- file.path(getwd(),"Output",paste(name),"AdditionalComponents", "AbuseFilter_hits.tsv", sep = "_"))
     write.table(data, file = aggregate_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
     
@@ -100,23 +100,23 @@ editfilters.r <- function(){
       scale_y_continuous(expand = c(0.01,0.01))
     
     #Print
-    ggsave(filename = file.path(getwd(),"Output", paste(name,"AbuseFilter_hits.png", sep = "_")),
+    ggsave(filename = file.path(getwd(),"Output", paste(name),"AdditionalComponents", "AbuseFilter_hits.png"),
            plot = regression_graph_totals,
            width = 8,
            height = 8,
            units = "in")
     
-    ggsave(filename = file.path(getwd(),"Output", paste(name,"AbuseFilter_prohibitions.png", sep = "_")),
+    ggsave(filename = file.path(getwd(),"Output", paste(name),"AdditionalComponents", "AbuseFilter_prohibitions.png"),
            plot = regression_graph_prohibits,
            width = 8,
            height = 8,
            units = "in")
     
     #Generate and throw out data on the linear regression
-    sink(file = file.path(getwd(),"Output", paste(name,"AbuseFilter_hits.txt", sep = "_")))
+    sink(file = file.path(getwd(),"Output", paste(name),"AdditionalComponents", "AbuseFilter_hits.txt"))
     print(summary(lm(formula = blocks ~  total.hits, data = data,)))
     sink()
-    sink(file = file.path(getwd(),"Output", paste(name,"AbuseFilter_prohibitions.txt", sep = "_")))
+    sink(file = file.path(getwd(),"Output", paste(name),"AdditionalComponents", "AbuseFilter_prohibitions.txt"))
     print(summary(lm(formula = blocks ~  strict.hits, data = data,)))
     sink()
   }
