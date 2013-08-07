@@ -1,7 +1,7 @@
-#UserSurvival - a project to accurately triage data on blocked Wikipedia users, identify
+#Blockr - a project to accurately triage data on blocked Wikipedia users, identify
 #the underlying rationales and test various hypotheses as to any outcome
 #
-#US_functions.r contains the project's global, reused functions
+#functions.r contains the project's global, reused functions
 #
 # @Year = 2013
 # @Copyright: Oliver Keyes
