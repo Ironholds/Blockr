@@ -1,5 +1,14 @@
+#Blockr - a project to accurately triage data on blocked Wikipedia users, identify
+#the underlying rationales and test various hypotheses as to any outcome
+#
+#editfilters.r extracts information on EditFilter hits and performs simple linear regression against the blocking data from logging.r
+#
+# @Year = 2013
+# @Copyright: Oliver Keyes
+# @License = MIT (http://opensource.org/licenses/MIT)
+
 #Wrapper function
-editfilters.r <- function(){
+editfilters.fun <- function(){
   
   #Retrieve filter data, and parse it for stupid
   filterparse.fun <- function(){
@@ -126,3 +135,6 @@ editfilters.r <- function(){
   output.fun(data = registered_data.df, name = "registered")
   
 }
+
+#Run
+editfilters.fun()

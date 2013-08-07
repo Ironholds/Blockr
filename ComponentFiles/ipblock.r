@@ -1,7 +1,7 @@
-#UserSurvival - a project to accurately triage data on blocked Wikipedia users, identify
+#Blockr - a project to accurately triage data on blocked Wikipedia users, identify
 #the underlying rationales and test various hypotheses as to any outcome
 #
-#ipblock.r outputs the basic analysis documented at http://blog.ironholds.org/?p=31
+#ipblock.r outputs the basic analysis (see Readme.md for more details)
 #
 # @Year = 2013
 # @Copyright: Oliver Keyes

@@ -1,4 +1,4 @@
-#UserSurvival - a project to accurately triage data on blocked Wikipedia users, identify
+#Blockr - a project to accurately triage data on blocked Wikipedia users, identify
 #the underlying rationales and test various hypotheses as to any outcome
 #
 #logging.r outputs similar results to the basic analysis, but for the logging rather than ipblocks table
