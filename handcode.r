@@ -7,7 +7,7 @@ handcode.fun <- function(){
   source(file = file.path(getwd(),"functions.r"))
   
   #Grab data to be randomly tested.
-  source(file = file.path(getwd(),"TestComponents","Retrieve.r"))
+  source(file = file.path(getwd(),"TestComponents","retrieve.r"))
   
   #Analyse hand-coding output.
   source(file = file.path(getwd(),"TestComponents","HandCodingAnalysis.r"))
