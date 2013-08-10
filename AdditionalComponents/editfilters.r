@@ -86,7 +86,7 @@ editfilters.fun <- function(){
   output.fun <- function(data, name){
     
     #Save dataframes for any later usage, and for transparency
-    aggregate_file_path <- file.path(getwd(),"Output",paste(name),"AdditionalComponents", "AbuseFilter_hits.tsv", sep = "_"))
+    aggregate_file_path <- file.path(getwd(),"Output",paste(name),"AdditionalComponents", "AbuseFilter_hits.tsv", sep = "_")
     write.table(data, file = aggregate_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
     
