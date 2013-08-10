@@ -49,7 +49,7 @@ editfilters.fun <- function(){
     read.delim(file.path(getwd(),"Output","anonymous","ComponentFiles","logging_regex_matches_monthly.tsv"), header = TRUE, as.is = TRUE), variable == "bad.faith" & block_timestamp >= 200903
     )
   registered_blocks.df <- subset(
-    read.delim(file.path(getwd(),"Output","registered","ComponentsFiles","logging_regex_matches_monthly.tsv"), header = TRUE, as.is = TRUE), variable == "bad.faith" & block_timestamp >= 200903
+    read.delim(file.path(getwd(),"Output","registered","ComponentFiles","logging_regex_matches_monthly.tsv"), header = TRUE, as.is = TRUE), variable == "bad.faith" & block_timestamp >= 200903
   )
 
   #Bring in interesting data and bind
