@@ -87,7 +87,7 @@ logging.fun <- function(){
     output.df <- data.frame()
     
     #Run regular expressions over input
-    for(i in length(regex_list)){
+    for(i in 1:length(regex_list)){
       
       #Run regex
       grepvec <- grepl(pattern = regex_list[i],
@@ -106,7 +106,7 @@ logging.fun <- function(){
       
       #replace input with non-matches from the last run
       input_data.df <- input_data.df[!grepvec,]
-      
+
     }
     
     #Add non-matches to the file we're exporting
@@ -120,7 +120,7 @@ logging.fun <- function(){
   }
   
   #Run
-  usertest.fun(query.df)
+  usertest.fun(registered.df)
 }
 
 #Run
