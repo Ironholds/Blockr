@@ -23,10 +23,10 @@ retrieve.fun <- function(){
     output.df <- data.frame()
     
     #Run regular expressions over input
-    for(i in 1:length(regex_list)){
+    for(i in 1:length(regex.vec)){
       
       #Run regex
-      grepvec <- grepl(pattern = regex_list[i],
+      grepvec <- grepl(pattern = regex.vec[i],
                        x = input_data.df$reason,
                        perl = TRUE,
                        ignore.case = TRUE)

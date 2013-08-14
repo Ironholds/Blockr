@@ -53,14 +53,12 @@ parse_data.fun <- function(x, tablename, usergroup){
                                 #Create empty vector.
                                 to_return.vec <- vector()
                                 
-                                #Grab length
-                                reg_length <- length(regex_list)
                                 
                                 #And now we loop.
-                                for(i in (1:reg_length)){
+                                for(i in (1:length(regex.vec))){
                                   
                                   #Run regexes
-                                  grepvec <- grepl(pattern = regex_list[i],
+                                  grepvec <- grepl(pattern = regex.vec[i],
                                   x = to_run.df$reason,
                                   perl = TRUE,
                                   ignore.case = TRUE)
