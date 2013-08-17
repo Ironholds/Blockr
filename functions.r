@@ -53,7 +53,6 @@ parse_data.fun <- function(x, tablename, usergroup){
                                 #Create empty vector.
                                 to_return.vec <- vector()
                                 
-                                
                                 #And now we loop.
                                 for(i in (1:length(regex.vec))){
                                   
@@ -93,8 +92,7 @@ parse_data.fun <- function(x, tablename, usergroup){
     data_by_year.df <- ddply(.data = data_by_year.df,
                              .var = "block_timestamp",
                              .fun = function(x){
-                              
-                              return(colSums(x[,2:7]))
+                                return(colSums(x[,2:7]))
                              }
     )
     
