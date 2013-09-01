@@ -39,10 +39,10 @@ parse_data.fun <- function(x, tablename, usergroup){
     samplesize <- trickstr::sample_size(x = input_data,
                                 variable = "block_timestamp",
                                 percentage = 0.20)
-    
+        
     output_data.df <- ddply(.data = input_data,
                             .var = "block_timestamp",
-                            .fun = function(x, samplesize){
+                            .fun = function(x){
                               
                               #sample from the subset to produce normalised data, operating off the value of samplesize
                               to_run.df <- trickstr::dfsample(df = x, size = samplesize)
@@ -68,7 +68,7 @@ parse_data.fun <- function(x, tablename, usergroup){
                               
                               #Include non-matches
                               to_return.vec[length(to_return.vec)+1] <- nrow(to_run.df)
-                              
+                                                            
                               #Return
                               return(to_return.vec)}
                             )
