@@ -37,7 +37,7 @@ logging.fun <- function(){
   #Hand-coding
   
   #Sample
-  to_code.df <- trickstr::dfsample(registered.df, size = 2000)
+  to_code.df <- trickstr::dfsample(registered.df, size = 4000)
   
   #Create exportable object
   hand_code.df <- data.frame()
@@ -54,14 +54,16 @@ logging.fun <- function(){
     #Extract rows that match
     matches <- to_code.df[grepvec,]
     
-    #Add regex value, to later identify /what/ it matched.
-    matches$matched <- i
-    
-    #bind to output object
-    output.df <- rbind(hand_code.df,matches)
-    
-    #replace input with non-matches from the last run
-    input_data.df <- to_code.df[!grepvec,]
+    if(nrow(matches) > 0){
+      #Add regex value, to later identify /what/ it matched.
+      matches$matched <- i
+      
+      #bind to output object
+      output.df <- rbind(hand_code.df,matches)
+      
+      #replace input with non-matches from the last run
+      to_code.df <- to_code.df[!grepvec,]
+    }
   }
   
   #Add non-matches to the file we're exporting
