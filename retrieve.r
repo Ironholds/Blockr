@@ -47,7 +47,7 @@ logging.fun <- function(){
     
     #Run regexes
     grepvec <- grepl(pattern = regex.vec[i],
-    x = registered.df$reason,
+    x = to_code.df$reason,
     perl = TRUE,
     ignore.case = TRUE)
     
@@ -63,6 +63,15 @@ logging.fun <- function(){
     #replace input with non-matches from the last run
     input_data.df <- to_code.df[!grepvec,]
   }
+  
+  #Add non-matches to the file we're exporting
+  to_code.df$matched <- 0
+  hand_code.df <- rbind(hand_code.df,to_code.df)
+  
+  #Export codable results
+  blockr_file_path <- file.path(getwd(),"Data","hand_codable.tsv")
+  write.table(hand_code.df, file = blockr_file_path, col.names = TRUE,
+              row.names = FALSE, sep = "\t", quote = TRUE, qmethod = "double")
 }
 
 ipblock.fun <- function(){
