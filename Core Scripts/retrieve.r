@@ -55,11 +55,12 @@ logging.fun <- function(){
     matches <- to_code.df[grepvec,]
     
     if(nrow(matches) > 0){
+      
       #Add regex value, to later identify /what/ it matched.
       matches$matched <- i
       
       #bind to output object
-      output.df <- rbind(hand_code.df,matches)
+      hand_code.df <- rbind(hand_code.df,matches)
       
       #replace input with non-matches from the last run
       to_code.df <- to_code.df[!grepvec,]
