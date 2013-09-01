@@ -36,9 +36,9 @@ parse_data.fun <- function(x, tablename, usergroup){
   regex.fun <- function(input_data){
     
     #How many items shall we sample?
-    samplesize <- sample_size(x = input_data,
+    samplesize <- round(sample_size(x = input_data,
                                 variable = "block_timestamp",
-                                percentage = 0.20)
+                                percentage = 0.20))
     
     output_data.df <- ddply(.data = input_data,
                             .var = "block_timestamp",
