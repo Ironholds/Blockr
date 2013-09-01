@@ -37,7 +37,7 @@ logging.fun <- function(){
   #Hand-coding
   
   #Sample
-  to_code.df <- registered.df[sample(1:nrow(registered.df), size = 2000),]
+  to_code.df <- dfsample(registered.df, size = 2000)
   
   #Create exportable object
   hand_code.df <- data.frame()
