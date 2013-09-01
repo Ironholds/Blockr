@@ -5,7 +5,7 @@ Interesting things found using the Blockr scripts will usually be posted on [my 
 
 __Author:__ Oliver Keyes<br>
 __License:__ [MIT](http://opensource.org/licenses/MIT)<br>
-__Status:__ In development
+__Status:__ Unstable/in development
 
 ##Contents
 At the moment, MetaAnalysis contains three central components, in the _ComponentFiles_ folder. In order, these are:
