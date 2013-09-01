@@ -91,6 +91,6 @@ parse_data.fun <- function(x, tablename, usergroup){
   
   #Export it
   melted_file_path <- file.path(getwd(),"Data",paste(tablename,usergroup,"regex_matches.tsv",sep = "_"))
-  write.table(melted_data_month.df, file = melted_file_path, col.names = TRUE,
+  write.table(melted_data.df, file = melted_file_path, col.names = TRUE,
               row.names = FALSE, sep = "\t", quote = FALSE)
 }
