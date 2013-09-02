@@ -35,17 +35,13 @@ parse_data.fun <- function(x, tablename, usergroup){
   #Regex function
   regex.fun <- function(input_data){
     
-    #How many items shall we sample?
-    samplesize <- trickstr::sample_size(x = input_data,
-                                variable = "block_timestamp",
-                                percentage = 0.20)
-        
+    
     output_data.df <- ddply(.data = input_data,
                             .var = "block_timestamp",
                             .fun = function(x){
                               
-                              #sample from the subset to produce normalised data, operating off the value of samplesize
-                              to_run.df <- trickstr::dfsample(df = x, size = samplesize)
+                              #Pin
+                              to_run.df <- x
                               
                               #Create empty vector.
                               to_return.vec <- vector()
