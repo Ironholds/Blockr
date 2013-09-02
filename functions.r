@@ -35,7 +35,6 @@ parse_data.fun <- function(x, tablename, usergroup){
   #Regex function
   regex.fun <- function(input_data){
     
-    
     output_data.df <- ddply(.data = input_data,
                             .var = "block_timestamp",
                             .fun = function(x){
