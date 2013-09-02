@@ -102,38 +102,10 @@ enclose.fun <- function(){
     parse_data.fun(x = anons.df, tablename = "ipblocks", usergroup = "anonymous")
   }
   
-  #Registration data
-  registration.fun <- function(){
-    
-    #Query
-    query.df <- sql.fun(query_statement = "
-            SELECT user.user_id AS id,
-              substring(logging.log_timestamp,1,4) AS registration_date,
-              user.user_editcount AS edit_count,
-              ipblocks.ipb_expiry AS expiry
-            FROM
-              logging INNER JOIN user
-                ON logging.log_title = user.user_name
-              LEFT JOIN ipblocks
-                ON ipblocks.ipb_user = user.user_id
-            WHERE
-              logging.log_type = 'newusers'
-              AND logging.log_action NOT IN ('autocreate');"
-    )
-    
-    #Make non-blocked users identifiable
-    query.df$expiry[ is.na(query.df$expiry) ] <- as.numeric(0)
-    
-    #Export
-    registration_file_path <- file.path(getwd(),"Data","registrations.tsv")
-    write.table(aggregate.data, file = aggregate_file_path, col.names = TRUE,
-                row.names = FALSE, sep = "\t", quote = FALSE)
-  }
-  
   #Run
   logging.fun()
   ipblock.fun()
-  registration.fun()
 }
   
 #Run
+enclose.fun()

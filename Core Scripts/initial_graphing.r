@@ -78,3 +78,6 @@ initial_graphing.fun <- function(){
   graphing.fun(table = "logging", usergroup = "anonymous")
   graphing.fun(table = "logging", usergroup = "registered")
 }
+
+#Run
+initial_graphing.fun()
