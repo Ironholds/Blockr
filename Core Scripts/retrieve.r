@@ -8,97 +8,132 @@
 # @License = MIT (http://opensource.org/licenses/MIT)
 
 #Enclosing function
-logging.fun <- function(){
+enclose.fun <- function(){
   
-  #Query database
-  query.df <- sql.fun(query_statement = "
-        SELECT
-          substring(logging.log_timestamp,1,6) AS block_timestamp,
-          logging.log_comment AS reason,
-          user.user_id AS userid
-        FROM logging LEFT JOIN user ON logging.log_title = user.user_name
-        WHERE logging.log_timestamp BETWEEN 20060101010101 AND 20121231235959
-          AND logging.log_type = 'block'
-          AND logging.log_action = 'block'
-          AND logging.log_params NOT LIKE '%indefinite%';"
-  )
-  
-  #Make anon users identifiable
-  query.df$userid[is.na(query.df$userid)] <- 0
-  
-  #Split
-  anonusers.df <- query.df[query.df$userid == 0,]
-  registered.df <- query.df[query.df$userid > 0,]
-  
-  #Run
-  parse_data.fun(x = anonusers.df, tablename = "logging", usergroup = "anonymous")
-  parse_data.fun(x = registered.df, tablename = "logging", usergroup = "registered")
-  
-  #Hand-coding
-  
-  #Sample
-  to_code.df <- trickstr::dfsample(registered.df, size = 4000)
-  
-  #Create exportable object
-  hand_code.df <- data.frame()
-
-  #Run the regexes
-  for(i in (1:length(regex.vec))){
+  #Logging data 
+  logging.fun <- function(){
     
-    #Run regexes
-    grepvec <- grepl(pattern = regex.vec[i],
-    x = to_code.df$reason,
-    perl = TRUE,
-    ignore.case = TRUE)
+    #Query database
+    query.df <- sql.fun(query_statement = "
+          SELECT
+            substring(logging.log_timestamp,1,6) AS block_timestamp,
+            logging.log_comment AS reason,
+            user.user_id AS userid
+          FROM logging LEFT JOIN user ON logging.log_title = user.user_name
+          WHERE logging.log_timestamp BETWEEN 20060101010101 AND 20121231235959
+            AND logging.log_type = 'block'
+            AND logging.log_action = 'block'
+            AND logging.log_params NOT LIKE '%indefinite%';"
+    )
     
-    #Extract rows that match
-    matches <- to_code.df[grepvec,]
+    #Make anon users identifiable
+    query.df$userid[is.na(query.df$userid)] <- 0
     
-    if(nrow(matches) > 0){
+    #Split
+    anonusers.df <- query.df[query.df$userid == 0,]
+    registered.df <- query.df[query.df$userid > 0,]
+    
+    #Run
+    parse_data.fun(x = anonusers.df, tablename = "logging", usergroup = "anonymous")
+    parse_data.fun(x = registered.df, tablename = "logging", usergroup = "registered")
+    
+    #Hand-coding
+    
+    #Sample
+    to_code.df <- trickstr::dfsample(registered.df, size = 4000)
+    
+    #Create exportable object
+    hand_code.df <- data.frame()
+  
+    #Run the regexes
+    for(i in (1:length(regex.vec))){
       
-      #Add regex value, to later identify /what/ it matched.
-      matches$matched <- i
+      #Run regexes
+      grepvec <- grepl(pattern = regex.vec[i],
+      x = to_code.df$reason,
+      perl = TRUE,
+      ignore.case = TRUE)
       
-      #bind to output object
-      hand_code.df <- rbind(hand_code.df,matches)
+      #Extract rows that match
+      matches <- to_code.df[grepvec,]
       
-      #replace input with non-matches from the last run
-      to_code.df <- to_code.df[!grepvec,]
+      if(nrow(matches) > 0){
+        
+        #Add regex value, to later identify /what/ it matched.
+        matches$matched <- i
+        
+        #bind to output object
+        hand_code.df <- rbind(hand_code.df,matches)
+        
+        #replace input with non-matches from the last run
+        to_code.df <- to_code.df[!grepvec,]
+      }
     }
+    
+    #Add non-matches to the file we're exporting
+    to_code.df$matched <- 0
+    hand_code.df <- rbind(hand_code.df,to_code.df)
+    
+    #Export codable results
+    blockr_file_path <- file.path(getwd(),"Data","hand_codable.tsv")
+    write.table(hand_code.df, file = blockr_file_path, col.names = TRUE,
+                row.names = FALSE, sep = "\t", quote = TRUE, qmethod = "double")
   }
   
-  #Add non-matches to the file we're exporting
-  to_code.df$matched <- 0
-  hand_code.df <- rbind(hand_code.df,to_code.df)
+  #Ipblocks table data
+  ipblock.fun <- function(){
+    
+    #Grab dataset
+    query.df <- sql.fun(query_statement = "
+            SELECT ipb_reason AS reason,
+              substring(ipb_timestamp,1,6) AS block_timestamp,
+              ipb_user
+            FROM ipblocks
+            WHERE ipb_timestamp BETWEEN 20060101010101 AND 20121231235959
+            AND ipb_expiry = 'infinity';"
+    )
+    
+    #Split
+    anons.df <- query.df[query.df$ipb_user == 0,]
+    registered.df <- query.df[query.df$ipb_user > 0,]
+    
+    #Run
+    parse_data.fun(x = registered.df, tablename = "ipblocks", usergroup = "registered")
+    parse_data.fun(x = anons.df, tablename = "ipblocks", usergroup = "anonymous")
+  }
   
-  #Export codable results
-  blockr_file_path <- file.path(getwd(),"Data","hand_codable.tsv")
-  write.table(hand_code.df, file = blockr_file_path, col.names = TRUE,
-              row.names = FALSE, sep = "\t", quote = TRUE, qmethod = "double")
-}
-
-ipblock.fun <- function(){
-  
-  #Grab dataset
-  query.df <- sql.fun(query_statement = "
-          SELECT ipb_reason AS reason,
-            substring(ipb_timestamp,1,6) AS block_timestamp,
-            ipb_user
-          FROM ipblocks
-          WHERE ipb_timestamp BETWEEN 20060101010101 AND 20121231235959
-          AND ipb_expiry = 'infinity';"
-  )
-  
-  #Split
-  anons.df <- query.df[query.df$ipb_user == 0,]
-  registered.df <- query.df[query.df$ipb_user > 0,]
+  #Registration data
+  registration.fun <- function(){
+    
+    #Query
+    query.df <- sql.fun(query_statement = "
+            SELECT user.user_id AS id,
+              substring(logging.log_timestamp,1,4) AS registration_date,
+              user.user_editcount AS edit_count,
+              ipblocks.ipb_expiry AS expiry
+            FROM
+              logging INNER JOIN user
+                ON logging.log_title = user.user_name
+              LEFT JOIN ipblocks
+                ON ipblocks.ipb_user = user.user_id
+            WHERE
+              logging.log_type = 'newusers'
+              AND logging.log_action NOT IN ('autocreate');"
+    )
+    
+    #Make non-blocked users identifiable
+    query.df$expiry[ is.na(query.df$expiry) ] <- as.numeric(0)
+    
+    #Export
+    registration_file_path <- file.path(getwd(),"Data","registrations.tsv")
+    write.table(aggregate.data, file = aggregate_file_path, col.names = TRUE,
+                row.names = FALSE, sep = "\t", quote = FALSE)
+  }
   
   #Run
-  parse_data.fun(x = registered.df, tablename = "ipblocks", usergroup = "registered")
-  parse_data.fun(x = anons.df, tablename = "ipblocks", usergroup = "anonymous")
+  logging.fun()
+  ipblock.fun()
+  registration.fun()
 }
-
-#Run
-logging.fun()
-ipblock.fun()
   
+#Run
