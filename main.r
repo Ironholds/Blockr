@@ -11,22 +11,42 @@ source(file = file.path(getwd(),"config.r"))
 #Load in global functions
 source(file = file.path(getwd(),"functions.r"))
 
-#Create output folder, if it doesn't already exist.
-dir.create(file.path(getwd(), "Output"), showWarnings = FALSE)
+#Create output folders, if they don't already exist.
+dir.create(file.path(getwd(), "Data"), showWarnings = FALSE)
+dir.create(file.path(getwd(), "Graphs"), showWarnings = FALSE)
 
-#Load in the enclosing functions for basic analysis, and run
-source(file = file.path(getwd(), "ComponentFiles", "registration_data.r"))
+run.fun <- function(){
+  
+  runtype <- readline(prompt = "Type 'full' for a full run, or 'limited' for a limited run\n")
+  
+  if(runtype %in% c("full","limited")){
+    
+    cat("Thank you. Beginning run.\n")
+    
+    source(file.path(getwd(),"Core Scripts","retrieve.r"))
+    
+    cat("initial data retrieved.\n")
+    
+    source(file.path(getwd(),"Core Scripts","initial_graphing.r"))
+    
+    cat("initial graphing complete.\n")
+    
+    if(runtype == "full"){
+      
+      source(file.path(getwd(),"Optional Scripts","additional_retrieve.r"))
+      
+      cat("additional retrieval complete.\n")
+    }
+    
+    cat("Thank you. Run complete.\n")
 
-print("Run 33 percent complete")
+  }
+  
+  else{
+    
+    cat("this is not a recognised run type\n")
+  }
+}
 
-source(file = file.path(getwd(), "ComponentFiles", "ipblock.r"))
-
-print("Run 66 percent complete")
-
-#Load in the enclosing function for logging table analysis, and run
-source(file = file.path(getwd(), "ComponentFiles", "logging.r"))
-
-print("Run 100 percent complete")
-
-#quit
-q(save = "no")
+#Run
+run.fun()
