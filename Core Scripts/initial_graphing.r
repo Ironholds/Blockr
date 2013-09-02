@@ -37,7 +37,7 @@ initial_graphing.fun <- function(){
       
     #print
     ggsave(filename = file.path(getwd(),"Graphs",paste(table,usergroup,"regression_by_month.png",sep = "_")),
-      plot = line_graph,
+      plot = regression_graph,
       width = 8,
       height = 8,
       units = "in")
