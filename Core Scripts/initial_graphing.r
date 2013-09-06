@@ -14,7 +14,7 @@ initial_graphing.fun <- function(){
       geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
       labs(x = "Month", y = "Number of users") +
       ggtitle(paste("Block rationales on the English-language Wikipedia by month\n (2006-2012)\n",table,"table,",usergroup,"users", sep = " ")) +
-      scale_x_discrete(breaks = c(200601,200701,200801,200901,201001,201101,201201), expand = c(0,0)) +
+      scale_x_discrete(breaks = seq(from = 200601, to = 201201, by = 100), expand = c(0,0)) +
       scale_y_continuous(expand = c(0, 0)) +
       theme(axis.text.x = element_text(angle = 90, hjust = 1))
     
@@ -31,7 +31,7 @@ initial_graphing.fun <- function(){
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
       labs(x = "Year", y = "Number of users") +
       ggtitle(paste("Block rationales on the English-language Wikipedia by month\n (2006-2012)\n",table,"table,",usergroup,"users", sep = " ")) +
-      scale_x_discrete(breaks = c(200601,200701,200801,200901,201001,201101,201201), expand = c(0,0)) +
+      scale_x_discrete(breaks = seq(from = 200601, to = 201201, by = 100), expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
       theme(axis.text.x = element_text(angle = 90, hjust = 1))
       
@@ -60,7 +60,7 @@ initial_graphing.fun <- function(){
       geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
       labs(x = "Month", y = "Number of users") +
       ggtitle(paste("Block rationales on the English-language Wikipedia by year\n (2006-2012)\n",table,"table,",usergroup,"users", sep = " ")) +
-      scale_x_discrete(breaks = c(2006,2007,2008,2009,2010,2011,2012), expand = c(0,0)) +
+      scale_x_discrete(breaks = seq(from = 200601, to = 201201, by = 100), expand = c(0,0)) +
       scale_y_continuous(expand = c(0, 0)) +
       theme(axis.text.x = element_text(angle = 90, hjust = 1))
     
