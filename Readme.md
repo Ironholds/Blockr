@@ -1,5 +1,5 @@
 #Blockr
-_Blockr_ is a set of R scripts that analyses blocking rationales on the English-language Wikipedia. In doing so, it attempts to divine data about proportionate increases or decreases in types of misbehaviour over time.
+_Blockr_ is a set of R scripts that analyses blocking rationales on the English-language Wikipedia. In doing so, it attempts to divine data about increases or decreases in types of misbehaviour over time.
 
 Interesting things found using the Blockr scripts will usually be posted on [my blog](https://blog.ironholds.org); if you spot a bug or have any suggestions, drop me a line.
 
@@ -8,14 +8,13 @@ __License:__ [MIT](http://opensource.org/licenses/MIT)<br>
 __Status:__ Unstable/in development
 
 ##Contents
-At the moment, MetaAnalysis contains three central components, in the _ComponentFiles_ folder. In order, these are:
+At the moment, Blockr contains two types of analysis:
 
-* _ipblock.r_: runs the analysis over the _ipblocks_ table, which contains all currently extant blocks - in other words, the fleeting temporary blocks given out in the last N days, along with all indefinites.
-* _logging.r_: runs the analysis over the _logging_ table, which contains all block actions taken over all time - or for our purposes, since 2006. 
-* _registration\_data.r_: provides details on comparative block and registration numbers, to (amongst other things) identify the probability of a user being indefinitely blocked, and how this has changed over time.
+* _Core Scripts_: runs a basic analysis over the _ipblocks_ and _logging_ tables, categorising blocks, returning and saving the anonymised, aggregate data (in the _Data_ folder) and graphing the output (in the _Graphs_ folder).
+* _Optional Scripts_: some optional data-retrieval and analysis that takes the output of the Core Scripts and returns, for example, more nuanced regression graphs, and comparisons with edit filter hits and registration times.
 
 ##Dependencies
-The biggest one is access to the Wikimedia analytics slaves - if you don't have that, this project is unlikely to be helpful to you unless you have a particular fondness for stealing my terrible, terrible code. MetaAnalysis scripts are also dependent on several R packages, specifically:
+The biggest one is access to the Wikimedia analytics slaves - if you don't have that, this project is unlikely to be helpful to you unless you have a particular fondness for stealing my terrible, terrible code. Blockr scripts are also dependent on several R packages, specifically:
 
 * [Plyr](https://plyr.had.co.nz/)
 * [ggplot2](https://ggplot2.org/)
@@ -37,5 +36,4 @@ In addition, the scripts depend on a config file. This takes the structure of:
 	
 ##To-do
 * Explore several hypotheses around the dramatic shift in vandalism-related blocks.
-* Have registration\_data.r run off the logging table for blocks, too, allowing for an estimation of whether a user would be blocked at all, not just indefinitely blocked.
-* Generate the same data for anonymous contributors.
+* Refactor the edit-filters script
