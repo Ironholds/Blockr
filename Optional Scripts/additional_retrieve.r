@@ -60,9 +60,6 @@ additional_retrieve.fun <- function(){
               AND substring(logging.log_timestamp,1,4) BETWEEN '200601' AND '201308';"
     )
     
-    #Make non-blocked users identifiable
-    query.df$expiry[ is.na(query.df$expiry) ] <- as.numeric(0)
-    
     #Export
     registration_file_path <- file.path(getwd(),"Data","registrations.tsv")
     write.table(aggregate.data, file = aggregate_file_path, col.names = TRUE,
