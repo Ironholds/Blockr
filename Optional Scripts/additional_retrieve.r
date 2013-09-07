@@ -33,13 +33,8 @@ additional_retrieve.fun <- function(){
     query.df <- query.df[query.df$user_action == "edit",]
     
     #Split and export
-    anonymous_hits.df <- query.df[query.df$user_id == 0,]
-    blockr_file_path <- file.path(getwd(),"Data","anonymous_editfilter_hits.tsv")
-    write.table(anonymous_hits.df, file = blockr_file_path, col.names = TRUE,
-                row.names = FALSE, sep = "\t", quote = TRUE, qmethod = "double")
-    registered_hits.df <- query.df[query.df$user_id > 0,]
-    blockr_file_path <- file.path(getwd(),"Data","registered_editfilter_hits.tsv")
-    write.table(registered_hits.df, file = blockr_file_path, col.names = TRUE,
+    blockr_file_path <- file.path(getwd(),"Data","editfilter_hits.tsv")
+    write.table(query.df, file = blockr_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = TRUE, qmethod = "double")
   }
   
