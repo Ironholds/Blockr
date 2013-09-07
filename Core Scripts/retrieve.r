@@ -20,7 +20,7 @@ enclose.fun <- function(){
             logging.log_comment AS reason,
             user.user_id AS userid
           FROM logging LEFT JOIN user ON logging.log_title = user.user_name
-          WHERE logging.log_timestamp BETWEEN 20060101010101 AND 20121231235959
+          WHERE substring(logging.log_timestamp,1,6) BETWEEN 200601 AND 201308
             AND logging.log_type = 'block'
             AND logging.log_action = 'block'
             AND logging.log_params NOT LIKE '%indefinite%';"
@@ -89,7 +89,7 @@ enclose.fun <- function(){
               substring(ipb_timestamp,1,6) AS block_timestamp,
               ipb_user
             FROM ipblocks
-            WHERE ipb_timestamp BETWEEN 20060101010101 AND 20121231235959
+            WHERE substring(ipb_timestamp,1,6) BETWEEN 200601 AND 201308
             AND ipb_expiry = 'infinity';"
     )
     

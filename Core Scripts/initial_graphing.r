@@ -45,7 +45,7 @@ initial_graphing.fun <- function(){
     #Create yearly data totals
     yearly.df <- input.df
     yearly.df$block_timestamp <- substring(yearly.df$block_timestamp,1,4)
-    yearly.df <- ddply(.data = yearly.df,
+    yearly.df <- ddply(.data = yearly.df[yearly.df$block_timestamp <=2012,],
                              .var = c("block_timestamp","variable"),
                              .fun = function(x){
                                 return(sum(x[,3]))
