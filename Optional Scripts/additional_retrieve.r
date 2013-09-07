@@ -23,7 +23,7 @@ additional_retrieve.fun <- function(){
       FROM abuse_filter_log INNER JOIN abuse_filter
         ON afl_filter = af_id
       WHERE af_public_comments NOT LIKE '%test%'
-        AND substring(afl_timestamp,1,6) <= '201212';"
+        AND substring(afl_timestamp,1,6) <= '201308';"
     )
     
     #Filter out hits where no action was taken, or the action was to tag
@@ -59,7 +59,8 @@ additional_retrieve.fun <- function(){
                 ON ipblocks.ipb_user = user.user_id
             WHERE
               logging.log_type = 'newusers'
-              AND logging.log_action NOT IN ('autocreate');"
+              AND logging.log_action NOT IN ('autocreate')
+              AND substring(logging.log_timestamp,1,4) <= '201308';"
     )
     
     #Make non-blocked users identifiable
