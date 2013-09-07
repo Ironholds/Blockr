@@ -62,7 +62,7 @@ additional_retrieve.fun <- function(){
     
     #Export
     registration_file_path <- file.path(getwd(),"Data","registrations.tsv")
-    write.table(aggregate.data, file = aggregate_file_path, col.names = TRUE,
+    write.table(query.df, file = registration_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
   }
   
