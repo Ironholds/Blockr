@@ -50,17 +50,14 @@ additional_retrieve.fun <- function(){
     query.df <- sql.fun(query_statement = "
             SELECT user.user_id AS id,
               substring(logging.log_timestamp,1,4) AS registration_date,
-              user.user_editcount AS edit_count,
-              ipblocks.ipb_expiry AS expiry
+              user.user_editcount AS edit_count
             FROM
               logging INNER JOIN user
                 ON logging.log_title = user.user_name
-              LEFT JOIN ipblocks
-                ON ipblocks.ipb_user = user.user_id
             WHERE
               logging.log_type = 'newusers'
               AND logging.log_action NOT IN ('autocreate')
-              AND substring(logging.log_timestamp,1,4) BETWEEN 200601 AND 201308;"
+              AND substring(logging.log_timestamp,1,4) BETWEEN '200601' AND '201308';"
     )
     
     #Make non-blocked users identifiable
