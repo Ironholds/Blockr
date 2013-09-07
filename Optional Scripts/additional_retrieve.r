@@ -60,7 +60,7 @@ additional_retrieve.fun <- function(){
             WHERE
               logging.log_type = 'newusers'
               AND logging.log_action NOT IN ('autocreate')
-              AND substring(logging.log_timestamp,1,4) <= '201308';"
+              AND substring(logging.log_timestamp,1,4) BETWEEN 200601 AND 201308;"
     )
     
     #Make non-blocked users identifiable

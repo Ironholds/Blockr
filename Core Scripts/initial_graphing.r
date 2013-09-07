@@ -1,3 +1,12 @@
+#Blockr - a project to accurately triage data on blocked Wikipedia users, identify
+#the underlying rationales and test various hypotheses as to any outcome
+#
+#initial_graphing.r takes the data extracted by retrieve.r and maps it.
+#
+# @Year = 2013
+# @Copyright: Oliver Keyes
+# @License = MIT (http://opensource.org/licenses/MIT)
+
 initial_graphing.fun <- function(){
   
   #Grouped function
