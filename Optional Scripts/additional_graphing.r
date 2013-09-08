@@ -63,6 +63,7 @@ additional_graph.fun <- function(){
     return(bound.df)
   }
   
+  #Run
   data.df <- data_read.fun(table = "logging", usergroup = "registered")
 }
 
