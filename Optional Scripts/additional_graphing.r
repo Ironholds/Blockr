@@ -63,10 +63,10 @@ additional_graphs.fun <- function(){
     #Return
     return(bound.df)
   }
-       
+  
+  data.df <- data_read.fun(table = "logging", usergroup = "registered")
+  
   graph.fun <- function(){
-    
-    data.df <- data_read.fun(table = "logging", usergroup = "registered")
     
     #Linear regression; what's the relationship between AV blocks and registrations?
     regression_graph_registrations <- ggplot(data.df, aes(x = blocks,y = registrations))+
