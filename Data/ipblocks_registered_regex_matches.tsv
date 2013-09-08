@@ -90,7 +90,7 @@ block_timestamp	variable	value
 201305	spam	2005
 201306	spam	2295
 201307	spam	2146
-201308	spam	2127
+201308	spam	2126
 200601	bad.edit	1488
 200602	bad.edit	1586
 200603	bad.edit	1866
@@ -274,7 +274,7 @@ block_timestamp	variable	value
 201305	Sockpuppetry	1459
 201306	Sockpuppetry	1335
 201307	Sockpuppetry	1473
-201308	Sockpuppetry	1037
+201308	Sockpuppetry	1036
 200601	Username.problems	797
 200602	Username.problems	944
 200603	Username.problems	1390

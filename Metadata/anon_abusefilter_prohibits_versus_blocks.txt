@@ -1,0 +1,19 @@
+
+Call:
+lm(formula = anonymous_editfilter_prohibits ~ blocks, data = data.df)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-15582.0  -5219.0    856.9   4643.9  18590.4 
+
+Coefficients:
+            Estimate Std. Error t value             Pr(>|t|)    
+(Intercept) 46540.21    3899.37  11.935 < 0.0000000000000002 ***
+blocks        -80.39      11.55  -6.959        0.00000000576 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
+
+Residual standard error: 7327 on 52 degrees of freedom
+Multiple R-squared: 0.4822,	Adjusted R-squared: 0.4722 
+F-statistic: 48.42 on 1 and 52 DF,  p-value: 0.00000000576 
+
