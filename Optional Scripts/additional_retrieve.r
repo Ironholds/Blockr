@@ -44,7 +44,7 @@ additional_retrieve.fun <- function(){
     #Query
     query.df <- sql.fun(query_statement = "
             SELECT user.user_id AS id,
-              substring(logging.log_timestamp,1,4) AS registration_date,
+              substring(logging.log_timestamp,1,6) AS registration_date,
               user.user_editcount AS edit_count
             FROM
               logging INNER JOIN user
@@ -52,7 +52,7 @@ additional_retrieve.fun <- function(){
             WHERE
               logging.log_type = 'newusers'
               AND logging.log_action NOT IN ('autocreate')
-              AND substring(logging.log_timestamp,1,4) BETWEEN '200601' AND '201308';"
+              AND substring(logging.log_timestamp,1,6) BETWEEN '200601' AND '201308';"
     )
     
     #Aggregate and divide by edit status
