@@ -8,7 +8,7 @@
 # @License = MIT (http://opensource.org/licenses/MIT)
 
 #Wrapping function
-additional_graph.fun <- function(){
+additional_graphs.fun <- function(){
   
   #Read in data
   data_read.fun <- function(table,usergroup){
