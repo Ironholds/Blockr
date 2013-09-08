@@ -155,7 +155,7 @@ additional_graphs.fun <- function(){
            units = "in")
     
     #R2 and other data
-    sink(file = file.path(getwd(),"Metadata", "anon_abusefilter_prohibits_versus_blocks.png"))
+    sink(file = file.path(getwd(),"Metadata", "anon_abusefilter_prohibits_versus_blocks.txt"))
     print(summary(lm(formula = anonymous_editfilter_prohibits ~  blocks, data = data.df,)))
     sink()
     
