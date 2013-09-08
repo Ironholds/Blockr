@@ -36,6 +36,10 @@ run.fun <- function(){
       source(file.path(getwd(),"Optional Scripts","additional_retrieve.r"))
       
       cat("additional retrieval complete.\n")
+      
+      source(file.path(getwd(),"Optional Scripts","additional_graphing.r"))
+      
+      cat("additional graphing complete.\n")
     }
     
     cat("Thank you. Run complete.\n")
