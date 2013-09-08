@@ -61,10 +61,10 @@ additional_retrieve.fun <- function(){
     
     #Export
     registration_file_path <- file.path(getwd(),"Data","registrations.tsv")
-    write.table(query.df, file = registration_file_path, col.names = TRUE,
+    write.table(registered.df, file = registration_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
     registration_with_edits_file_path <- file.path(getwd(),"Data","registrations_with_edits.tsv")
-    write.table(query.df, file = registration_with_edits_file_path, col.names = TRUE,
+    write.table(registered_with_edits.df, file = registration_with_edits_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
   }
   
