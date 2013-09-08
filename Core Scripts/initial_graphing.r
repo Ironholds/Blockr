@@ -38,7 +38,7 @@ initial_graphing.fun <- function(){
     regression_graph <- ggplot(input.df,aes(x = block_timestamp,y = value, colour = variable))+
       geom_point(shape=3) +
       geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
-      labs(x = "Year", y = "Number of users") +
+      labs(x = "Month", y = "Number of users") +
       ggtitle(paste("Block rationales on the English-language Wikipedia by month\n (2006-2012)\n",table,"table,",usergroup,"users", sep = " ")) +
       scale_x_discrete(breaks = seq(from = 200601, to = 201201, by = 100), expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
@@ -67,7 +67,7 @@ initial_graphing.fun <- function(){
     #Graph
     year_graph <- ggplot(yearly.df, aes(block_timestamp, V1)) + 
       geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
-      labs(x = "Month", y = "Number of users") +
+      labs(x = "Year", y = "Number of users") +
       ggtitle(paste("Block rationales on the English-language Wikipedia by year\n (2006-2012)\n",table,"table,",usergroup,"users", sep = " ")) +
       scale_x_discrete(breaks = seq(from = 200601, to = 201201, by = 100), expand = c(0,0)) +
       scale_y_continuous(expand = c(0, 0)) +
