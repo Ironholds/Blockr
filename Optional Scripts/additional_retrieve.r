@@ -55,9 +55,16 @@ additional_retrieve.fun <- function(){
               AND substring(logging.log_timestamp,1,4) BETWEEN '200601' AND '201308';"
     )
     
+    #Aggregate and divide by edit status
+    registered.df <- as.data.frame(table(query.df$registration_date))
+    registered_with_edits.df <- as.data.frame(table(query.df[query.df$edit_count >= 1,]$registration_date))
+    
     #Export
     registration_file_path <- file.path(getwd(),"Data","registrations.tsv")
     write.table(query.df, file = registration_file_path, col.names = TRUE,
+                row.names = FALSE, sep = "\t", quote = FALSE)
+    registration_with_edits_file_path <- file.path(getwd(),"Data","registrations_with_edits.tsv")
+    write.table(query.df, file = registration_with_edits_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
   }
   
