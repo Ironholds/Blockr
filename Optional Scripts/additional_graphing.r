@@ -60,6 +60,9 @@ additional_graphs.fun <- function(){
     write.table(bound.df, file = blockr_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t")
     
+    #Remove editfilter hits
+    file.remove(file.path(getwd(),"Data","editfilter_hits.tsv"))
+    
     #Return
     return(bound.df)
   }
