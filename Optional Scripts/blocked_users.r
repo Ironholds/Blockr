@@ -47,9 +47,9 @@ block_edits.fun <- function(){
   
   }
   
-  #Save
+  #Aggregate and save
   blockr_file_path <- file.path(getwd(),"Data","blocked_users.tsv")
-  write.table(query.df, file = blockr_file_path, col.names = TRUE,
+  write.table(as.data.frame(table(query.df$edits), file = blockr_file_path, col.names = TRUE,
               row.names = FALSE, sep = "\t")
   
   #Plot
