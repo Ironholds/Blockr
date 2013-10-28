@@ -10,13 +10,15 @@
 #Read in data
 data_read.fun <- function(){
 
+  #Grab editfilter data and generate other
+  source(file.path(getwd(),"Optional Scripts","additional_retrieve.r"))
+  
   #Read non-context-specific data in
   registrations.df <- read.delim(file = file.path(getwd(),"Data","registrations.tsv"), as.is = TRUE, header = TRUE)
   registrations_with_edits.df <- read.delim(file = file.path(getwd(),"Data","registrations_with_edits.tsv"), as.is = TRUE, header = TRUE)
   block_data.df <- subset(read.delim(file = file.path(getwd(),"Data","logging_registered_regex_matches.tsv"), as.is = TRUE, header = TRUE), variable == "bad.edit")
   
-  #Read edit-filter data in
-  editfilter.df <- read.delim(file = file.path(getwd(),"Data","editfilter_hits.tsv"), as.is = TRUE, header = TRUE)
+  #Parse edit-filter data
   anonymous_hits.df <- editfilter.df[editfilter.df$user_id == 0,]
   registered_hits.df <- editfilter.df[editfilter.df$user_id > 0,]
   

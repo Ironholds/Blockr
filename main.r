@@ -32,14 +32,10 @@ run.fun <- function(){
     cat("initial graphing complete.\n")
     
     if(runtype == "full"){
-      
-      source(file.path(getwd(),"Optional Scripts","additional_retrieve.r"))
-      
-      cat("additional retrieval complete.\n")
-      
+            
       source(file.path(getwd(),"Optional Scripts","additional_graphing.r"))
       
-      cat("additional graphing complete.\n")
+      cat("additional retrieval and graphing complete.\n")
     }
     
     cat("Thank you. Run complete.\n")

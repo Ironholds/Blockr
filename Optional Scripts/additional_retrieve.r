@@ -32,10 +32,8 @@ additional_retrieve.fun <- function(){
     #Filter out non-edits
     query.df <- query.df[query.df$user_action == "edit",]
     
-    #Split and export
-    blockr_file_path <- file.path(getwd(),"Data","editfilter_hits.tsv")
-    write.table(query.df, file = blockr_file_path, col.names = TRUE,
-                row.names = FALSE, sep = "\t", quote = TRUE, qmethod = "double")
+    #Return
+    return(query.df)
   }
   
   #Registration data
@@ -69,9 +67,12 @@ additional_retrieve.fun <- function(){
   }
   
   #Run
-  filterparse.fun()
+  editfilter.df <- filterparse.fun()
   registration.fun()
+  
+  #Return
+  return(editfilter.df)
 }
 
 #Run
-additional_retrieve.fun()
+editfilter.df <- additional_retrieve.fun()

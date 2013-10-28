@@ -4,16 +4,16 @@ lm(formula = registrations_with_edits ~ blocks, data = data.df)
 
 Residuals:
    Min     1Q Median     3Q    Max 
--35199  -7694  -1549   1601 104072 
+-35132  -7510  -1585   1572 104034 
 
 Coefficients:
              Estimate Std. Error t value           Pr(>|t|)    
-(Intercept) 37665.722   4176.155   9.019 0.0000000000000314 ***
-blocks         48.565      7.318   6.636 0.0000000023537962 ***
+(Intercept) 37776.217   4172.633   9.053 0.0000000000000267 ***
+blocks         48.452      7.312   6.626 0.0000000024626028 ***
 ---
 Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1 
 
-Residual standard error: 18000 on 90 degrees of freedom
-Multiple R-squared: 0.3285,	Adjusted R-squared: 0.3211 
-F-statistic: 44.04 on 1 and 90 DF,  p-value: 0.000000002354 
+Residual standard error: 17990 on 90 degrees of freedom
+Multiple R-squared: 0.3279,	Adjusted R-squared: 0.3204 
+F-statistic: 43.91 on 1 and 90 DF,  p-value: 0.000000002463 
 

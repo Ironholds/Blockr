@@ -76,7 +76,7 @@ block_timestamp	variable	value
 201206	spam	0
 201207	spam	1
 201208	spam	0
-201209	spam	5
+201209	spam	1
 201210	spam	0
 201211	spam	0
 201212	spam	0
@@ -190,7 +190,7 @@ block_timestamp	variable	value
 200611	Sockpuppetry	2
 200612	Sockpuppetry	8
 200701	Sockpuppetry	2
-200702	Sockpuppetry	2
+200702	Sockpuppetry	1
 200703	Sockpuppetry	16
 200704	Sockpuppetry	4
 200705	Sockpuppetry	4
@@ -371,7 +371,7 @@ block_timestamp	variable	value
 200702	Proxies	117
 200703	Proxies	62
 200704	Proxies	57
-200705	Proxies	101
+200705	Proxies	100
 200706	Proxies	435
 200707	Proxies	518
 200708	Proxies	1705
