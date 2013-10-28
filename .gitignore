@@ -1,2 +1,4 @@
 *.Rhistory*
 *config.r
+*hand_codable.tsv
+
