@@ -23,7 +23,7 @@ additional_retrieve.fun <- function(){
       FROM abuse_filter_log INNER JOIN abuse_filter
         ON afl_filter = af_id
       WHERE af_public_comments NOT LIKE '%test%'
-        AND substring(afl_timestamp,1,6) <= '201308';"
+        AND substring(afl_timestamp,1,6) <= '201309';"
     )
     
     #Filter out hits where no action was taken, or the action was to tag
@@ -50,7 +50,7 @@ additional_retrieve.fun <- function(){
             WHERE
               logging.log_type = 'newusers'
               AND logging.log_action NOT IN ('autocreate')
-              AND substring(logging.log_timestamp,1,6) BETWEEN '200601' AND '201308';"
+              AND substring(logging.log_timestamp,1,6) BETWEEN '200601' AND '201309';"
     )
     
     #Aggregate and divide by edit status

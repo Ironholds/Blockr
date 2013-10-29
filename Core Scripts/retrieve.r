@@ -20,11 +20,10 @@ enclose.fun <- function(){
             logging.log_comment AS reason,
             user.user_id AS userid
           FROM logging LEFT JOIN user ON logging.log_title = user.user_name
-          WHERE substring(logging.log_timestamp,1,6) BETWEEN 200601 AND 201308
+          WHERE substring(logging.log_timestamp,1,6) BETWEEN 200601 AND 201309
             AND logging.log_type = 'block'
-            AND logging.log_action = 'block'
-            AND logging.log_params NOT LIKE '%indefinite%';"
-    )
+            AND logging.log_action = 'block';"
+         )
     
     #Make anon users identifiable
     query.df$userid[is.na(query.df$userid)] <- 0
@@ -37,47 +36,6 @@ enclose.fun <- function(){
     parse_data.fun(x = anonusers.df, tablename = "logging", usergroup = "anonymous")
     parse_data.fun(x = registered.df, tablename = "logging", usergroup = "registered")
     
-    #Hand-coding
-    
-    #Sample
-    to_code.df <- trickstr::dfsample(registered.df, size = 4000)
-    
-    #Create exportable object
-    hand_code.df <- data.frame()
-  
-    #Run the regexes
-    for(i in (1:length(regex.vec))){
-      
-      #Run regexes
-      grepvec <- grepl(pattern = regex.vec[i],
-      x = to_code.df$reason,
-      perl = TRUE,
-      ignore.case = TRUE)
-      
-      #Extract rows that match
-      matches <- to_code.df[grepvec,]
-      
-      if(nrow(matches) > 0){
-        
-        #Add regex value, to later identify /what/ it matched.
-        matches$matched <- i
-        
-        #bind to output object
-        hand_code.df <- rbind(hand_code.df,matches)
-        
-        #replace input with non-matches from the last run
-        to_code.df <- to_code.df[!grepvec,]
-      }
-    }
-    
-    #Add non-matches to the file we're exporting
-    to_code.df$matched <- 0
-    hand_code.df <- rbind(hand_code.df,to_code.df)
-    
-    #Export codable results
-    blockr_file_path <- file.path(getwd(),"Data","hand_codable.tsv")
-    write.table(hand_code.df, file = blockr_file_path, col.names = TRUE,
-                row.names = FALSE, sep = "\t", quote = TRUE, qmethod = "double")
   }
   
   #Ipblocks table data
@@ -89,7 +47,7 @@ enclose.fun <- function(){
               substring(ipb_timestamp,1,6) AS block_timestamp,
               ipb_user
             FROM ipblocks
-            WHERE substring(ipb_timestamp,1,6) BETWEEN 200601 AND 201308
+            WHERE substring(ipb_timestamp,1,6) BETWEEN 200601 AND 201309
             AND ipb_expiry = 'infinity';"
     )
     

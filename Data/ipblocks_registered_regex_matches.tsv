@@ -91,6 +91,7 @@ block_timestamp	variable	value
 201306	spam	2294
 201307	spam	2146
 201308	spam	2123
+201309	spam	2210
 200601	bad.edit	1487
 200602	bad.edit	1586
 200603	bad.edit	1865
@@ -172,17 +173,18 @@ block_timestamp	variable	value
 201207	bad.edit	1180
 201208	bad.edit	1274
 201209	bad.edit	1527
-201210	bad.edit	2120
+201210	bad.edit	2119
 201211	bad.edit	1570
 201212	bad.edit	1426
 201301	bad.edit	1484
 201302	bad.edit	1377
 201303	bad.edit	1534
 201304	bad.edit	1305
-201305	bad.edit	1545
+201305	bad.edit	1544
 201306	bad.edit	1139
 201307	bad.edit	839
 201308	bad.edit	1056
+201309	bad.edit	1294
 200601	Sockpuppetry	323
 200602	Sockpuppetry	371
 200603	Sockpuppetry	296
@@ -275,6 +277,7 @@ block_timestamp	variable	value
 201306	Sockpuppetry	1335
 201307	Sockpuppetry	1473
 201308	Sockpuppetry	1030
+201309	Sockpuppetry	984
 200601	Username.problems	797
 200602	Username.problems	944
 200603	Username.problems	1390
@@ -367,6 +370,7 @@ block_timestamp	variable	value
 201306	Username.problems	1163
 201307	Username.problems	1009
 201308	Username.problems	989
+201309	Username.problems	1200
 200601	Proxies	0
 200602	Proxies	0
 200603	Proxies	1
@@ -459,6 +463,7 @@ block_timestamp	variable	value
 201306	Proxies	0
 201307	Proxies	0
 201308	Proxies	0
+201309	Proxies	0
 200601	Misc	1353
 200602	Misc	1382
 200603	Misc	1239
@@ -551,3 +556,4 @@ block_timestamp	variable	value
 201306	Misc	81
 201307	Misc	118
 201308	Misc	133
+201309	Misc	264
