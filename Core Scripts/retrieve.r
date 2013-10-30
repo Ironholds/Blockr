@@ -1,68 +1,54 @@
-#Blockr - a project to accurately triage data on blocked Wikipedia users, identify
-#the underlying rationales and test various hypotheses as to any outcome
-#
-#retrieve.r grabs the raw data from the Wikimedia analytics slaves and parses it into aggregates, exporting raw data for hand-coding.
-#
-# @Year = 2013
-# @Copyright: Oliver Keyes
-# @License = MIT (http://opensource.org/licenses/MIT)
+# retrieve.r retrieves data from the logging table and processes it through the regex functions in Blockr_base
+# (contained in classes.r)
+# 
+# Copyright (c) 2013 Oliver Keyes
+#   
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#   
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+# 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
 
 #Enclosing function
 enclose.fun <- function(){
   
-  #Logging data 
-  logging.fun <- function(){
-    
-    #Query database
-    query.df <- sql.fun(query_statement = "
-          SELECT
-            substring(logging.log_timestamp,1,6) AS block_timestamp,
-            logging.log_comment AS reason,
-            user.user_id AS userid
-          FROM logging LEFT JOIN user ON logging.log_title = user.user_name
-          WHERE substring(logging.log_timestamp,1,6) BETWEEN 200601 AND 201309
-            AND logging.log_type = 'block'
-            AND logging.log_action = 'block';"
-         )
-    
-    #Make anon users identifiable
-    query.df$userid[is.na(query.df$userid)] <- 0
-    
-    #Split
-    anonusers.df <- query.df[query.df$userid == 0,]
-    registered.df <- query.df[query.df$userid > 0,]
-    
-    #Run
-    parse_data.fun(x = anonusers.df, tablename = "logging", usergroup = "anonymous")
-    parse_data.fun(x = registered.df, tablename = "logging", usergroup = "registered")
-    
-  }
+  #Query database to retrieve data from the logging table
+  query.df <- sql.fun(query_statement = paste("
+    SELECT
+      substring(logging.log_timestamp,1,6) AS timestamp,
+      logging.log_comment AS reason,
+      user.user_id AS userid
+    FROM logging LEFT JOIN user ON logging.log_title = user.user_name
+    WHERE substring(logging.log_timestamp,1,6) BETWEEN",sql_start.str,"AND",sql_end.str,"
+      AND logging.log_type = 'block'
+      AND logging.log_action = 'block';")
+  )
   
-  #Ipblocks table data
-  ipblock.fun <- function(){
-    
-    #Grab dataset
-    query.df <- sql.fun(query_statement = "
-            SELECT ipb_reason AS reason,
-              substring(ipb_timestamp,1,6) AS block_timestamp,
-              ipb_user
-            FROM ipblocks
-            WHERE substring(ipb_timestamp,1,6) BETWEEN 200601 AND 201309
-            AND ipb_expiry = 'infinity';"
-    )
-    
-    #Split
-    anons.df <- query.df[query.df$ipb_user == 0,]
-    registered.df <- query.df[query.df$ipb_user > 0,]
-    
-    #Run
-    parse_data.fun(x = registered.df, tablename = "ipblocks", usergroup = "registered")
-    parse_data.fun(x = anons.df, tablename = "ipblocks", usergroup = "anonymous")
-  }
+  #Normalise and make identifiable
+  query.df$userid[is.na(query.df$userid)] <- 0
+  query.df$timestamp <- as.numeric(query.df$timestamp)
+
+  
+  #Split
+  anonusers.df <- query.df[query.df$userid == 0,]
+  registered.df <- query.df[query.df$userid > 0,]
   
   #Run
-  logging.fun()
-  ipblock.fun()
+  parse_data.fun(x = anonusers.df, tablename = "logging", usergroup = "anonymous")
+  parse_data.fun(x = registered.df, tablename = "logging", usergroup = "registered")
+    
 }
   
 #Run

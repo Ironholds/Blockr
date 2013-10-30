@@ -5,7 +5,8 @@ Interesting things found using the Blockr scripts will usually be posted on [my 
 
 __Author:__ Oliver Keyes<br>
 __License:__ [MIT](http://opensource.org/licenses/MIT)<br>
-__Status:__ Stable
+__Branch:__ Development
+__Status:__ Unstable
 
 ##Contents
 At the moment, Blockr contains two types of analysis:
