@@ -89,7 +89,7 @@ Blockr_base <- setRefClass("Blockr_base",
       #Aggregate
       to_output <- ddply(.data = x,
                          .var = "timestamp",
-                         .fun = function(x))
+                         .fun = function(x){})
       
       
     }
