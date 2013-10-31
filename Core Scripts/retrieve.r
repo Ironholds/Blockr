@@ -53,8 +53,8 @@ enclose.fun <- function(){
                       c("registered.df","registered.base","registered_aggregate"))
   
   #Rename vector
-  rename.vec <- c("V1 = month", "V2 = Spam", "V3 = Disruption",
-                  "V4 = sockpuppetry", "V5 = username", "V6 = proxy", "V7 = misc")
+  rename.vec <- c("V1 = Spam", "V1 = Disruption",
+                  "V2 = sockpuppetry", "V4 = username", "V5 = proxy", "V6 = misc")
   
   #Output object
   output.ls <- list()
@@ -71,14 +71,14 @@ enclose.fun <- function(){
     holding.df <- get(data_loop.ls[[i]][1])$regex_loop.fun(
       data = get(data_loop.ls[[i]][1])$data,
       var = "timestamp",
-      rename = rename.vec)
+      )
 
     #Melt
-    to_output <- melt(holding.df, id.vars = 1, measure.vars = 2:7)
+    to_output.df <- melt(holding.df, id.vars = 1, measure.vars = 2:7)
 
     #Export
     export_file_path <- file.path(getwd(),"Data",paste(data_loop.ls[[i]][3],".tsv",sep = ""))
-    write.table(holding.df, file = export_file_path, col.names = TRUE,
+    write.table(to_output.df, file = export_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
     
     #Add to returning list

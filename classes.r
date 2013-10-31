@@ -55,7 +55,7 @@ Blockr_base <- setRefClass("Blockr_base",
       }
       
       #Include non-matches
-      to_return.vec[length(to_return.vec)+1] <- nrow(to_run.df)
+      to_return.vec[length(to_return.vec)+1] <- nrow(input_data.df)
       
       #Return
       return(to_return.vec)
@@ -71,7 +71,7 @@ Blockr_base <- setRefClass("Blockr_base",
       #Use ddply to iterate over each time period
       to_output <- ddply(.data = data,
         .variables = var,
-        .fun = ddply_loop.fun(x)
+        .fun = .self$ddply_loop.fun
       )
       
       #Do we need to rename?
