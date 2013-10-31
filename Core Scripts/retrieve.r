@@ -72,7 +72,6 @@ enclose.fun <- function(){
       data = get(data_loop.ls[[i]][1])$data,
       var = "timestamp",
       rename = rename.vec)
-    )
 
     #Melt
     to_output <- melt(holding.df, id.vars = 1, measure.vars = 2:7)
