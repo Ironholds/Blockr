@@ -21,8 +21,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#Enclosing function
-enclose.fun <- function(){
+#Enclosing function, to be source()d and executed by visualise.r
+retrieve_enclose.fun <- function(){
   
   #Query database to retrieve data from the logging table
   query.df <- sql.fun(query_statement = paste("
@@ -53,7 +53,8 @@ enclose.fun <- function(){
                       c("registered.base","registered.df","registered_aggregate"))
   
   #Rename vector
-  rename.vec <- c("timestamp", "spam", "disruption","sockpuppetry", "username", "proxy", "misc")
+  rename.vec <- c("timestamp" = "timestamp", "V1" = "spam", "V2" = "disruption","V3" = "sockpuppetry",
+                  "V4" = "username", "V5" = "proxy", "V6" = "misc")
   
   #Output object
   output.ls <- list()
@@ -70,10 +71,10 @@ enclose.fun <- function(){
     holding.df <- get(data_loop.ls[[i]][1])$regex_loop.fun(
       data = get(data_loop.ls[[i]][1])$data,
       var = "timestamp",
-      replace = rename.vec)
-    
-    #Add to returning list
-    output.ls[i] <- holding.df
+      rename_strings = rename.vec)
+      
+    #add to returning list
+    output.ls[[i]] <- holding.df
     
     #Melt
     to_output.df <- melt(holding.df, id.vars = 1, measure.vars = 2:7)

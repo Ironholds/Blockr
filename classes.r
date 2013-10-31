@@ -66,7 +66,7 @@ Blockr_base <- setRefClass("Blockr_base",
     #@data = the input dataframe
     #@var = the variable(s) to loop over in ddply
     #@rename = the list of vectors/new names for those vectors - see rename() in the plyr documentation for examples
-    regex_loop.fun = function(data,var,rename){
+    regex_loop.fun = function(data,var,rename_strings){
       
       #Use ddply to iterate over each time period
       to_output <- ddply(.data = data,
@@ -75,9 +75,9 @@ Blockr_base <- setRefClass("Blockr_base",
       )
       
       #Do we need to rename?
-      if(!missing(rename)){#Yep?
+      if(!missing(rename_strings)){#Yep?
         
-        names(to_output) <- rename
+        to_output <- rename(to_output, replace = rename_strings)
         
       }
       
@@ -86,3 +86,8 @@ Blockr_base <- setRefClass("Blockr_base",
     }
   )
 )
+
+#Base visualisation class
+Blockr_vis <- setRefClass("Blockr_base",
+  fields = list(data = "data.frame"), #Includes generic data.frame functions.
+  methods = list())
