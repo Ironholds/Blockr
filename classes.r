@@ -77,7 +77,7 @@ Blockr_base <- setRefClass("Blockr_base",
       #Do we need to rename?
       if(!missing(rename)){#Yep?
         
-        names(to_output) <- replace.vec
+        names(to_output) <- rename
         
       }
       
