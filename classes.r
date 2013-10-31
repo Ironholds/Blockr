@@ -29,13 +29,38 @@ Blockr_base <- setRefClass("Blockr_base",
     
     #Initial contents of regex_loop.fun
     #Obviously for the parent class we want the most common use case, which is returning aggregate numbers
-    loop_contents.fun = function(data){
+    #@x = input data
+    ddply_loop.fun = function(x){
       
+      #Fix input data
+      input_data.df <- x
       
+      #Initialise export object
+      to_return.vec <- vector()
       
+      #For loop
+      for(i in 1:length(regex.vec)){
+        
+        #Run regexes
+        grepvec <- grepl(pattern = regex.vec[i],
+                         x = input_data.df$reason,
+                         perl = TRUE,
+                         ignore.case = TRUE)
+        
+        #Number of rows that match
+        to_return.vec[i] <- sum(grepvec)
+        
+        #Non-matches
+        input_data.df <- input_data.df[!grepvec,]
+      }
       
+      #Include non-matches
+      to_return.vec[length(to_return.vec)+1] <- nrow(to_run.df)
+      
+      #Return
+      return(to_return.vec)
     },
-    
+
     #Function for looping regexes - uses loop_contents.fun, allowing for modification of the actual
     #nuts and bolts in child classes without reinventing the /entire/ wheel
     #@data = the input dataframe
@@ -46,24 +71,7 @@ Blockr_base <- setRefClass("Blockr_base",
       #Use ddply to iterate over each time period
       to_output <- ddply(.data = data,
         .variables = var,
-        .fun = function(x){
-          
-          #Fix input data in place
-          input_data.df <- x
-          
-          #Create empty dataframe to be exported
-          loop_output_data.df <- data.frame()
-          
-           for(i in 1:length(regex.vec)){ #Loop over each set of regular expressions
-             
-             output.list <- loop_contents.fun(data = input_data.df) #Run loop_contents.fun, exporting a list
-             
-             input_data.df <- as.data.frame(output.list[1]) #Fling the first list element back in as input data for the next run
-             
-             loop_output_data.df <- cbind(loop_output_data.df,) #Fling the second list element out, binding it into the newly initialised object for exporting
-           }
-           
-         }
+        .fun = ddply_loop.fun(x)
       )
       
       #Do we need to rename?
@@ -73,8 +81,7 @@ Blockr_base <- setRefClass("Blockr_base",
         
       }
       
-      #Either way, melt and return
-      to_output <- melt(to_output, id.vars = 1, measure.vars = 2:ncol(to.output))
+      #Either way, return
       return(to_output)
     }
   )

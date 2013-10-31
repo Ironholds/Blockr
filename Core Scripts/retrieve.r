@@ -64,7 +64,7 @@ enclose.fun <- function(){
     
     #Create in the Blockr_base class, with the input data as, well, $data
     assign(x = data_loop.ls[[i]][1],
-           value = Blockr_base(data = get(data_loop.ls[[i]][2]))
+           value = new("Blockr_base", data = get(data_loop.ls[[i]][2]))
       )
     
     #Run function and retrieve
@@ -74,13 +74,16 @@ enclose.fun <- function(){
       rename = rename.vec)
     )
 
+    #Melt
+    to_output <- melt(holding.df, id.vars = 1, measure.vars = 2:7)
+
     #Export
     export_file_path <- file.path(getwd(),"Data",paste(data_loop.ls[[i]][3],".tsv",sep = ""))
     write.table(holding.df, file = export_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
     
     #Add to returning list
-    output.ls[i] <- holding.df
+    output.ls[i] <- to_output.df
   }
   
   #Return
