@@ -49,8 +49,8 @@ enclose.fun <- function(){
   #@1 resulting object name
   #@2 source object name
   #@3 resulting file name
-  data_loop.ls <-list(c("anon.base","anonusers.df","te"),
-                      c("registered.df","registered.base","te"))
+  data_loop.ls <-list(c("anon.base","anonusers.df","anonymous_aggregate"),
+                      c("registered.df","registered.base","registered_aggregate"))
   
   #Rename vector
   rename.vec <- c("V1 = month", "V2 = Spam", "V3 = Disruption",
@@ -70,7 +70,7 @@ enclose.fun <- function(){
     #Run function and retrieve
     holding.df <- get(data_loop.ls[[i]][1])$regex_loop.fun(
       data = get(data_loop.ls[[i]][1])$data,
-      var = "timestamp"
+      var = "timestamp",
       rename = rename.vec)
     )
 
