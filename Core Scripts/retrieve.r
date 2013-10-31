@@ -40,16 +40,49 @@ enclose.fun <- function(){
   query.df$userid[is.na(query.df$userid)] <- 0
   query.df$timestamp <- as.numeric(query.df$timestamp)
 
-  
   #Split
   anonusers.df <- query.df[query.df$userid == 0,]
   registered.df <- query.df[query.df$userid > 0,]
   
-  #Run
-  parse_data.fun(x = anonusers.df, tablename = "logging", usergroup = "anonymous")
-  parse_data.fun(x = registered.df, tablename = "logging", usergroup = "registered")
-    
-}
+  #Loop to format, run and export
+  #List necessary params.
+  #@1 resulting object name
+  #@2 source object name
+  #@3 resulting file name
+  data_loop.ls <-list(c("anon.base","anonusers.df","te"),
+                      c("registered.df","registered.base","te"))
   
-#Run
-enclose.fun()
+  #Rename vector
+  rename.vec <- c("V1 = month", "V2 = Spam", "V3 = Disruption",
+                  "V4 = sockpuppetry", "V5 = username", "V6 = proxy", "V7 = misc")
+  
+  #Output object
+  output.ls <- list()
+  
+  #Loop
+  for(i in 1:length(data_loop.ls)){
+    
+    #Create in the Blockr_base class, with the input data as, well, $data
+    assign(x = data_loop.ls[[i]][1],
+           value = Blockr_base(data = get(data_loop.ls[[i]][2]))
+      )
+    
+    #Run function and retrieve
+    holding.df <- get(data_loop.ls[[i]][1])$regex_loop.fun(
+      data = get(data_loop.ls[[i]][1])$data,
+      var = "timestamp"
+      rename = rename.vec)
+    )
+
+    #Export
+    export_file_path <- file.path(getwd(),"Data",paste(data_loop.ls[[i]][3],".tsv",sep = ""))
+    write.table(holding.df, file = export_file_path, col.names = TRUE,
+                row.names = FALSE, sep = "\t", quote = FALSE)
+    
+    #Add to returning list
+    output.ls[i] <- holding.df
+  }
+  
+  #Return
+  return(output.ls)
+}

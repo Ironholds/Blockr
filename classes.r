@@ -63,8 +63,6 @@ Blockr_base <- setRefClass("Blockr_base",
              loop_output_data.df <- cbind(loop_output_data.df,) #Fling the second list element out, binding it into the newly initialised object for exporting
            }
            
-           
-           
          }
       )
       
@@ -74,24 +72,10 @@ Blockr_base <- setRefClass("Blockr_base",
         to_output <- rename(x = to_output, replace = rename)
         
       }
-        
-      #Either way, return
+      
+      #Either way, melt and return
+      to_output <- melt(to_output, id.vars = 1, measure.vars = 2:ncol(to.output))
       return(to_output)
-    },
-    
-    #Quick aggregation function, to deal with year/month conversion
-    #@x = input dataframe
-    data_aggregation.fun = function(x){
-      
-      #Substring
-      x$timestamp <- substring(x,1,6)
-      
-      #Aggregate
-      to_output <- ddply(.data = x,
-                         .var = "timestamp",
-                         .fun = function(x){})
-      
-      
     }
   )
 )

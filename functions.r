@@ -43,6 +43,20 @@ sql.fun <- function(query_statement){
   return(output)
 }
 
+#Quick aggregation function, to deal with year/month conversion
+#@x = input dataframe
+data_aggregation.fun = function(x){
+  
+  #Substring
+  x$timestamp <- substring(x,1,6)
+  
+  #Aggregate
+  to_output <- ddply(.data = x,
+                     .var = "timestamp",
+                     .fun = function(x){})
+  
+  
+}
 parse_data.fun <- function(x, tablename, usergroup){
     
   #Regex function
@@ -90,12 +104,4 @@ parse_data.fun <- function(x, tablename, usergroup){
     
   #Run regexes across rationales
   parsed_data.df <- regex.fun(input_data = x)
-  
-  #Melt datasets
-  melted_data.df <- melt(parsed_data.df, id.vars = 1, measure.vars = 2:7)
-  
-  #Export it
-  melted_file_path <- file.path(getwd(),"Data",paste(tablename,usergroup,"regex_matches.tsv",sep = "_"))
-  write.table(melted_data.df, file = melted_file_path, col.names = TRUE,
-              row.names = FALSE, sep = "\t", quote = FALSE)
 }
