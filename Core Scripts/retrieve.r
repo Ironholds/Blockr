@@ -50,7 +50,7 @@ enclose.fun <- function(){
   #@2 source object name
   #@3 resulting file name
   data_loop.ls <-list(c("anon.base","anonusers.df","anonymous_aggregate"),
-                      c("registered.df","registered.base","registered_aggregate"))
+                      c("registered.base","registered.df","registered_aggregate"))
   
   #Rename vector
   rename.vec <- c("V1 = Spam", "V1 = Disruption",
