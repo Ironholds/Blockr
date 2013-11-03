@@ -9,6 +9,45 @@
 
 initial_graphing.fun <- function(){
   
+  #Grab data
+  data.ls <- retrieve_enclose.fun()
+  
+  #Report as such
+  print("initial data retrieval complete")
+  
+  #Data object names
+  #@1 Temporary object name to use
+  #@2 Usergroup
+  #@3 Type of data
+  graphing_data.ls <- list(
+    c("anonymous.df","anonymous","raw"),
+    c("registered.df","registered","raw"),
+    c("anonymous_norm.df","anonymous","normalised"),
+    c("registered_norm.df","registered","normalised")
+  )
+  
+  if(length(graphing_data.ls) != length(data.ls)){
+    
+    stop("There is an inconsistency between the graphing data and the number of dataframes to analyse")
+    
+  }else{
+    
+    for(i in 1:length(graphing_data.ls)){
+      
+      #Split the pertinent dataframe out of data.ls and add to a newly-created Blockr_vis object
+      assign(graphing_data.ls[[i]][1],
+        value = new("Blockr_vis",
+          data = get(as.data.frame(data.ls[[i]])),
+          yearly_data = data_aggregation.fun(x = get(as.data.frame(data.ls[[i]])))
+        )
+      )
+           
+    }
+    
+    
+    
+    
+  }
   #Grouped function
   graphing.fun <- function(table,usergroup){
     
