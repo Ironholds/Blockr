@@ -46,11 +46,13 @@ retrieve_enclose.fun <- function(){
   
   #Loop to format, run and export
   #List necessary params.
-  #@1 resulting object name
+  #@1 resulting object name for regex crunching
   #@2 source object name
-  #@3 resulting file name
-  data_loop.ls <-list(c("anon.base","anonusers.df","anonymous_aggregate","anon.base_hand"),
-                      c("registered.base","registered.df","registered_aggregate","registered.base_hand"))
+  #@3 resulting file name for regex crunching
+  #@4 resulting object name for hand-coding
+  #@5 resulting file prefix for hand-coding and proportionate analysis
+  data_loop.ls <-list(c("anon.base","anonusers.df","anonymous_aggregate","anon.base_hand","anonymous"),
+                      c("registered.base","registered.df","registered_aggregate","registered.base_hand","registered"))
   
   #Rename vector
   rename.vec <- c("timestamp" = "timestamp", "V1" = "spam", "V2" = "disruption","V3" = "sockpuppetry",
@@ -64,7 +66,7 @@ retrieve_enclose.fun <- function(){
     
     #Create in the Blockr_base class, with the input data as, well, $data
     assign(x = data_loop.ls[[i]][1],
-           value = new("Blockr_base", data = get(data_loop.ls[[i]][2]))
+      value = new("Blockr_base", data = get(data_loop.ls[[i]][2]))
       )
     
     #Run function and retrieve
@@ -82,17 +84,36 @@ retrieve_enclose.fun <- function(){
     #Export
     export_file_path <- file.path(getwd(),"Data",paste(data_loop.ls[[i]][3],".tsv",sep = ""))
     write.table(to_output.df, file = export_file_path, col.names = TRUE,
-                row.names = FALSE, sep = "\t", quote = FALSE)
+      row.names = FALSE, sep = "\t", quote = FALSE)
     
     #And now we play the hand-coding game
     assign(x = data_loop.ls[[i]][4],
      value = new("Blockr_base_handcode", data = get(data_loop.ls[[i]][2]),
-                 sample_size = trickstr::sample_size(x = get(data_loop.ls[[i]][2]), variable = "timestamp", percentage = 0.20))
+        sample_size = trickstr::sample_size(x = get(data_loop.ls[[i]][2]), variable = "timestamp", percentage = 0.20))
     )
     
+    #Grab data to hand-code
     holding.df <- get(data_loop.ls[[i]][4])$regex_container.fun(
       data = get(data_loop.ls[[i]][4])$data,
       var = "timestamp")
+    
+    #Export
+    export_file_path <- file.path(getwd(),"Data",paste(data_loop.ls[[i]][5],"hand_coding.tsv",sep = "_"))
+    write.table(holding.df, file = export_file_path, col.names = TRUE,
+      row.names = FALSE, sep = "\t", quote = FALSE)
+    
+    #Grab proportions, too!
+    proportions.df <- ddply(.data = holding.df,
+      .var = c("timestamp","matched_regex"),
+      .fun = nrow)
+    
+    #Export those
+    export_file_path <- file.path(getwd(),"Data",paste(data_loop.ls[[i]][5],"proportionate_data.tsv",sep = "_"))
+    write.table(holding.df, file = export_file_path, col.names = TRUE,
+                row.names = FALSE, sep = "\t", quote = FALSE)
+    
+    #Write them into the returned list, with a mod2
+    output.ls[[i+2]] <- proportions.df
   }
   
   #Return
