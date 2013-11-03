@@ -103,13 +103,13 @@ Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
       to_return.df <- data.frame()
       
       #For loop
-      for(i in 1:length(regex.vec)){
+      for(i in 1:length(regex.ls)){
         
         #Check contents of input_data.df in case all possible matches have already been found
         if(nrow(input_data.df) > 0){
           
           #Run regexes
-          grepvec <- grepl(pattern = regex.vec[i],
+          grepvec <- grepl(pattern = regex.ls[[i]][2],
                            x = input_data.df$reason,
                            perl = TRUE,
                            ignore.case = TRUE)
@@ -119,7 +119,7 @@ Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
           
           #Add match number
           if(nrow(matches.df) > 0){
-            matches.df$matched_regex <- i
+            matches.df$matched_regex <- regex.ls[[i]][1]
             
             #Grab and return matches
             to_return.df <- rbind(to_return.df,matches.df)
@@ -133,7 +133,7 @@ Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
       #Mark non-matches
       if(nrow(input_data.df) > 0){
         
-        input_data.df$matched_regex <- 0
+        input_data.df$matched_regex <- "Misc"
         
         #Add to exporting object
         to_return.df <- rbind(to_return.df,input_data.df)
