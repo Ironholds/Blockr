@@ -15,37 +15,56 @@ initial_graphing.fun <- function(){
   #Report as such
   print("initial data retrieval complete")
   
-  #Data object names
+  #Metadata for non-normalised elements of data.ls
   #@1 Temporary object name to use
   #@2 Usergroup
   #@3 Type of data
   graphing_data.ls <- list(
     c("anonymous.df","anonymous","raw"),
-    c("registered.df","registered","raw"),
-    c("anonymous_norm.df","anonymous","normalised"),
-    c("registered_norm.df","registered","normalised")
+    c("registered.df","registered","raw")
   )
   
-  if(length(graphing_data.ls) != length(data.ls)){
-    
+  #Metadata for normalised elements of data.ls
+  #@1 Temporary object name to use
+  #@2 Usergroup
+  #@3 Type of data
+  graphing_data_norm.ls <- list(
+    c("anonymous_norm.df","anonymous","normalised"),
+    c("registered_norm.df","registered","normalised"))
+  
+  #Check for user error in expanding/modifying the Blockr codebase
+  if(length(graphing_data.ls) + length(graphing_data_norm.ls) != length(data.ls)){
     stop("There is an inconsistency between the graphing data and the number of dataframes to analyse")
     
   }else{
     
+    #Iterate over the non-normalised data to produce juicy, juicy graphs
     for(i in 1:length(graphing_data.ls)){
       
       #Split the pertinent dataframe out of data.ls and add to a newly-created Blockr_vis object
       assign(graphing_data.ls[[i]][1],
         value = new("Blockr_vis",
-          data = get(as.data.frame(data.ls[[i]])),
-          yearly_data = data_aggregation.fun(x = get(as.data.frame(data.ls[[i]])))
+          data = as.data.frame(data.ls[[i]]),
+          yearly_data = data_aggregation.fun(x = as.data.frame(data.ls[[i]])),
+          data_type = "raw"
         )
       )
-           
+      
+      #Add yearly data 
+      assign(paste(graphing_data.ls[[i]][1],"$yearly_data", sep = ""),
+        value = paste(graphing_data.ls[[i]][1],"$data_aggregation.fun", sep = "")(x = get(graphing_data.ls[[i]][1]))
+      )
     }
     
-    
-    
+    #Ditto for normalised data
+    for(i in 1:length(graphing_data_norm.ls)){
+      
+      
+      
+      
+      
+      
+    }
     
   }
   #Grouped function

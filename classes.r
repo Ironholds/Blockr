@@ -149,25 +149,8 @@ Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
 
 #Base visualisation class
 Blockr_vis <- setRefClass("Blockr_vis",
-  fields = list(data = "data.frame", yearly_data = "data.frame"), #Includes generic data.frame functions.
+  fields = list(data = "data.frame", yearly_data = "data.frame", data_type = "character"), #Includes generic data.frame functions.
   methods = list(
-    
-    #Quick aggregation function, to deal with year/month conversion
-    #@x = input dataframe
-    data_aggregation.fun = function(x){
-      
-      #Substring
-      x$timestamp <- substring(x,1,6)
-      
-      #Aggregate
-      to_output <- ddply(.data = x,
-       .var = "timestamp",
-       .fun = function(x){
-         
-         return(sum(x))
-       }
-      )
-    },
     
     #Initial graphing function
     initial_graph.fun = function(){
@@ -182,8 +165,9 @@ Blockr_vis_proportion <- setRefClass("Blockr_vis_proportion",
   fields = list(data = "data.frame"), #Includes generic data.frame functions.
   methods = list(
     
+    
     #Time-series analysis for the normalised data
-    timeseries.fun <- function(){
+    timeseries.fun = function(){
       
       
       

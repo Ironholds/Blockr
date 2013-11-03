@@ -42,3 +42,20 @@ sql.fun <- function(query_statement){
   #Return output
   return(output)
 }
+
+#Quick aggregation function, to deal with year/month conversion
+#@x = input dataframe
+data_aggregation.fun = function(x){
+  
+  #Substring
+  x$timestamp <- substring(x,1,6)
+  
+  #Aggregate
+  to_output <- ddply(.data = x,
+   .var = "timestamp",
+   .fun = function(x){
+     
+     return(sum(x))
+   }
+  )
+}
