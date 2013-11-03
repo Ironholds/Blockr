@@ -49,8 +49,8 @@ retrieve_enclose.fun <- function(){
   #@1 resulting object name
   #@2 source object name
   #@3 resulting file name
-  data_loop.ls <-list(c("anon.base","anonusers.df","anonymous_aggregate"),
-                      c("registered.base","registered.df","registered_aggregate"))
+  data_loop.ls <-list(c("anon.base","anonusers.df","anonymous_aggregate","anon.base_hand"),
+                      c("registered.base","registered.df","registered_aggregate","registered.base_hand"))
   
   #Rename vector
   rename.vec <- c("timestamp" = "timestamp", "V1" = "spam", "V2" = "disruption","V3" = "sockpuppetry",
@@ -68,7 +68,7 @@ retrieve_enclose.fun <- function(){
       )
     
     #Run function and retrieve
-    holding.df <- get(data_loop.ls[[i]][1])$regex_loop.fun(
+    holding.df <- get(data_loop.ls[[i]][1])$regex_container.fun(
       data = get(data_loop.ls[[i]][1])$data,
       var = "timestamp",
       rename_strings = rename.vec)
@@ -84,6 +84,15 @@ retrieve_enclose.fun <- function(){
     write.table(to_output.df, file = export_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
     
+    #And now we play the hand-coding game
+    assign(x = data_loop.ls[[i]][4],
+     value = new("Blockr_base_handcode", data = get(data_loop.ls[[i]][2]),
+                 sample_size = trickstr::sample_size(x = get(data_loop.ls[[i]][2]), variable = "timestamp", percentage = 0.20))
+    )
+    
+    holding.df <- get(data_loop.ls[[i]][4])$regex_container.fun(
+      data = get(data_loop.ls[[i]][4])$data,
+      var = "timestamp")
   }
   
   #Return

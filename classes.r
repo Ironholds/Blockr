@@ -43,9 +43,9 @@ Blockr_base <- setRefClass("Blockr_base",
         
         #Run regexes
         grepvec <- grepl(pattern = regex.vec[i],
-                         x = input_data.df$reason,
-                         perl = TRUE,
-                         ignore.case = TRUE)
+           x = input_data.df$reason,
+           perl = TRUE,
+           ignore.case = TRUE)
         
         #Number of rows that match
         to_return.vec[i] <- sum(grepvec)
@@ -66,7 +66,7 @@ Blockr_base <- setRefClass("Blockr_base",
     #@data = the input dataframe
     #@var = the variable(s) to loop over in ddply
     #@rename = the list of vectors/new names for those vectors - see rename() in the plyr documentation for examples
-    regex_loop.fun = function(data,var,rename_strings){
+    regex_container.fun = function(data,var,rename_strings){
       
       #Use ddply to iterate over each time period
       to_output <- ddply(.data = data,
@@ -87,7 +87,61 @@ Blockr_base <- setRefClass("Blockr_base",
   )
 )
 
+#Hand-coding class - child of Blockr_base, overwrites ddply_loop.fun
+#This is used both to produce a hand-coding sample, and to generate data that can be used for a proportion analysis
+Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
+  fields = list(data = "data.frame", sample_size = "numeric"), #Note that it requires a set sample size to be valid
+  contains = "Blockr_base",
+  methods = list(
+    
+    ddply_loop.fun = function(x){
+      
+      #Fix input data, and sample as appropriate
+      input_data.df <- trickstr::dfsample(df = x, size = .self$sample_size) #Sample is based on the object's sample_size value
+      
+      #Initialise export object
+      to_return.df <- data.frame()
+      
+      #For loop
+      for(i in 1:length(regex.vec)){
+        
+        #Check contents of input_data.df in case all possible matches have already been found
+        if(nrow(input_data.df) > 0){
+          
+          #Run regexes
+          grepvec <- grepl(pattern = regex.vec[i],
+                           x = input_data.df$reason,
+                           perl = TRUE,
+                           ignore.case = TRUE)
+          
+          #Fix matches
+          matches.df <- input_data.df[grepvec,]
+          
+          #Add match number
+          matches.df$matched_regex <- i
+          
+          #Grab and return matches
+          to_return.df <- cbind(to_return.df,matches.df)
+          
+          #Non-matches
+          input_data.df <- input_data.df[!grepvec,]
+        }
+      }
+      
+      #Mark non-matches
+      input_data.df$matched_regex <- 0
+      
+      #Add to exporting object
+      to_return.df <- cbind(to_return.df,input_data.df)
+      
+      #Return
+      return(to_return.df)
+      
+    }
+  )
+)
+
 #Base visualisation class
-Blockr_vis <- setRefClass("Blockr_base",
+Blockr_vis <- setRefClass("Blockr_vis",
   fields = list(data = "data.frame"), #Includes generic data.frame functions.
   methods = list())
