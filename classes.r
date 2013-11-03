@@ -118,21 +118,27 @@ Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
           matches.df <- input_data.df[grepvec,]
           
           #Add match number
-          matches.df$matched_regex <- i
-          
-          #Grab and return matches
-          to_return.df <- cbind(to_return.df,matches.df)
-          
+          if(nrow(matches.df) > 0){
+            matches.df$matched_regex <- i
+            
+            #Grab and return matches
+            to_return.df <- rbind(to_return.df,matches.df)
+            
+          }
           #Non-matches
           input_data.df <- input_data.df[!grepvec,]
         }
       }
       
       #Mark non-matches
-      input_data.df$matched_regex <- 0
-      
-      #Add to exporting object
-      to_return.df <- cbind(to_return.df,input_data.df)
+      if(nrow(input_data.df) > 0){
+        
+        input_data.df$matched_regex <- 0
+        
+        #Add to exporting object
+        to_return.df <- cbind(to_return.df,input_data.df)
+        
+      }
       
       #Return
       return(to_return.df)
