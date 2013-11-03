@@ -39,10 +39,10 @@ Blockr_base <- setRefClass("Blockr_base",
       to_return.vec <- vector()
       
       #For loop
-      for(i in 1:length(regex.vec)){
+      for(i in 1:length(regex.ls)){
         
         #Run regexes
-        grepvec <- grepl(pattern = regex.vec[i],
+        grepvec <- grepl(pattern = regex.ls[[i]][2],
            x = input_data.df$reason,
            perl = TRUE,
            ignore.case = TRUE)
@@ -149,5 +149,10 @@ Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
 
 #Base visualisation class
 Blockr_vis <- setRefClass("Blockr_vis",
+  fields = list(data = "data.frame"), #Includes generic data.frame functions.
+  methods = list())
+
+Blockr_vis_proportion <- setRefClass("Blockr_vis_proportion",
+  contains = "Blockr_vis"
   fields = list(data = "data.frame"), #Includes generic data.frame functions.
   methods = list())
