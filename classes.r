@@ -173,7 +173,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
     initial_graph.fun = function(){
       
       
-    },
+    }
     
     ))
 
