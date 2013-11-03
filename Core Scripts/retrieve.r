@@ -74,13 +74,13 @@ retrieve_enclose.fun <- function(){
       data = get(data_loop.ls[[i]][1])$data,
       var = "timestamp",
       rename_strings = rename.vec)
-      
-    #add to returning list
-    output.ls[[i]] <- holding.df
     
     #Melt
     to_output.df <- melt(holding.df, id.vars = 1, measure.vars = 2:7)
 
+    #add to returning list
+    output.ls[[i]] <- to_output.df
+    
     #Export
     export_file_path <- file.path(getwd(),"Data",paste(data_loop.ls[[i]][3],".tsv",sep = ""))
     write.table(to_output.df, file = export_file_path, col.names = TRUE,
@@ -96,7 +96,7 @@ retrieve_enclose.fun <- function(){
     holding.df <- get(data_loop.ls[[i]][4])$regex_container.fun(
       data = get(data_loop.ls[[i]][4])$data,
       var = "timestamp")
-    
+     
     #Export
     export_file_path <- file.path(getwd(),"Data",paste(data_loop.ls[[i]][5],"hand_coding.tsv",sep = "_"))
     write.table(holding.df, file = export_file_path, col.names = TRUE,
@@ -106,6 +106,10 @@ retrieve_enclose.fun <- function(){
     proportions.df <- ddply(.data = holding.df,
       .var = c("timestamp","matched_regex"),
       .fun = nrow)
+    
+    #Factorise and rename
+    proportions.df$matched_regex <- as.factor(proportions.df$matched_regex)
+    proportions.df <- rename(proportions.df, replace = c("matched_regex" = "variable", "V1" = "value"))
     
     #Export those
     export_file_path <- file.path(getwd(),"Data",paste(data_loop.ls[[i]][5],"proportionate_data.tsv",sep = "_"))
