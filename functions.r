@@ -47,15 +47,23 @@ sql.fun <- function(query_statement){
 #@x = input dataframe
 data_aggregation.fun = function(x){
   
-  #Substring
-  x$timestamp <- substring(x,1,6)
+  #Substring and temporarily defactor
+  x$timestamp <- substring(x$timestamp,1,4)
+  x$variable <- as.character(x$variable)
   
   #Aggregate
   to_output <- ddply(.data = x,
-   .var = "timestamp",
+   .var = c("timestamp","variable"),
    .fun = function(x){
-     
-     return(sum(x))
+          
+     return(sum(x[,3]))
    }
   )
+  
+  #Renumber, refactorise
+  to_output$timestamp <- as.numeric(to_output$timestamp)
+  to_output$variable <- as.factor(to_output$variable)
+  
+  #return
+  return(to_output)
 }
