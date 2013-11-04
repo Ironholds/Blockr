@@ -50,10 +50,6 @@ initial_graphing.fun <- function(){
         )
       )
       
-      #Add yearly data 
-      assign(paste(graphing_data.ls[[i]][1],"$yearly_data", sep = ""),
-        value = paste(graphing_data.ls[[i]][1],"$data_aggregation.fun", sep = "")(x = get(graphing_data.ls[[i]][1]))
-      )
     }
     
     #Ditto for normalised data
