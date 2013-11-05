@@ -15,7 +15,7 @@ initial_graphing.fun <- function(){
   #Report as such
   print("initial data retrieval complete")
   
-  #Metadata for non-normalised elements of data.ls
+  #Metadata for elements of data.ls
   #@1 Temporary object name to use
   #@2 Usergroup
   #@3 Type of data
@@ -26,13 +26,6 @@ initial_graphing.fun <- function(){
     c("anonymous_norm.df","anonymous","normalised"),
     c("registered_norm.df","registered","normalised")
     )
-  
-  #Metadata for normalised elements of data.ls
-  #@1 Temporary object name to use
-  #@2 Usergroup
-  #@3 Type of data
-  #@4 position in data.ls
-
   
   #Check for user error in expanding/modifying the Blockr codebase
   if(length(graphing_data.ls) != length(data.ls)){
@@ -51,12 +44,13 @@ initial_graphing.fun <- function(){
           value = new("Blockr_vis",
             data = as.data.frame(data.ls[[i]]),
             yearly_data = data_aggregation.fun(x = as.data.frame(data.ls[[i]])),
-            data_type = "raw"
+            data_type = graphing_data.ls[[i]][3],
+            user_group = graphing_data.ls[[i]][2]
           )
         )
      
         #Graph
-        get(data_loop.ls[[i]][1])$initial_graph.fun(data = get(data_loop.ls[[i]][1])$data, yearly_data = get(data_loop.ls[[i]][1])$yearly_data)
+        get(graphing_data.ls[[i]][1])$initial_graph.fun()
 
       } else{ #And for normalised data...
         
@@ -64,15 +58,15 @@ initial_graphing.fun <- function(){
          value = new("Blockr_vis_proportion",
            data = as.data.frame(data.ls[[i]]),
            yearly_data = data_aggregation.fun(x = as.data.frame(data.ls[[i]])),
-           data_type = "normalised"
+           data_type = graphing_data.ls[[i]][3]
          )
         )
         
         #Graph
-        get(data_loop.ls[[i]][1])$initial_graph.fun(data = get(data_loop.ls[[i]][1])$data, yearly_data = get(data_loop.ls[[i]][1])$yearly_data)
-
+        get(graphing_data.ls[[i]][1])$initial_graph.fun()
+        
         #Do some time-series analysis, to boot
-        get(data_loop.ls[[i]][1])$timeseries.fun(x = get(data_loop.ls[[i]][1])$data)
+        get(graphing_data.ls[[i]][1])$timeseries.fun()
         
       }
     }
