@@ -81,7 +81,9 @@ Blockr_base <- setRefClass("Blockr_base",
         
       }
       
-      #Either way, return
+      #Either way, factorise and return
+      to_output$timestamp <- as.factor(to_output$timestamp)
+      
       return(to_output)
     }
   )
