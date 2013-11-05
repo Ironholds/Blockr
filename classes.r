@@ -153,7 +153,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
   methods = list(
     
     #Initial graphing function
-    initial_graph.fun = function(){
+    initial_graph.fun = function(data, yearly_data){
       
       
     }
