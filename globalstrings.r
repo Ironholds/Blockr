@@ -28,6 +28,10 @@ regex.ls <- list(c("spam","(spam|advertis(ement|ing)|promot(e|ion))"),
                       c("username","(username|uw-(uhblock|softestblock)|(softer|cause|u)block|impost(or|er)|too similar|similar to existing user or recent meme|\\{\\{unb|contact an administrator for verification|impersonat(or|ion|ing))"),
                       c("proxy","(torblock|blocked proxy|webhostblock|\\{\\{tor)"))
 
-#Start and end dates - used in deciding the boundaries of any query to the MySQL dbs
+#Start and end dates - used in deciding the boundaries of any query to the MySQL dbs, and graphing boundaries
 sql_start.str <- "200601"
 sql_end.str <- "2001309"
+
+#Substring those for yearly graphing boundaries
+sql_year_start.str <- substring(sql_start.str,1,4)
+sql_year_end.str <- substring(sql_end.str,1,4)

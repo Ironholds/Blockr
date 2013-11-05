@@ -156,17 +156,58 @@ Blockr_vis <- setRefClass("Blockr_vis",
     
     #Initial graphing function
     initial_graph.fun = function(){
-      
-    monthly_line_graph <- ggplot(.self$data, aes(timestamp, value)) + 
-      geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
-      labs(x = "Month", y = "Number of blocks") +
-      ggtitle(paste("Block rationales on the English-language Wikipedia by month\n",sql_start.str,"-",sql_end.str,.self$user_group,"users", sep = " ")) +
-      scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100), expand = c(0,0)) +
-      scale_y_continuous(expand = c(0, 0)) +
-      theme(axis.text.x = element_text(angle = 90, hjust = 1))
-    }
     
-    ))
+      #Simple line graph of monthly data
+      monthly_line_graph <- ggplot(.self$data, aes(timestamp, value)) + 
+        geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
+        labs(x = "Month", y = "Number of blocks") +
+        ggtitle(paste("Block rationales on the English-language Wikipedia by month\n",sql_start.str,"-",sql_end.str,.self$user_group,"users", sep = " ")) +
+        scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100), expand = c(0,0)) +
+        scale_y_continuous(expand = c(0, 0)) +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1))
+      
+      #Print
+      ggsave(filename = file.path(getwd(),"Graphs",paste(.self$usergroup,.self$data_type,"monthly_line_graph.png",sep = "_")),
+             plot = monthly_line_graph,
+             width = 8,
+             height = 8,
+             units = "in")
+      
+      #Monthly, with points and simple linear regression.
+      monthly_regression_graph <- ggplot(.self$data,aes(x = timestamp,y = value, colour = variable))+
+        geom_point(shape=3) +
+        geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
+        labs(x = "Month", y = "Number of blocks") +
+        ggtitle(paste("Block rationales on the English-language Wikipedia by month\n",sql_start.str,"-",sql_end.str,.self$user_group,"users", sep = " ")) +
+        scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100), expand = c(0,0)) +
+        scale_y_continuous(expand = c(0,0)) +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1))
+      
+      #Print
+      ggsave(filename = file.path(getwd(),"Graphs",paste(.self$usergroup,.self$data_type,"monthly_linear_regression_graph.png",sep = "_")),
+             plot = monthly_regression_graph,
+             width = 8,
+             height = 8,
+             units = "in")
+      
+      #Yearly summary
+      year_line_graph <- ggplot(.self$yearly_data, aes(timestamp, value)) + 
+        geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
+        labs(x = "Year", y = "Number of blocks") +
+        ggtitle(paste("Block rationales on the English-language Wikipedia by year\n (2006-2012)\n",table,"table,",usergroup,"users", sep = " ")) +
+        scale_x_discrete(breaks = seq(from = as.numeric(sql_year_start.str), to = as.numeric(sql_year_end.str), by = 1), expand = c(0,0)) +
+        scale_y_continuous(expand = c(0, 0)) +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1))
+      
+      #Print
+      ggsave(filename = file.path(getwd(),"Graphs",paste(.self$usergroup,.self$data_type,"yearly_line_graph.png",sep = "_")),
+             plot = year_line_graph,
+             width = 8,
+             height = 8,
+             units = "in")
+    }
+  }
+}
 
 Blockr_vis_proportion <- setRefClass("Blockr_vis_proportion",
   contains = "Blockr_vis",
