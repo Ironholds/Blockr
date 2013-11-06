@@ -113,7 +113,7 @@ retrieve_enclose.fun <- function(){
     
     #Export those
     export_file_path <- file.path(getwd(),"Data",paste(data_loop.ls[[i]][5],"proportionate_data.tsv",sep = "_"))
-    write.table(holding.df, file = export_file_path, col.names = TRUE,
+    write.table(proportions.df, file = export_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
     
     #Write them into the returned list, with a mod2

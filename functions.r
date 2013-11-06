@@ -61,7 +61,7 @@ data_aggregation.fun = function(x){
   )
   
   #Renumber, refactorise, rename!
-  to_output$timestamp <- as.numeric(to_output$timestamp)
+  to_output$timestamp <- as.factor(to_output$timestamp)
   to_output$variable <- as.factor(to_output$variable)
   to_output <- rename(to_output, replace = c("V1" = "value"))
   
