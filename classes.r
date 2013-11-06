@@ -161,7 +161,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
       monthly_line_graph <- ggplot(.self$data, aes(timestamp, value)) + 
         geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
         labs(x = "Month", y = "Number of blocks") +
-        ggtitle(paste("Block rationales on the English-language Wikipedia by month\n",sql_start.str,"-",sql_end.str,.self$user_group,"users", sep = " ")) +
+        ggtitle(paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str,"-",sql_end.str,"),",.self$user_group,"users", sep = " ")) +
         scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100), expand = c(0,0)) +
         scale_y_continuous(expand = c(0, 0)) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1))
@@ -178,7 +178,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
         geom_point(shape=3) +
         geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
         labs(x = "Month", y = "Number of blocks") +
-        ggtitle(paste("Block rationales on the English-language Wikipedia by month\n",sql_start.str,"-",sql_end.str,.self$user_group,"users", sep = " ")) +
+        ggtitle(paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str,"-",sql_end.str,"),",.self$user_group,"users", sep = " ")) +
         scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100), expand = c(0,0)) +
         scale_y_continuous(expand = c(0,0)) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1))
@@ -194,7 +194,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
       year_line_graph <- ggplot(.self$yearly_data, aes(timestamp, value)) + 
         geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
         labs(x = "Year", y = "Number of blocks") +
-        ggtitle(paste("Block rationales on the English-language Wikipedia by year\n (2006-2012)\n",.self$user_group,"users,",.self$data_type,"data",sep = " ")) +
+        ggtitle(paste("Block rationales on the English-language Wikipedia by year\n (",sql_year_start.str,"-",sql_year_end.str,")",.self$user_group,"users,",.self$data_type,"data",sep = " ")) +
         scale_x_discrete(breaks = seq(from = as.numeric(sql_year_start.str), to = as.numeric(sql_year_end.str), by = 1), expand = c(0,0)) +
         scale_y_continuous(expand = c(0, 0)) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1))
