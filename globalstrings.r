@@ -30,7 +30,7 @@ regex.ls <- list(c("spam","(spam|advertis(ement|ing)|promot(e|ion))"),
 
 #Start and end dates - used in deciding the boundaries of any query to the MySQL dbs, and graphing boundaries
 sql_start.str <- "200601"
-sql_end.str <- "2001309"
+sql_end.str <- "201309"
 
 #Substring those for yearly graphing boundaries
 sql_year_start.str <- substring(sql_start.str,1,4)
