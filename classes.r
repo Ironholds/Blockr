@@ -206,8 +206,8 @@ Blockr_vis <- setRefClass("Blockr_vis",
              height = 8,
              units = "in")
     }
-  }
-}
+  )
+)
 
 Blockr_vis_proportion <- setRefClass("Blockr_vis_proportion",
   contains = "Blockr_vis",
