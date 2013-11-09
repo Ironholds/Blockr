@@ -107,6 +107,17 @@ retrieve_enclose.fun <- function(){
       .var = c("timestamp","matched_regex"),
       .fun = nrow)
     
+    #Solve for annoying missing values bug.
+    fixrows.df <- as.data.frame(as.numeric(levels(unique(holding.df$timestamp))))
+    unique_vars <- unique(proportions.df$matched_regex)
+    
+    for(i in 1:length(unique_vars)){
+      
+      interim.df <- proportions.df[proportions.df$matched_regex = unique_vars[i],]
+      
+      
+      
+    }
     #Factorise and rename
     proportions.df$matched_regex <- as.factor(proportions.df$matched_regex)
     proportions.df <- rename(proportions.df, replace = c("matched_regex" = "variable", "V1" = "value"))

@@ -68,3 +68,24 @@ data_aggregation.fun = function(x){
   #return
   return(to_output)
 }
+
+missing_values.fun <- function(data, column, values){
+  
+  #Fix data and grab unique variable values
+  interim.df <- data
+  unique_vars <- unique(data[,column])
+  
+  #Create output object and object to test against.
+  output.df <- data.frame()
+  comparator.df <- 
+
+  #Grab unique variable names
+  for(i in 1:length(interim.df[,column])){
+    
+    #Temporarily fix the comparator values
+    comparator.df <- values
+    
+    
+    
+  }
+}
