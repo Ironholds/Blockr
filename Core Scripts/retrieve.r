@@ -107,8 +107,7 @@ retrieve_enclose.fun <- function(){
       .var = c("timestamp","matched_regex"),
       .fun = nrow)
     
-    #Factorise and rename
-    proportions.df$matched_regex <- as.factor(proportions.df$matched_regex)
+    #Rename
     proportions.df <- rename(proportions.df, replace = c("matched_regex" = "variable", "V1" = "value"))
     
     #Export those
