@@ -75,9 +75,10 @@ retrieve_enclose.fun <- function(){
       var = "timestamp",
       rename_strings = rename.vec)
     
-    #Melt
+    #Melt and defactor
     to_output.df <- melt(holding.df, id.vars = 1, measure.vars = 2:7)
-
+    to_output.df$variable <- as.character(to_output.df$variable)
+    
     #add to returning list
     output.ls[[i]] <- to_output.df
     
