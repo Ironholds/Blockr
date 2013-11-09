@@ -205,7 +205,20 @@ Blockr_vis <- setRefClass("Blockr_vis",
              width = 8,
              height = 8,
              units = "in")
+    
       
+    },
+    
+    timeseries.fun = function(x){
+      
+      #Filter
+      x <- x[x$variable != "misc",]
+      
+      #Convert timestamps into character representations, and thence into a zoo yearmon object.
+      x$timestamp <- as.character(x$timestamp)
+      x$timestamp <- as.yearmon(x$timestamp, "%Y%m")
+      
+      #Identify unique    
     }
   )
 )

@@ -49,7 +49,6 @@ data_aggregation.fun = function(x){
   
   #Substring and temporarily defactor
   x$timestamp <- substring(x$timestamp,1,4)
-  x$variable <- as.character(x$variable)
   
   #Aggregate
   to_output <- ddply(.data = x,
@@ -62,7 +61,6 @@ data_aggregation.fun = function(x){
   
   #Renumber, refactorise, rename!
   to_output$timestamp <- as.factor(to_output$timestamp)
-  to_output$variable <- as.factor(to_output$variable)
   to_output <- rename(to_output, replace = c("V1" = "value"))
   
   #return
