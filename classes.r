@@ -206,25 +206,6 @@ Blockr_vis <- setRefClass("Blockr_vis",
              height = 8,
              units = "in")
       
-    },
-    #Time-series analysis
-    timeseries.fun = function(x){
-
-      #Split and apply
-      d_ply(.data = x,
-            .variables = "variable",
-            .fun = function(x){
-              
-              #Grab pertinent column
-              observations.ts <- ts(x$value, deltat = 1/12)
-              
-              #Graph and return
-              png(filename=paste(.self$user_group,"timeseries.png",sep = "_"))
-              plot(stl(log(observations.ts), s.window = "periodic"))
-              title(main = paste("Blocks of",.self$user_group,"users\n(",sql_year_start.str,"-",sql_year_end.str,")","seasonally decomposed"))
-              dev.off()
-              }
-            )
     }
   )
 )

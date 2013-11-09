@@ -66,12 +66,6 @@ initial_graphing.fun <- function(){
       #Graph
       get(graphing_data.ls[[i]][1])$initial_graph.fun()
       
-      #Time-series analysis for raw data
-      if(graphing_data.ls[[i]][3] == "raw"){
-     
-        get(graphing_data.ls[[i]][1])$timeseries.fun()
-
-      }
     }
   }
   
