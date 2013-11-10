@@ -96,7 +96,7 @@ Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
   contains = "Blockr_base",
   methods = list(
     
-    ddply_loop.fun = function(){
+    ddply_loop.fun = function(x){
       
       #Fix input data, and sample as appropriate
       input_data.df <- trickstr::dfsample(df = x, size = .self$sample_size) #Sample is based on the object's sample_size value
