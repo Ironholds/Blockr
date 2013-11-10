@@ -66,10 +66,10 @@ Blockr_base <- setRefClass("Blockr_base",
     #@data = the input dataframe
     #@var = the variable(s) to loop over in ddply
     #@rename = the list of vectors/new names for those vectors - see rename() in the plyr documentation for examples
-    regex_container.fun = function(data,var,rename_strings){
+    regex_container.fun = function(var,rename_strings){
       
       #Use ddply to iterate over each time period
-      to_output <- ddply(.data = data,
+      to_output <- ddply(.data = .self$data,
         .variables = var,
         .fun = .self$ddply_loop.fun
       )
@@ -96,10 +96,10 @@ Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
   contains = "Blockr_base",
   methods = list(
     
-    ddply_loop.fun = function(x){
+    ddply_loop.fun = function(){
       
       #Fix input data, and sample as appropriate
-      input_data.df <- trickstr::dfsample(df = x, size = .self$sample_size) #Sample is based on the object's sample_size value
+      input_data.df <- trickstr::dfsample(df = .self$data, size = .self$sample_size) #Sample is based on the object's sample_size value
       
       #Initialise export object
       to_return.df <- data.frame()
@@ -209,16 +209,42 @@ Blockr_vis <- setRefClass("Blockr_vis",
       
     },
     
-    timeseries.fun = function(x){
+    timeseries.fun = function(){
       
       #Filter
-      x <- x[x$variable != "misc",]
+      x <- .self$data[.self$data$variable != "misc",]
       
       #Convert timestamps into character representations, and thence into a zoo yearmon object.
-      x$timestamp <- as.character(x$timestamp)
       x$timestamp <- as.yearmon(x$timestamp, "%Y%m")
       
-      #Identify unique    
+      #Identify unique variables
+      unique_vars <- unique(x$variable)
+      
+      #For each unique variable, generate and plot stl data.
+      for(i in 1:length(unique_vars)){
+        
+        #Grab the data for the pertinent variable, removing, well, the variable.
+        input_data <- x[x$variable == unique_vars[i],c(1,3)]
+        
+        #Generate stl data
+        data.stl <- stl(x = zoo(x = x$value,
+                                index = x$timestamp),
+                        s.window = "periodic"
+        )
+        
+        #Plot it and return
+        png(filename = file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,unique_vars[i]"timeseries_analysis.png",sep = "")))
+        plot(data.stl)
+        title(main = "Seasonal decomposition of block data",
+              sub = paste(.self$data_type,"data,",.self$user_group,"users,",unique_vars[i],"blocks" sep = " "))
+        dev.off()
+        
+        #Return to file, too.
+        cat(data.stl, file = file.path(getwd(),"Metadata",paste(.self$user_group,.self$data_type,unique_vars[i]"timeseries_analysis.txt",sep = "")))
+        
+      }
+      
+      
     }
   )
 )
