@@ -71,7 +71,6 @@ retrieve_enclose.fun <- function(){
     
     #Run function and retrieve
     holding.df <- get(data_loop.ls[[i]][1])$regex_container.fun(
-      data = get(data_loop.ls[[i]][1])$data,
       var = "timestamp",
       rename_strings = rename.vec)
     
