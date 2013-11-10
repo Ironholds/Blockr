@@ -99,7 +99,7 @@ Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
     ddply_loop.fun = function(){
       
       #Fix input data, and sample as appropriate
-      input_data.df <- trickstr::dfsample(df = .self$data, size = .self$sample_size) #Sample is based on the object's sample_size value
+      input_data.df <- trickstr::dfsample(df = x, size = .self$sample_size) #Sample is based on the object's sample_size value
       
       #Initialise export object
       to_return.df <- data.frame()
