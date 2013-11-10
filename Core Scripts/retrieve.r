@@ -93,9 +93,7 @@ retrieve_enclose.fun <- function(){
     )
     
     #Grab data to hand-code
-    holding.df <- get(data_loop.ls[[i]][4])$regex_container.fun(
-      data = get(data_loop.ls[[i]][4])$data,
-      var = "timestamp")
+    holding.df <- get(data_loop.ls[[i]][4])$regex_container.fun(var = "timestamp")
      
     #Export
     export_file_path <- file.path(getwd(),"Data",paste(data_loop.ls[[i]][5],"hand_coding.tsv",sep = "_"))
