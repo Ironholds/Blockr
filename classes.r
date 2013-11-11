@@ -233,14 +233,15 @@ Blockr_vis <- setRefClass("Blockr_vis",
         )
         
         #Plot it and return
-        png(filename = file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,unique_vars[i],"timeseries_analysis.png", sep = "")))
+        graph_path <- file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,unique_vars[i],"timeseries_analysis.png", sep = "_"))
+        png(filename = graph_path)
         plot(data.stl)
         title(main = "Seasonal decomposition of block data",
               sub = paste(.self$data_type,"data,",.self$user_group,"users,",unique_vars[i],"blocks", sep = " "))
         dev.off()
         
         #Return to file, too.
-        cat(data.stl, file = file.path(getwd(),"Metadata",paste(.self$user_group,.self$data_type,unique_vars[i],"timeseries_analysis.txt", sep = "")))
+        cat(data.stl, file = file.path(getwd(),"Metadata",paste(.self$user_group,.self$data_type,unique_vars[i],"timeseries_analysis.txt", sep = "_")))
         
       }
       
