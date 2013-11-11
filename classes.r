@@ -241,7 +241,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
         dev.off()
         
         #Return to file, too, using dump due to cat()'s inability to appreciate lists.
-        dump(data.stl, file = file.path(getwd(),"Metadata",paste(.self$user_group,.self$data_type,unique_vars[i],"timeseries_analysis.txt", sep = "_")))
+        write(as.data.frame(data.stl$time.series), file = file.path(getwd(),"Metadata",paste(.self$user_group,.self$data_type,unique_vars[i],"timeseries_analysis.txt", sep = "_")))
         
       }
       
