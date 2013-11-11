@@ -227,8 +227,8 @@ Blockr_vis <- setRefClass("Blockr_vis",
         input_data <- x[x$variable == unique_vars[i],c(1,3)]
         
         #Generate stl data
-        data.stl <- stl(x = zoo(x = x$value,
-                                index = x$timestamp),
+        data.stl <- stl(x = zoo(x = input_data$value,
+                                order.by = input_data$timestamp),
                         s.window = "periodic"
         )
         
