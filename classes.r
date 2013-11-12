@@ -267,7 +267,7 @@ Blockr_vis_nonraw <- setRefClass("Blockr_vis_nonraw",
                               monthly_bar_graph <- ggplot(.self$data, aes(timestamp, value, fill = variable)) + 
                                 geom_bar(aes(group = variable, colour = variable), stat = "identity") +
                                 labs(x = "Month", y = "Number of blocks") +
-                                ggtitle(paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str," - ",sql_end.str,"), ",.self$user_group," users",.self$data_type," data" sep = "")) +
+                                ggtitle(paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str," - ",sql_end.str,"), ",.self$user_group," users",.self$data_type," data", sep = "")) +
                                 scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100), expand = c(0,0)) +
                                 scale_y_continuous(expand = c(0, 0)) +
                                 theme(axis.text.x = element_text(angle = 90, hjust = 1))
