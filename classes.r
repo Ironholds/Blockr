@@ -135,7 +135,7 @@ Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
       #Mark non-matches
       if(nrow(input_data.df) > 0){
         
-        input_data.df$matched_regex <- "Misc"
+        input_data.df$matched_regex <- "misc"
         
         #Add to exporting object
         to_return.df <- rbind(to_return.df,input_data.df)
