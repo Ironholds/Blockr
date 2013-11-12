@@ -1,5 +1,5 @@
-# retrieve.r retrieves data from the logging table and processes it through the regex functions in Blockr_base
-# (contained in classes.r)
+# exploratory_analysis.r retrieves data from the logging table and processes it through the regex functions in Blockr_base
+# (contained in classes.r) before doing some exploratory graphing using Blockr_vis
 # 
 # Copyright (c) 2013 Oliver Keyes
 #   
@@ -44,16 +44,6 @@ retrieve_enclose.fun <- function(){
   anonusers.df <- query.df[query.df$userid == 0,]
   registered.df <- query.df[query.df$userid > 0,]
   
-  #Loop to format, run and export
-  #List necessary params.
-  #@1 resulting object name for regex crunching
-  #@2 source object name
-  #@3 resulting file name for regex crunching
-  #@4 resulting object name for hand-coding
-  #@5 resulting file prefix for hand-coding and proportionate analysis
-  data_loop.ls <-list(c("anon.base","anonusers.df","anonymous_aggregate","anon.base_hand","anonymous"),
-                      c("registered.base","registered.df","registered_aggregate","registered.base_hand","registered"))
-  
   #Rename vector
   rename.vec <- c("timestamp" = "timestamp", "V1" = "spam", "V2" = "disruption","V3" = "sockpuppetry",
                   "V4" = "username", "V5" = "proxy", "V6" = "misc")
@@ -62,15 +52,15 @@ retrieve_enclose.fun <- function(){
   output.ls <- list()
   
   #Loop
-  for(i in 1:length(data_loop.ls)){
+  for(i in 1:length(retrieval_loop.ls)){
     
     #Create in the Blockr_base class, with the input data as, well, $data
-    assign(x = data_loop.ls[[i]][1],
-      value = new("Blockr_base", data = get(data_loop.ls[[i]][2]))
+    assign(x = retrieval_loop.ls[[i]][1],
+      value = new("Blockr_base", data = get(retrieval_loop.ls[[i]][2]))
       )
     
     #Run function and retrieve
-    holding.df <- get(data_loop.ls[[i]][1])$regex_container.fun(
+    holding.df <- get(retrieval_loop.ls[[i]][1])$regex_container.fun(
       var = "timestamp",
       rename_strings = rename.vec)
     
@@ -82,21 +72,21 @@ retrieve_enclose.fun <- function(){
     output.ls[[i]] <- to_output.df
     
     #Export
-    export_file_path <- file.path(getwd(),"Data",paste(data_loop.ls[[i]][3],".tsv",sep = ""))
+    export_file_path <- file.path(getwd(),"Data",paste(retrieval_loop.ls[[i]][3],".tsv",sep = ""))
     write.table(to_output.df, file = export_file_path, col.names = TRUE,
       row.names = FALSE, sep = "\t", quote = FALSE)
     
     #And now we play the hand-coding game
-    assign(x = data_loop.ls[[i]][4],
-     value = new("Blockr_base_handcode", data = get(data_loop.ls[[i]][2]),
-        sample_size = trickstr::sample_size(x = get(data_loop.ls[[i]][2]), variable = "timestamp", percentage = 0.20))
+    assign(x = retrieval_loop.ls[[i]][4],
+     value = new("Blockr_base_handcode", data = get(retrieval_loop.ls[[i]][2]),
+        sample_size = trickstr::sample_size(x = get(retrieval_loop.ls[[i]][2]), variable = "timestamp", percentage = 0.20))
     )
     
     #Grab data to hand-code
-    holding.df <- get(data_loop.ls[[i]][4])$regex_container.fun(var = "timestamp")
+    holding.df <- get(retrieval_loop.ls[[i]][4])$regex_container.fun(var = "timestamp")
      
     #Export
-    export_file_path <- file.path(getwd(),"Data",paste(data_loop.ls[[i]][5],"hand_coding.tsv",sep = "_"))
+    export_file_path <- file.path(getwd(),"Data",paste(retrieval_loop.ls[[i]][5],"hand_coding.tsv",sep = "_"))
     write.table(holding.df, file = export_file_path, col.names = TRUE,
       row.names = FALSE, sep = "\t", quote = FALSE)
     
@@ -109,7 +99,7 @@ retrieve_enclose.fun <- function(){
     proportions.df <- rename(proportions.df, replace = c("matched_regex" = "variable", "V1" = "value"))
     
     #Export those
-    export_file_path <- file.path(getwd(),"Data",paste(data_loop.ls[[i]][5],"proportionate_data.tsv",sep = "_"))
+    export_file_path <- file.path(getwd(),"Data",paste(retrieval_loop.ls[[i]][5],"proportionate_data.tsv",sep = "_"))
     write.table(proportions.df, file = export_file_path, col.names = TRUE,
                 row.names = FALSE, sep = "\t", quote = FALSE)
     
@@ -119,4 +109,45 @@ retrieve_enclose.fun <- function(){
   
   #Return
   return(output.ls)
+}
+
+#Graphing function
+initial_graphing.fun <- function(){
+  
+  #Grab data
+  data.ls <- retrieve_enclose.fun()
+  
+  #Report as such
+  print("initial data retrieval complete")
+
+  
+  #Check for user error in expanding/modifying the Blockr codebase
+  if(length(graphing_loop.ls) != length(data.ls)){
+    stop("There is an inconsistency between the graphing data and the number of dataframes to analyse")
+    
+  }else{
+    
+    #Iterate over the non-normalised data to produce juicy, juicy graphs
+    for(i in 1:length(graphing_loop.ls)){
+      
+      #Split the pertinent dataframe out of data.ls and add to a newly-created Blockr_vis object
+      assign(graphing_loop.ls[[i]][1],
+             value = new("Blockr_vis",
+                         data = as.data.frame(data.ls[[i]]),
+                         yearly_data = data_aggregation.fun(x = as.data.frame(data.ls[[i]])),
+                         data_type = graphing_loop.ls[[i]][3],
+                         user_group = graphing_loop.ls[[i]][2]
+             )
+      )
+      
+      #Graph
+      get(graphing_loop.ls[[i]][1])$initial_graph.fun()
+      
+      #Time-series analysis        
+      get(graphing_loop.ls[[i]][1])$timeseries.fun()
+    }
+  }
+  
+  #Report
+  print("initial graphing complete")
 }
