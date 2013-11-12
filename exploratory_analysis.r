@@ -130,15 +130,28 @@ initial_graphing.fun <- function(){
     #Iterate over the non-normalised data to produce juicy, juicy graphs
     for(i in 1:length(graphing_loop.ls)){
       
-      #Split the pertinent dataframe out of data.ls and add to a newly-created Blockr_vis object
-      assign(graphing_loop.ls[[i]][1],
-             value = new("Blockr_vis",
-                         data = as.data.frame(data.ls[[i]]),
-                         yearly_data = data_aggregation.fun(x = as.data.frame(data.ls[[i]])),
-                         data_type = graphing_loop.ls[[i]][3],
-                         user_group = graphing_loop.ls[[i]][2]
-             )
-      )
+      if(graphing_loop.ls[[i]][3] == "raw"){
+          
+        #Split the pertinent dataframe out of data.ls and add to a newly-created Blockr_vis object
+        assign(graphing_loop.ls[[i]][1],
+               value = new("Blockr_vis",
+                           data = as.data.frame(data.ls[[i]]),
+                           yearly_data = data_aggregation.fun(x = as.data.frame(data.ls[[i]])),
+                           data_type = graphing_loop.ls[[i]][3],
+                           user_group = graphing_loop.ls[[i]][2]
+               )
+        )
+      } else {
+        
+        assign(graphing_loop.ls[[i]][1],
+               value = new("Blockr_vis_nonraw",
+                           data = as.data.frame(data.ls[[i]]),
+                           data_type = graphing_loop.ls[[i]][3],
+                           user_group = graphing_loop.ls[[i]][2]
+               )
+        )
+        
+      }
       
       #Graph
       get(graphing_loop.ls[[i]][1])$initial_graph.fun()

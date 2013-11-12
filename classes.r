@@ -256,3 +256,26 @@ Blockr_vis <- setRefClass("Blockr_vis",
     }
   )
 )
+
+Blockr_vis_nonraw <- setRefClass("Blockr_vis_nonraw",
+                          fields = list(data = "data.frame", data_type = "character", user_group = "character"), #Includes generic data.frame functions.
+                          contains = "Blockr_vis",
+                          methods = list(
+                            initial_graph.fun = function(){
+                              
+                              #Monthly data
+                              monthly_bar_graph <- ggplot(.self$data, aes(timestamp, value, fill = variable)) + 
+                                geom_bar(aes(group = variable, colour = variable), stat = "identity") +
+                                labs(x = "Month", y = "Number of blocks") +
+                                ggtitle(paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str," - ",sql_end.str,"), ",.self$user_group," users",.self$data_type," data" sep = "")) +
+                                scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100), expand = c(0,0)) +
+                                scale_y_continuous(expand = c(0, 0)) +
+                                theme(axis.text.x = element_text(angle = 90, hjust = 1))
+                              
+                              #Print
+                              ggsave(filename = file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,"monthly_bar_graph.png",sep = "_")),
+                                     plot = monthly_bar_graph,
+                                     width = 8,
+                                     height = 8,
+                                     units = "in")
+                            }
