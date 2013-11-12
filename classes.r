@@ -215,6 +215,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
       x <- .self$data[.self$data$variable != "misc",]
       
       #Convert timestamps into character representations, and thence into a zoo yearmon object.
+      x$timestamp <- as.character(x$timestamp)
       x$timestamp <- as.yearmon(x$timestamp, "%Y%m")
       
       #Identify unique variables
