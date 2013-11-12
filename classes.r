@@ -221,7 +221,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
       #Identify unique variables
       unique_vars <- unique(x$variable)
       
-      consistent_length <- nrow(x[x$variable = "disruption",])
+      consistent_length <- nrow(x[x$variable == "disruption",])
       
       #For each unique variable, generate and plot stl data.
       for(i in 1:length(unique_vars)){
