@@ -221,7 +221,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
       unique_vars <- unique(x$variable)
       
       #Disruption, always a constant
-      constant_series <- x[x$variable == "disruption"]$timestamp
+      constant_series <- x[x$variable == "disruption",]
       
       #For each unique variable, generate and plot stl data.
       for(i in 1:length(unique_vars)){
