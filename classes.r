@@ -221,30 +221,35 @@ Blockr_vis <- setRefClass("Blockr_vis",
       #Identify unique variables
       unique_vars <- unique(x$variable)
       
+      consistent_length <- nrow(x[x$variable = "disruption",])
+      
       #For each unique variable, generate and plot stl data.
       for(i in 1:length(unique_vars)){
         
         #Grab the data for the pertinent variable, removing, well, the variable.
         input_data <- x[x$variable == unique_vars[i],c(1,3)]
-                
-        #Generate stl data
-        data.stl <- stl(x = zoo(x = input_data$value,
-                                order.by = input_data$timestamp),
-                        s.window = "periodic"
-        )
         
-        #Plot it and return
-        graph_path <- file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,unique_vars[i],"timeseries_analysis.png", sep = "_"))
-        png(filename = graph_path)
-        plot(data.stl)
-        title(main = "Seasonal decomposition of block data",
-              sub = paste(.self$data_type,"data,",.self$user_group,"users,",unique_vars[i],"blocks", sep = " "))
-        dev.off()
-        
-        #Return to file, too, using a roundabout method due to cat()'s inability to appreciate lists.
-        sink(file.path(getwd(),"Metadata",paste(.self$user_group,.self$data_type,unique_vars[i],"timeseries_analysis.txt", sep = "_")))
-        lapply(data.stl$time.series, print)
-        sink()
+        if(length(input_data) == consistent_length){
+          
+          #Generate stl data
+          data.stl <- stl(x = zoo(x = input_data$value,
+                                  order.by = input_data$timestamp),
+                          s.window = "periodic"
+          )
+          
+          #Plot it and return
+          graph_path <- file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,unique_vars[i],"timeseries_analysis.png", sep = "_"))
+          png(filename = graph_path)
+          plot(data.stl)
+          title(main = "Seasonal decomposition of block data",
+                sub = paste(.self$data_type,"data,",.self$user_group,"users,",unique_vars[i],"blocks", sep = " "))
+          dev.off()
+          
+          #Return to file, too, using a roundabout method due to cat()'s inability to appreciate lists.
+          sink(file.path(getwd(),"Metadata",paste(.self$user_group,.self$data_type,unique_vars[i],"timeseries_analysis.txt", sep = "_")))
+          lapply(data.stl$time.series, print)
+          sink()
+        }
       }
       
       
