@@ -279,3 +279,5 @@ Blockr_vis_nonraw <- setRefClass("Blockr_vis_nonraw",
                                      height = 8,
                                      units = "in")
                             }
+                          )
+)
