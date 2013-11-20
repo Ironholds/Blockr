@@ -35,27 +35,24 @@ Blockr_base <- setRefClass("Blockr_base",
       #Fix input data
       input_data.df <- x
       
-      #Initialise export object
-      to_return.vec <- vector()
-      
-      #For loop
-      for(i in 1:length(regex.ls)){
+      #Use lapply rather than a for loop. Microbenchmarks show a substantial performance improvement.
+      lapply_output <- lapply(regex.ls,function(x){
         
         #Run regexes
-        grepvec <- grepl(pattern = regex.ls[[i]][2],
-           x = input_data.df$reason,
-           perl = TRUE,
-           ignore.case = TRUE)
-        
-        #Number of rows that match
-        to_return.vec[i] <- sum(grepvec)
+        grepvec <- grepl(pattern = x[2],
+                         x = input_data.df$reason,
+                         perl = TRUE,
+                         ignore.case = TRUE)
         
         #Non-matches
-        input_data.df <- input_data.df[!grepvec,]
-      }
+        input_data.df <<- input_data.df[!grepvec,]
+        
+        #Print matches
+        sum(grepvec)
+      })
       
-      #Include non-matches
-      to_return.vec[length(to_return.vec)+1] <- nrow(input_data.df)
+      #Unlist and vectorise the lapply output, adding any remainder.
+      to_return.vec <- c(unlist(lapply_output),nrow(input_data.df))
       
       #Return
       return(to_return.vec)
