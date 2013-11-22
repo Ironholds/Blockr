@@ -24,7 +24,7 @@
 #This contains the basic methods for parsing block entries,
 #and applies to data.frames quite happily.
 Blockr_base <- setRefClass("Blockr_base",
-  fields = list(data = "data.frame"), #Includes generic data.frame functions.
+  fields = list(data = "data.frame", user_type = "character"), #Includes generic data.frame functions.
   methods = list(
     
     #Initial contents of regex_loop.fun
@@ -38,21 +38,25 @@ Blockr_base <- setRefClass("Blockr_base",
       #Use lapply rather than a for loop. Microbenchmarks show a substantial performance improvement.
       lapply_output <- lapply(regex.ls,function(x){
         
-        #Run regexes
+        #Run regexes in regex.ls over input data, one by one
         grepvec <- grepl(pattern = x[2],
                          x = input_data.df$reason,
                          perl = TRUE,
                          ignore.case = TRUE)
         
-        #Non-matches
-        input_data.df <<- input_data.df[!grepvec,]
+        #Return non-matches to input_data.df in the parent environment before resetting the loop
+        #Assign is used because <- wouldn't get out of the loop and <<- would go too far.
+        #env = parent.env(environment()) solves for that nicely.
+        assign(x = "input_data.df",
+               value = input_data.df[!grepvec,],
+               envir = parent.env(environment()))
         
         #Print matches
         sum(grepvec)
       })
       
-      #Unlist and vectorise the lapply output, adding any remainder.
-      to_return.vec <- c(unlist(lapply_output),nrow(input_data.df))
+      #Unlist and vectorise the lapply output, adding any remainder and the total
+      to_return.vec <- c(unlist(lapply_output),nrow(input_data.df),nrow(x))
       
       #Return
       return(to_return.vec)
@@ -63,20 +67,15 @@ Blockr_base <- setRefClass("Blockr_base",
     #@data = the input dataframe
     #@var = the variable(s) to loop over in ddply
     #@rename = the list of vectors/new names for those vectors - see rename() in the plyr documentation for examples
-    regex_container.fun = function(var,rename_strings){
+    regex_container.fun = function(){
       
       #Use ddply to iterate over each time period
       to_output <- ddply(.data = .self$data,
-        .variables = var,
+        .variables = "timestamp",
         .fun = .self$ddply_loop.fun
       )
-      
-      #Do we need to rename?
-      if(!missing(rename_strings)){#Yep?
         
-        to_output <- rename(to_output, replace = rename_strings)
-        
-      }
+        to_output <- rename(to_output, replace = rename.vec)
       
       #Either way, factorise and return
       to_output$timestamp <- as.factor(to_output$timestamp)

@@ -48,3 +48,7 @@ graphing_loop.ls <- list(
   c("anonymous_norm.df","anonymous","normalised"),
   c("registered_norm.df","registered","normalised")
 )
+
+#Rename vector
+rename.vec <- c("timestamp" = "timestamp", "V1" = "spam", "V2" = "disruption","V3" = "sockpuppetry",
+                "V4" = "username", "V5" = "proxy", "V6" = "misc","V7" = "totals")
