@@ -2,3 +2,4 @@
 config.r
 *hand_coding.tsv
 *.Rproj*
+.Rproj.user
