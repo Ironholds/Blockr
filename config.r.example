@@ -14,5 +14,6 @@ library(zoo)
 #My personal Library of Doom (tm) - https://github.com/Ironholds/trickstr
 library(trickstr)
 
-#Screw with scientific notation
-options(scipen=500)
+#Options
+options(scipen=500) #Screw with scientific notation
+options(stringsAsFactors = FALSE) #Stop automatically factorising
