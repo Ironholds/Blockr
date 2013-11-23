@@ -88,8 +88,8 @@ Blockr_base <- setRefClass("Blockr_base",
 #Hand-coding class - child of Blockr_base, overwrites ddply_loop.fun
 #This is used both to produce a hand-coding sample, and to generate data that can be used for a proportion analysis
 Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
-  fields = list(data = "data.frame", sample_size = "numeric"), #Note that it requires a set sample size to be valid
-  contains = "Blockr_base",
+  fields = list(sample_size = "numeric"), #Include sample size
+  contains = "Blockr_base", #Inherit Blockr_base, and thus those fields and methods.
   methods = list(
     
     ddply_loop.fun = function(x){
