@@ -70,7 +70,10 @@ retrieve_enclose.fun <- function(){
       var = "timestamp",
       rename_strings = rename.vec)
     
-    #Run regular expressions over a hand-coding sample
+    #Run regular expressions over a sample to generate hand-coding data.
+    handcode.df <- Blockr_base_handcode(data = input.df$data,
+                                        user_type = as.character(x[3]),
+                                        sample_size = as.character(x[4]))
     
   })
   for(i in 1:length(retrieval_loop.ls)){

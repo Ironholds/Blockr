@@ -66,3 +66,57 @@ data_aggregation.fun = function(x){
   #return
   return(to_output)
 }
+
+#Raw data processing method
+data_process.fun = function(x){
+  
+  #Retrieve data
+  retrieved_data.df <- ddply(.data = x,
+                             .var = "timestamp",
+                             .fun = function(x){
+                               
+                               #Fix the raw data as input_data.df, and create output object
+                               input_data.df <- x
+                               output_data.df <- data.frame()
+                               
+                               #Use lapply rather than a for loop. Microbenchmarks show a substantial performance improvement.
+                               lapply_output <- lapply(regex.ls,function(x){
+                                 
+                                 #Run regexes in regex.ls over input data, one by one
+                                 grepvec <- grepl(pattern = x[2],
+                                                  x = input_data.df$reason,
+                                                  perl = TRUE,
+                                                  ignore.case = TRUE)
+                                 
+                                 #Output refined input data, using assign() 
+                                 #due to lapply's distinct environment for 
+                                 #function calls
+                                 assign(x = "input_data.df",
+                                        value = input_data.df[!grepvec,],
+                                        envir = parent.env(environment()))
+                                 
+                                 #Generate data to output, and output
+                                 lapply_output.df <- input_data.df[grepvec,]
+                                 lapply_output.df$regex <- as.character(x[2])
+                                 
+                                 assign("output.df",
+                                        value = cbind(output.df,lapply_output.df),
+                                        envir = parent.env(environment()))
+                                 
+                               }
+                               )
+                               
+                               
+                               #Add in remaining input data
+                               input_data.df$regex <- "misc"
+                               to_output <- cbind(output_data.df,input_data.df)
+                               
+                               #Return
+                               return(to_output)
+                             }
+  )
+  
+  #Return
+  return(retrieved_data.df)
+  
+}

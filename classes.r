@@ -27,121 +27,89 @@ Blockr_base <- setRefClass("Blockr_base",
   fields = list(data = "data.frame", user_type = "character"), #Includes generic data.frame functions.
   methods = list(
     
-    #Initial contents of regex_loop.fun
-    #Obviously for the parent class we want the most common use case, which is returning aggregate numbers
-    #@x = input data
-    ddply_loop.fun = function(x){
+    #Aggregate data
+    aggregation.fun = function(){
       
-      #Fix input data
-      input_data.df <- x
-      
-      #Use lapply rather than a for loop. Microbenchmarks show a substantial performance improvement.
-      lapply_output <- lapply(regex.ls,function(x){
-        
-        #Run regexes in regex.ls over input data, one by one
-        grepvec <- grepl(pattern = x[2],
-                         x = input_data.df$reason,
-                         perl = TRUE,
-                         ignore.case = TRUE)
-        
-        #Return non-matches to input_data.df in the parent environment before resetting the loop
-        #Assign is used because <- wouldn't get out of the loop and <<- would go too far.
-        #env = parent.env(environment()) solves for that nicely.
-        assign(x = "input_data.df",
-               value = input_data.df[!grepvec,],
-               envir = parent.env(environment()))
-        
-        #Print matches
-        sum(grepvec)
-      })
-      
-      #Unlist and vectorise the lapply output, adding any remainder and the total
-      to_return.vec <- c(unlist(lapply_output),nrow(input_data.df),nrow(x))
+      #Aggregate
+      aggregated.df <- ddply(.data = .self$data,
+                             .var = "timestamp",
+                             .fun = function(x){
+                               
+                               return(as.data.frame(table(x$regex)))
+                             }
+      )
       
       #Return
-      return(to_return.vec)
+      return(aggregated.df)
     },
-
-    #Function for looping regexes - uses loop_contents.fun, allowing for modification of the actual
-    #nuts and bolts in child classes without reinventing the /entire/ wheel
-    #@data = the input dataframe
-    #@var = the variable(s) to loop over in ddply
-    #@rename = the list of vectors/new names for those vectors - see rename() in the plyr documentation for examples
-    regex_container.fun = function(){
+    
+    #Sampling function
+    sample.fun = function(){
       
-      #Use ddply to iterate over each time period
-      to_output <- ddply(.data = .self$data,
-        .variables = "timestamp",
-        .fun = .self$ddply_loop.fun
+      #Identify appropriate sample size
+      sample_size <- trickstr::sample_size(x = .self$data,
+                                           variable = "timestamp",
+                                           percentage = 0.20)
+      
+      #Sample
+      sampled_data.df <- ddply(.data = .self$data,
+                               .var = "timestamp",
+                               .fun = function(x){
+                                 
+                                 sample.df <- trickstr::dfsample(x,sample_size)
+                                 
+                                 return()
+                               }
+                               
       )
-        
-        to_output <- rename(to_output, replace = rename.vec)
       
-      #Either way, factorise and return
-      to_output$timestamp <- as.factor(to_output$timestamp)
+      #Write into the raw_data field of the parent object
+      return(retrieved_data.df)
       
-      return(to_output)
+    },
+    
+    #Function to tie them all together
+    grouping.fun = function(){
+      
+      #Process data
+      .self$data <- data_process.fun(x = .self$data)
+      
+      #Retrieve aggregates and save
+      aggregated.df <- .self$aggregation.fun()
+      export_file_path <- file.path(getwd(),"Data",paste(as.character(.self$user_type),"_disproportionate_",".tsv",sep = ""))
+      write.table(aggregated.df, file = export_file_path, col.names = TRUE,
+                  row.names = FALSE, sep = "\t", quote = FALSE)
+      
+      #Sample original data
+      sample.df <- .self$sample.fun()
+      
+      #Return
+      return(sample.df)
+      
     }
+      
   )
 )
 
 #Hand-coding class - child of Blockr_base, overwrites ddply_loop.fun
 #This is used both to produce a hand-coding sample, and to generate data that can be used for a proportion analysis
 Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
-  fields = list(sample_size = "numeric"), #Include sample size
   contains = "Blockr_base", #Inherit Blockr_base, and thus those fields and methods.
   methods = list(
     
-    ddply_loop.fun = function(x){
+    #Function to tie them all together
+    grouping.fun = function(){
       
-      #Fix input data, and sample as appropriate
-      input_data.df <- trickstr::dfsample(df = x, size = .self$sample_size) #Sample is based on the object's sample_size value
+      #Save data to file
       
-      #Initialise export object
-      to_return.df <- data.frame()
-      
-      #For loop
-      for(i in 1:length(regex.ls)){
+      #Retrieve aggregates and save
+      aggregated.df <- .self$aggregation.fun()
+      export_file_path <- file.path(getwd(),"Data",paste(as.character(.self$user_type),"_disproportionate_",".tsv",sep = ""))
+      write.table(aggregated.df, file = export_file_path, col.names = TRUE,
+                  row.names = FALSE, sep = "\t", quote = FALSE)
         
-        #Check contents of input_data.df in case all possible matches have already been found
-        if(nrow(input_data.df) > 0){
-          
-          #Run regexes
-          grepvec <- grepl(pattern = regex.ls[[i]][2],
-                           x = input_data.df$reason,
-                           perl = TRUE,
-                           ignore.case = TRUE)
-          
-          #Fix matches
-          matches.df <- input_data.df[grepvec,]
-          
-          #Add match number
-          if(nrow(matches.df) > 0){
-            matches.df$matched_regex <- regex.ls[[i]][1]
-            
-            #Grab and return matches
-            to_return.df <- rbind(to_return.df,matches.df)
-            
-          }
-          #Non-matches
-          input_data.df <- input_data.df[!grepvec,]
-        }
-      }
-      
-      #Mark non-matches
-      if(nrow(input_data.df) > 0){
-        
-        input_data.df$matched_regex <- "misc"
-        
-        #Add to exporting object
-        to_return.df <- rbind(to_return.df,input_data.df)
-        
-      }
-      
-      #Return
-      return(to_return.df)
-      
     }
+      
   )
 )
 
