@@ -24,7 +24,7 @@
 #This contains the basic methods for parsing block entries,
 #and applies to data.frames quite happily.
 Blockr_base <- setRefClass("Blockr_base",
-  fields = list(data = "data.frame", user_type = "character"), #Includes generic data.frame functions.
+  fields = list(data = "data.frame", user_type = "character", sample_size = "character"), #Includes generic data.frame functions.
   methods = list(
     
     #Aggregate data
@@ -47,16 +47,13 @@ Blockr_base <- setRefClass("Blockr_base",
     sample.fun = function(){
       
       #Identify appropriate sample size
-      sample_size <- trickstr::sample_size(x = .self$data,
-                                           variable = "timestamp",
-                                           percentage = 0.20)
       
       #Sample
       sampled_data.df <- ddply(.data = .self$data,
                                .var = "timestamp",
                                .fun = function(x){
                                  
-                                 sample.df <- trickstr::dfsample(x,sample_size)
+                                 sample.df <- trickstr::dfsample(x,.self$sample_size)
                                  
                                  return()
                                }
