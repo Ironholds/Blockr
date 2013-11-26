@@ -99,8 +99,8 @@ data_process.fun = function(x){
                                  lapply_output.df <- input_data.df[grepvec,]
                                  lapply_output.df$regex <- as.character(x[2])
                                  
-                                 assign("output.df",
-                                        value = cbind(output.df,lapply_output.df),
+                                 assign("output_data.df",
+                                        value = cbind(output_data.df,lapply_output.df),
                                         envir = parent.env(environment()))
                                  
                                }
