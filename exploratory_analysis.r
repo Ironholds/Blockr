@@ -63,17 +63,17 @@ retrieve_enclose.fun <- function(){
     
     #Create new Blockr_base object, with the input data as data and the data-type associated
     #with it in input.ls as user_type
-    input.df <- Blockr_base$new(data = as.data.frame(x[1:2]), user_type = as.character(x[3]))
+    input.df <- Blockr_base$new(data = as.data.frame(x[1:2]),
+                                user_type = as.character(x[3]),
+                                sample_size = as.character(x[4]))
     
-    #Run regular expressions over the input data
-    holding.df <- input.df$regex_container.fun(
-      var = "timestamp",
-      rename_strings = rename.vec)
+    #Run regular expressions over the input data, generate and save aggregates,
+    #and start work on the proportionate set of aggregate data.
+    proportionate.df <- Blockr_base_handcode$new(data = input.df$grouping.fun(),
+                                                 user_type = input.df$user_type)
     
-    #Run regular expressions over a sample to generate hand-coding data.
-    handcode.df <- Blockr_base_handcode(data = input.df$data,
-                                        user_type = as.character(x[3]),
-                                        sample_size = as.character(x[4]))
+    #Run aggregation-and-save function for proportionate data.
+    proportionate.df$grouping.fun()
     
   })
   for(i in 1:length(retrieval_loop.ls)){

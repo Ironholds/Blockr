@@ -131,7 +131,7 @@ Blockr_base <- setRefClass("Blockr_base",
       
       #Retrieve aggregates and save
       aggregated.df <- .self$aggregation.fun()
-      export_file_path <- file.path(getwd(),"Data",paste(as.character(.self$user_type),"_disproportionate_",".tsv",sep = ""))
+      export_file_path <- file.path(getwd(),"Data",paste(as.character(.self$user_type),"_disproportionate",".tsv",sep = ""))
       write.table(aggregated.df, file = export_file_path, col.names = TRUE,
                   row.names = FALSE, sep = "\t", quote = FALSE)
       
@@ -154,12 +154,10 @@ Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
     
     #Function to tie them all together
     grouping.fun = function(){
-      
-      #Save data to file
-      
+            
       #Retrieve aggregates and save
       aggregated.df <- .self$aggregation.fun()
-      export_file_path <- file.path(getwd(),"Data",paste(as.character(.self$user_type),"_disproportionate_",".tsv",sep = ""))
+      export_file_path <- file.path(getwd(),"Data",paste(as.character(.self$user_type),"_proportionate",".tsv",sep = ""))
       write.table(aggregated.df, file = export_file_path, col.names = TRUE,
                   row.names = FALSE, sep = "\t", quote = FALSE)
         
