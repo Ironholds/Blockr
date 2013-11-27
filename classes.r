@@ -39,6 +39,12 @@ Blockr_base <- setRefClass("Blockr_base",
                              }
       )
       
+      #Rename
+      names(aggregated.df)[2:3] <- c("variable","value")
+      
+      #Defactor
+      aggregated.df$variable <- as.character(aggregated.df$variable)
+      
       #Return
       return(aggregated.df)
     },
