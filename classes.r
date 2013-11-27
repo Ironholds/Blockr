@@ -113,7 +113,7 @@ Blockr_base <- setRefClass("Blockr_base",
                                  
                                  sample.df <- trickstr::dfsample(x,.self$sample_size)
                                  
-                                 return()
+                                 return(sample.df)
                                }
                                
       )
