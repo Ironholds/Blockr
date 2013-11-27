@@ -27,6 +27,60 @@ Blockr_base <- setRefClass("Blockr_base",
   fields = list(data = "data.frame", user_type = "character", sample_size = "character"), #Includes generic data.frame functions.
   methods = list(
     
+    #Raw data processing method
+    data_process.fun = function(){
+      
+      #Retrieve data
+      retrieved_data.df <- ddply(.data = .self$data,
+                                 .var = "timestamp",
+                                 .fun = function(x){
+                                   
+                                   #Fix the raw data as input_data.df, and create output object
+                                   input_data.df <- x
+                                   output_data.df <- data.frame()
+                                   
+                                   #Use lapply rather than a for loop. Microbenchmarks show a substantial performance improvement.
+                                   lapply_output <- lapply(regex.ls,function(x){
+                                     
+                                     #Run regexes in regex.ls over input data, one by one
+                                     grepvec <- grepl(pattern = x[2],
+                                                      x = input_data.df$reason,
+                                                      perl = TRUE,
+                                                      ignore.case = TRUE)
+                                     
+                                     #Output refined input data, using assign() 
+                                     #due to lapply's distinct environment for 
+                                     #function calls
+                                     assign(x = "input_data.df",
+                                            value = input_data.df[!grepvec,],
+                                            envir = parent.env(environment()))
+                                     
+                                     #Generate data to output, and output
+                                     lapply_output.df <- input_data.df[grepvec,]
+                                     lapply_output.df$regex <- as.character(x[1])
+                                     
+                                     assign("output_data.df",
+                                            value = rbind(output_data.df,lapply_output.df),
+                                            envir = parent.env(environment()))
+                                     
+                                   }
+                                   )
+                                   
+                                   
+                                   #Add in remaining input data
+                                   input_data.df$regex <- "misc"
+                                   to_output <- rbind(output_data.df,input_data.df)
+                                   
+                                   #Return
+                                   return(to_output)
+                                 }
+      )
+      
+      #Return
+      .self$data <- retrieved_data.df
+      
+    },
+    
     #Aggregate data
     aggregation.fun = function(){
       
@@ -73,7 +127,7 @@ Blockr_base <- setRefClass("Blockr_base",
     grouping.fun = function(){
       
       #Process data
-      .self$data <- data_process.fun(x = .self$data)
+      data_process.fun()
       
       #Retrieve aggregates and save
       aggregated.df <- .self$aggregation.fun()
