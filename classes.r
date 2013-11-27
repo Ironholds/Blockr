@@ -51,9 +51,7 @@ Blockr_base <- setRefClass("Blockr_base",
     
     #Sampling function
     sample.fun = function(){
-      
-      #Identify appropriate sample size
-      
+            
       #Sample
       sampled_data.df <- ddply(.data = .self$data,
                                .var = "timestamp",
@@ -67,7 +65,7 @@ Blockr_base <- setRefClass("Blockr_base",
       )
       
       #Write into the raw_data field of the parent object
-      return(retrieved_data.df)
+      return(sampled_data.df)
       
     },
     
