@@ -97,10 +97,10 @@ data_process.fun = function(x){
                                  
                                  #Generate data to output, and output
                                  lapply_output.df <- input_data.df[grepvec,]
-                                 lapply_output.df$regex <- as.character(x[2])
+                                 lapply_output.df$regex <- as.character(x[1])
                                  
                                  assign("output_data.df",
-                                        value = cbind(output_data.df,lapply_output.df),
+                                        value = rbind(output_data.df,lapply_output.df),
                                         envir = parent.env(environment()))
                                  
                                }
@@ -109,7 +109,7 @@ data_process.fun = function(x){
                                
                                #Add in remaining input data
                                input_data.df$regex <- "misc"
-                               to_output <- cbind(output_data.df,input_data.df)
+                               to_output <- rbind(output_data.df,input_data.df)
                                
                                #Return
                                return(to_output)
