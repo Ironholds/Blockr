@@ -168,34 +168,33 @@ Blockr_base_handcode <- setRefClass("Blockr_base_handcode",
 
 #Base visualisation class
 Blockr_vis <- setRefClass("Blockr_vis",
-  fields = list(data = "data.frame", yearly_data = "data.frame", data_type = "character", user_group = "character"), #Includes generic data.frame functions.
+  fields = list(data = "data.frame", data_type = "character", user_group = "character"), #Includes generic data.frame functions.
   methods = list(
     
-    #Initial graphing function
-    initial_graph.fun = function(){
-    
-      #Simple line graph of monthly data
-      monthly_line_graph <- ggplot(.self$data, aes(timestamp, value)) + 
+    #Monthly graphs
+    monthly_graph.fun = function(){
+      
+      line_graph <- ggplot(.self$data, aes(timestamp,value)) +
         geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
-        labs(x = "Month", y = "Number of blocks") +
-        ggtitle(paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str,"-",sql_end.str,"),",.self$user_group,"users", sep = " ")) +
-        scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100), expand = c(0,0)) +
-        scale_y_continuous(expand = c(0, 0)) +
+        labs(x = "Month", Y = "Number of blocks") +
+        ggtitle(paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str,"-",sql_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " ")) +
+        scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100)) +
+        scale_y_continuous(expand = c(0,0)) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1))
       
-      #Print
+      #Save
       ggsave(filename = file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,"monthly_line_graph.png",sep = "_")),
-             plot = monthly_line_graph,
+             plot = line_graph,
              width = 8,
              height = 8,
              units = "in")
       
       #Monthly, with points and simple linear regression.
-      monthly_regression_graph <- ggplot(.self$data,aes(x = timestamp,y = value, colour = variable))+
+      regression_graph <- ggplot(.self$data,aes(x = timestamp,y = value, colour = variable))+
         geom_point(shape=3) +
         geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
         labs(x = "Month", y = "Number of blocks") +
-        ggtitle(paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str,"-",sql_end.str,"),",.self$user_group,"users", sep = " ")) +
+        ggtitle(paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str,"-",sql_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " ")) +
         scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100), expand = c(0,0)) +
         scale_y_continuous(expand = c(0,0)) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1))
@@ -206,9 +205,33 @@ Blockr_vis <- setRefClass("Blockr_vis",
              width = 8,
              height = 8,
              units = "in")
+    },
+    
+    yearly_graph.fun = function(){
+      
+      #Fix data
+      data.df <- .self$data
+      
+      #Aggregate
+      
+      #Substring and temporarily defactor
+      data.df$timestamp <- substring(data.df$timestamp,1,4)
+      
+      #Aggregate
+      data.df <- ddply(.data = data.df,
+                         .var = c("timestamp","variable"),
+                         .fun = function(x){
+                           
+                           return(sum(x[,3]))
+                         }
+      )
+      
+      #Renumber, refactorise, rename!
+      data.df$timestamp <- as.factor(data.df$timestamp)
+      data.df <- rename(data.df, replace = c("V1" = "value"))
       
       #Yearly summary
-      year_line_graph <- ggplot(.self$yearly_data, aes(timestamp, value)) + 
+      year_line_graph <- ggplot(data.df, aes(timestamp, value)) + 
         geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
         labs(x = "Year", y = "Number of blocks") +
         ggtitle(paste("Block rationales on the English-language Wikipedia by year\n (",sql_year_start.str,"-",sql_year_end.str,")",.self$user_group,"users,",.self$data_type,"data",sep = " ")) +
@@ -221,80 +244,12 @@ Blockr_vis <- setRefClass("Blockr_vis",
              plot = year_line_graph,
              width = 8,
              height = 8,
-             units = "in")
-    
-      
+             units = "in")      
     },
-    
-    timeseries.fun = function(){
-      
-      #Filter
-      x <- .self$data[.self$data$variable != "misc",]
-      
-      #Convert timestamps into character representations, and thence into a zoo yearmon object.
-      x$timestamp <- as.character(x$timestamp)
-      x$timestamp <- as.yearmon(x$timestamp, "%Y%m")
-      
-      #Identify unique variables
-      unique_vars <- unique(x$variable)
-      
-      consistent_length <- nrow(x[x$variable == "disruption",])
-      
-      #For each unique variable, generate and plot stl data.
-      for(i in 1:length(unique_vars)){
         
-        #Grab the data for the pertinent variable, removing, well, the variable.
-        input_data <- x[x$variable == unique_vars[i],c(1,3)]
-        
-        if(length(input_data) == consistent_length){
-          
-          #Generate stl data
-          data.stl <- stl(x = zoo(x = input_data$value,
-                                  order.by = input_data$timestamp),
-                          s.window = "periodic"
-          )
-          
-          #Plot it and return
-          graph_path <- file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,unique_vars[i],"timeseries_analysis.png", sep = "_"))
-          png(filename = graph_path)
-          plot(data.stl)
-          title(main = "Seasonal decomposition of block data",
-                sub = paste(.self$data_type,"data,",.self$user_group,"users,",unique_vars[i],"blocks", sep = " "))
-          dev.off()
-          
-          #Return to file, too, using a roundabout method due to cat()'s inability to appreciate lists.
-          sink(file.path(getwd(),"Metadata",paste(.self$user_group,.self$data_type,unique_vars[i],"timeseries_analysis.txt", sep = "_")))
-          lapply(data.stl$time.series, print)
-          sink()
-        }
-      }
+
       
       
     }
   )
-)
-
-Blockr_vis_nonraw <- setRefClass("Blockr_vis_nonraw",
-                          fields = list(data = "data.frame", data_type = "character", user_group = "character"), #Includes generic data.frame functions.
-                          contains = "Blockr_vis",
-                          methods = list(
-                            initial_graph.fun = function(){
-                              
-                              #Monthly data
-                              monthly_bar_graph <- ggplot(.self$data, aes(timestamp, value, fill = variable)) + 
-                                geom_bar(aes(group = variable, colour = variable), stat = "identity") +
-                                labs(x = "Month", y = "Number of blocks") +
-                                ggtitle(paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str," - ",sql_end.str,"), ",.self$user_group," users",.self$data_type," data", sep = "")) +
-                                scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100), expand = c(0,0)) +
-                                scale_y_continuous(expand = c(0, 0)) +
-                                theme(axis.text.x = element_text(angle = 90, hjust = 1))
-                              
-                              #Print
-                              ggsave(filename = file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,"monthly_bar_graph.png",sep = "_")),
-                                     plot = monthly_bar_graph,
-                                     width = 8,
-                                     height = 8,
-                                     units = "in")
-                            }
-                          )
 )

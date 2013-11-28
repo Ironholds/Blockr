@@ -75,105 +75,19 @@ retrieve_enclose.fun <- function(){
     #Run aggregation-and-save function for proportionate data.
     proportionate.df$grouping.fun()
     
+    #Visualise! Let no numeric data escape your eyes!
+    #Disproportionate data first
+    disproportionate_graphing <- Blockr_vis$new(data = input.df$data,
+                                                data_type = "disproportionate",
+                                                user_type = input.df$user_type)
+    
+    #Then the same for proportionate data
+    proportionate_graphing <- Blockr_vis$new(data = proportionate.df$data,
+                                                data_type = "proportionate",
+                                                user_type = proportionate.df$user_type)
+    
+    proportionate_graphing$grouping.fun()
+    
+    
+    
   })
-  for(i in 1:length(retrieval_loop.ls)){
-    
-    #Melt and defactor
-    to_output.df <- melt(holding.df, id.vars = 1, measure.vars = 2:7)
-    to_output.df$variable <- as.character(to_output.df$variable)
-    
-    #add to returning list
-    output.ls[[i]] <- to_output.df
-    
-    #Export
-    export_file_path <- file.path(getwd(),"Data",paste(retrieval_loop.ls[[i]][3],".tsv",sep = ""))
-    write.table(to_output.df, file = export_file_path, col.names = TRUE,
-                row.names = FALSE, sep = "\t", quote = FALSE)
-    
-    #And now we play the hand-coding game
-    assign(x = retrieval_loop.ls[[i]][4],
-           value = new("Blockr_base_handcode", data = get(retrieval_loop.ls[[i]][2]),
-                       sample_size = trickstr::sample_size(x = get(retrieval_loop.ls[[i]][2]), variable = "timestamp", percentage = 0.20))
-    )
-    
-    #Grab data to hand-code
-    holding.df <- get(retrieval_loop.ls[[i]][4])$regex_container.fun(var = "timestamp")
-    
-    #Export
-    export_file_path <- file.path(getwd(),"Data",paste(retrieval_loop.ls[[i]][5],"hand_coding.tsv",sep = "_"))
-    write.table(holding.df, file = export_file_path, col.names = TRUE,
-                row.names = FALSE, sep = "\t", quote = FALSE)
-    
-    #Grab proportions, too!
-    proportions.df <- ddply(.data = holding.df,
-                            .var = c("timestamp","matched_regex"),
-                            .fun = nrow)
-    
-    #Rename
-    proportions.df <- rename(proportions.df, replace = c("matched_regex" = "variable", "V1" = "value"))
-    
-    #Export those
-    export_file_path <- file.path(getwd(),"Data",paste(retrieval_loop.ls[[i]][5],"proportionate_data.tsv",sep = "_"))
-    write.table(proportions.df, file = export_file_path, col.names = TRUE,
-                row.names = FALSE, sep = "\t", quote = FALSE)
-    
-    #Write them into the returned list, with a mod2
-    output.ls[[i+2]] <- proportions.df
-  }
-  
-  #Return
-  return(output.ls)
-}
-
-#Grab data
-data.ls <- retrieve_enclose.fun()
-
-#Report as such
-print("initial data retrieval complete")
-
-
-#Check for user error in expanding/modifying the Blockr codebase
-if(length(graphing_loop.ls) != length(data.ls)){
-  stop("There is an inconsistency between the graphing data and the number of dataframes to analyse")
-  
-}else{
-  
-  #Iterate over the non-normalised data to produce juicy, juicy graphs
-  for(i in 1:length(graphing_loop.ls)){
-    
-    if(graphing_loop.ls[[i]][3] == "raw"){
-        
-      #Split the pertinent dataframe out of data.ls and add to a newly-created Blockr_vis object
-      assign(graphing_loop.ls[[i]][1],
-             value = new("Blockr_vis",
-                         data = as.data.frame(data.ls[[i]]),
-                         yearly_data = data_aggregation.fun(x = as.data.frame(data.ls[[i]])),
-                         data_type = graphing_loop.ls[[i]][3],
-                         user_group = graphing_loop.ls[[i]][2]
-             )
-      )
-    } else {
-      
-      assign(graphing_loop.ls[[i]][1],
-             value = new("Blockr_vis_nonraw",
-                         data = as.data.frame(data.ls[[i]]),
-                         data_type = graphing_loop.ls[[i]][3],
-                         user_group = graphing_loop.ls[[i]][2]
-             )
-      )
-      
-    }
-    
-    #Graph
-    get(graphing_loop.ls[[i]][1])$initial_graph.fun()
-    
-    #Time-series analysis        
-    get(graphing_loop.ls[[i]][1])$timeseries.fun()
-  }
-}
-  
-  #Report
-  print("initial graphing complete")
-
-#Run
-initial_graphing.fun()
