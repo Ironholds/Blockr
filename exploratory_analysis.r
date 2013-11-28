@@ -88,6 +88,8 @@ retrieve_enclose.fun <- function(){
     
     proportionate_graphing$grouping.fun()
     
-    
-    
   })
+}
+
+#Run
+retrieve_enclose.fun()

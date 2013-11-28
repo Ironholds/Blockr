@@ -14,6 +14,7 @@ source(file = file.path(getwd(),"classes.r")) #Classes
 #Create output folders, if they don't already exist.
 dir.create(file.path(getwd(), "Data"), showWarnings = FALSE)
 dir.create(file.path(getwd(), "Graphs"), showWarnings = FALSE)
+dir.create(file.path(getwd(), "Metadata"), showWarnings = FALSE)
 
 run.fun <- function(){
   
