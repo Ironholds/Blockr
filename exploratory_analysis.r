@@ -75,19 +75,6 @@ retrieve_enclose.fun <- function(){
     #Run aggregation-and-save function for proportionate data.
     proportionate.df$grouping.fun()
     
-    #Visualise! Let no numeric data escape your eyes!
-    #Disproportionate data first
-    disproportionate_graphing <- Blockr_vis$new(data = input.df$data,
-                                                data_type = "disproportionate",
-                                                user_type = input.df$user_type)
-    
-    #Then the same for proportionate data
-    proportionate_graphing <- Blockr_vis$new(data = proportionate.df$data,
-                                                data_type = "proportionate",
-                                                user_type = proportionate.df$user_type)
-    
-    proportionate_graphing$grouping.fun()
-    
   })
 }
 
