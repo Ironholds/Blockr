@@ -25,7 +25,8 @@ run.fun <- function(){
     source(file.path(getwd(),"exploratory_analysis.r"))
     
     if(runtype == "full"){
-            
+      
+      to_dispose <- lapply(list.files(path = file.path(getwd(),"Modules")), source)
     }
     
     cat("Thank you. Run complete.\n")
