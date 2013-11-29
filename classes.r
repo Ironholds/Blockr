@@ -265,8 +265,5 @@ Blockr_vis <- setRefClass("Blockr_vis",
       
       
     }
-      
-      
-    }
   )
 )
