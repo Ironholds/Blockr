@@ -172,12 +172,17 @@ Blockr_vis <- setRefClass("Blockr_vis",
   methods = list(
     
     #Monthly graphs
-    monthly_graph.fun = function(){
+    monthly_graph.fun = function(x,
+                                 y,
+                                 variable,
+                                 title,
+                                 y_lab,
+                                 x_lab){#Abstract strings away
       
-      line_graph <- ggplot(.self$data, aes(timestamp,value)) +
+      line_graph <- ggplot(.self$data, aes(x,y)) +
         geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
-        labs(x = "Month", Y = "Number of blocks") +
-        ggtitle(paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str,"-",sql_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " ")) +
+        labs(x = x_lab, Y = y_lab) +
+        ggtitle(title) +
         scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100)) +
         scale_y_continuous(expand = c(0,0)) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1))
@@ -190,11 +195,11 @@ Blockr_vis <- setRefClass("Blockr_vis",
              units = "in")
       
       #Monthly, with points and simple linear regression.
-      regression_graph <- ggplot(.self$data,aes(x = timestamp,y = value, colour = variable))+
+      regression_graph <- ggplot(.self$data,aes(x = x, y = y, colour = variable))+
         geom_point(shape=3) +
         geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
-        labs(x = "Month", y = "Number of blocks") +
-        ggtitle(paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str,"-",sql_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " ")) +
+        labs(x = x_lab, Y = y_lab) +
+        ggtitle(title) +
         scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100), expand = c(0,0)) +
         scale_y_continuous(expand = c(0,0)) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1))
@@ -207,7 +212,10 @@ Blockr_vis <- setRefClass("Blockr_vis",
              units = "in")
     },
     
-    yearly_graph.fun = function(){
+    yearly_graph.fun = function(x,
+                                y,
+                                title,
+                                labels){ #Abstract variables away
       
       #Fix data
       data.df <- .self$data
@@ -246,8 +254,17 @@ Blockr_vis <- setRefClass("Blockr_vis",
              height = 8,
              units = "in")      
     },
-        
-
+      
+    #Grouping function
+    grouping.fun = function(){
+      
+      #Run monthly graphing
+      monthly_graph.fun(x = "timestamp", y = "value", variable = "variable",
+                        title = paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str,"-",sql_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " "),
+                        y_lab = "Number of blocks", x_lab = "Month")
+      
+      
+    }
       
       
     }
