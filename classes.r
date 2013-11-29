@@ -42,27 +42,31 @@ Blockr_base <- setRefClass("Blockr_base",
                                    #Use lapply rather than a for loop. Microbenchmarks show a substantial performance improvement.
                                    lapply_output <- lapply(regex.ls,function(x){
                                      
-                                     #Run regexes in regex.ls over input data, one by one
-                                     grepvec <- grepl(pattern = x[2],
-                                                      x = input_data.df$reason,
-                                                      perl = TRUE,
-                                                      ignore.case = TRUE)
-                                     
-                                     #Output refined input data, using assign() 
-                                     #due to lapply's distinct environment for 
-                                     #function calls
-                                     assign(x = "input_data.df",
-                                            value = input_data.df[!grepvec,],
-                                            envir = parent.env(environment()))
-                                     
-                                     #Generate data to output, and output
-                                     lapply_output.df <- input_data.df[grepvec,]
-                                     lapply_output.df$regex <- as.character(x[1])
-                                     
-                                     assign("output_data.df",
-                                            value = rbind(output_data.df,lapply_output.df),
-                                            envir = parent.env(environment()))
-                                     
+                                     if(length(x) > 0){
+                                       
+                                       #Run regexes in regex.ls over input data, one by one
+                                       grepvec <- grepl(pattern = x[2],
+                                                        x = input_data.df$reason,
+                                                        perl = TRUE,
+                                                        ignore.case = TRUE)
+                                       
+                                       if(sum(grepvec) > 0){
+                                         #Output refined input data, using assign() 
+                                         #due to lapply's distinct environment for 
+                                         #function calls
+                                         assign(x = "input_data.df",
+                                                value = input_data.df[!grepvec,],
+                                                envir = parent.env(environment()))
+                                         
+                                         #Generate data to output, and output
+                                         lapply_output.df <- input_data.df[grepvec,]
+                                         lapply_output.df$regex <- as.character(x[1])
+                                         
+                                         assign("output_data.df",
+                                                value = rbind(output_data.df,lapply_output.df),
+                                                envir = parent.env(environment()))
+                                       }
+                                     }
                                    }
                                    )
                                    
