@@ -53,11 +53,6 @@ retrieve_enclose.fun <- function(){
                                          variable = "timestamp",
                                          percentage = 0.20)))
   
-  #Rename vector
-  rename.vec <- c("timestamp" = "timestamp", "V1" = "spam", "V2" = "disruption","V3" = "sockpuppetry",
-                  "V4" = "username", "V5" = "proxy", "V6" = "misc")
-  
-  
   #Loop
   to_dispose <- lapply(input.ls,function(x){
     
