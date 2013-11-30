@@ -51,16 +51,16 @@ Blockr_base <- setRefClass("Blockr_base",
                                                         ignore.case = TRUE)
                                        
                                        if(sum(grepvec) > 0){
+                                         #Generate data to output, and output
+                                         lapply_output.df <- input_data.df[grepvec,]
+                                         lapply_output.df$regex <- as.character(x[1])
+                                         
                                          #Output refined input data, using assign() 
                                          #due to lapply's distinct environment for 
                                          #function calls
                                          assign(x = "input_data.df",
                                                 value = input_data.df[!grepvec,],
                                                 envir = parent.env(environment()))
-                                         
-                                         #Generate data to output, and output
-                                         lapply_output.df <- input_data.df[grepvec,]
-                                         lapply_output.df$regex <- as.character(x[1])
                                          
                                          assign("output_data.df",
                                                 value = rbind(output_data.df,lapply_output.df),
