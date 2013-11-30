@@ -42,7 +42,7 @@ Blockr_base <- setRefClass("Blockr_base",
                                    #Use lapply rather than a for loop. Microbenchmarks show a substantial performance improvement.
                                    lapply_output <- lapply(regex.ls,function(x){
                                      
-                                     if(length(x) > 0){
+                                     if(nrow(input_data.df) > 0){
                                        
                                        #Run regexes in regex.ls over input data, one by one
                                        grepvec <- grepl(pattern = x[2],
@@ -115,7 +115,7 @@ Blockr_base <- setRefClass("Blockr_base",
                                .var = "timestamp",
                                .fun = function(x){
                                  
-                                 sample.df <- trickstr::dfsample(x,.self$sample_size)
+                                 sample.df <- trickstr::dfsample(x,as.numeric(.self$sample_size)
                                  
                                  return(sample.df)
                                }
