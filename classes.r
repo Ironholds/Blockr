@@ -115,7 +115,7 @@ Blockr_base <- setRefClass("Blockr_base",
                                .var = "timestamp",
                                .fun = function(x){
                                  
-                                 sample.df <- trickstr::dfsample(x,as.numeric(.self$sample_size)
+                                 sample.df <- trickstr::dfsample(x,as.numeric(.self$sample_size))
                                  
                                  return(sample.df)
                                }
