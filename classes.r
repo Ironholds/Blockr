@@ -183,7 +183,10 @@ Blockr_vis <- setRefClass("Blockr_vis",
                                  y_lab,
                                  x_lab){#Abstract strings away
       
-      line_graph <- ggplot(.self$data, aes(x,y)) +
+      #Rename variables, as specified, to ensure consistency within the plotting environment
+      internal_datastore <- rename(.self$data,replace = c(x = "timestamp", y = "value", variable = "variable"))
+      
+      line_graph <- ggplot(internal_datastore, aes(time,value)) +
         geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
         labs(x = x_lab, Y = y_lab) +
         ggtitle(title) +
@@ -199,7 +202,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
              units = "in")
       
       #Monthly, with points and simple linear regression.
-      regression_graph <- ggplot(.self$data,aes(x = x, y = y, colour = variable))+
+      regression_graph <- ggplot(internal_datastore, aes(time,value, colour = variable))+
         geom_point(shape=3) +
         geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
         labs(x = x_lab, Y = y_lab) +
@@ -218,32 +221,34 @@ Blockr_vis <- setRefClass("Blockr_vis",
     
     yearly_graph.fun = function(x,
                                 y,
-                                title,
-                                labels){ #Abstract variables away
+                                variable,
+                                y_lab,
+                                x_lab){ #Abstract variables away
       
       #Fix data
       data.df <- .self$data
       
-      #Aggregate
+      #Rename variables, as specified, to ensure consistency within the plotting environment
+      data.df <- rename(.self$data,replace = c(x = "time", y = "value", variable = "variable"))
       
       #Substring and temporarily defactor
-      data.df$timestamp <- substring(data.df$timestamp,1,4)
+      data.df$time <- substring(data.df$time,1,4)
       
       #Aggregate
       data.df <- ddply(.data = data.df,
-                         .var = c("timestamp","variable"),
+                         .var = c("time","variable"),
                          .fun = function(x){
                            
-                           return(sum(x[,3]))
+                           return(sum(x$value))
                          }
       )
       
       #Renumber, refactorise, rename!
-      data.df$timestamp <- as.factor(data.df$timestamp)
+      data.df$time <- as.factor(data.df$time)
       data.df <- rename(data.df, replace = c("V1" = "value"))
       
       #Yearly summary
-      year_line_graph <- ggplot(data.df, aes(timestamp, value)) + 
+      year_line_graph <- ggplot(data.df, aes(time, value)) + 
         geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
         labs(x = "Year", y = "Number of blocks") +
         ggtitle(paste("Block rationales on the English-language Wikipedia by year\n (",sql_year_start.str,"-",sql_year_end.str,")",.self$user_group,"users,",.self$data_type,"data",sep = " ")) +
@@ -266,7 +271,6 @@ Blockr_vis <- setRefClass("Blockr_vis",
       monthly_graph.fun(x = "timestamp", y = "value", variable = "variable",
                         title = paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str,"-",sql_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " "),
                         y_lab = "Number of blocks", x_lab = "Month")
-      
       
     }
   )
