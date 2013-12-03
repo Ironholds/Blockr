@@ -31,24 +31,8 @@ regex.ls <- list(
 
 #Start and end dates - used in deciding the boundaries of any query to the MySQL dbs, and graphing boundaries
 sql_start.str <- "200601"
-sql_end.str <- "201310"
+sql_end.str <- "201311"
 
 #Substring those for yearly graphing boundaries
 sql_year_start.str <- substring(sql_start.str,1,4)
 sql_year_end.str <- substring(sql_end.str,1,4)
-
-#Lists of values for the initial retrieval and graphing loops.
-retrieval_loop.ls <- list(
-  c("anon.base","anonusers.df","anonymous_aggregate","anon.base_hand","anonymous"),
-  c("registered.base","registered.df","registered_aggregate","registered.base_hand","registered"))
-
-graphing_loop.ls <- list(
-  c("anonymous.df","anonymous","raw"),
-  c("registered.df","registered","raw"),
-  c("anonymous_norm.df","anonymous","normalised"),
-  c("registered_norm.df","registered","normalised")
-)
-
-#Rename vector
-rename.vec <- c("timestamp" = "timestamp", "V1" = "spam", "V2" = "disruption","V3" = "sockpuppetry",
-                "V4" = "username", "V5" = "proxy", "V6" = "misc","V7" = "totals")
