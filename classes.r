@@ -265,7 +265,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
     },
       
     #Grouping function
-    grouping.fun = function(){
+    graphing.fun = function(){
       
       #Run monthly graphing
       monthly_graph.fun(x = "timestamp", y = "value", variable = "variable",

@@ -74,7 +74,7 @@ block_graphing.fun <- function(){
     }
     
     #Either way, run graphing function
-    graphing_data.obj$graphing.meth()
+    graphing_data.obj$graphing.fun()
     
   })
   
