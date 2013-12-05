@@ -46,7 +46,7 @@ block_graphing.fun <- function(){
                    .fun = function(x){
                      
                      #Grab new line to insert
-                     value_sum.vec <- c(x[1,1],"sum",sum(x$value))
+                     value_sum.vec <- c(x[1,1],"total",sum(x$value))
                      
                      #Insert line and return
                      x[nrow(x)+1, ] <- value_sum.vec
@@ -55,7 +55,8 @@ block_graphing.fun <- function(){
       )
       
       #Factor
-      data.df$variable <- as.factor(data.df$variable)
+      data.df$timestamp <- as.factor(data.df$timestamp)
+      data.df$value <- as.numeric(data.df$value)
       
       #Throw into class
       graphing_data.obj <- Blockr_vis$new(data = data.df,
@@ -64,7 +65,7 @@ block_graphing.fun <- function(){
     } else {
       
       #Factor
-      data.df$variable <- as.factor(data.df$variable)
+      data.df$timestamp <- as.factor(data.df$timestamp)
       
       #Throw into class
       graphing_data.obj <- Blockr_vis_proportionate$new(data = data.df,

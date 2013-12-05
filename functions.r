@@ -66,4 +66,3 @@ data_aggregation.fun = function(x){
   #return
   return(to_output)
 }
-

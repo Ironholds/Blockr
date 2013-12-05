@@ -175,8 +175,9 @@ Blockr_vis <- setRefClass("Blockr_vis",
   fields = list(data = "data.frame", data_type = "character", user_group = "character"), #Includes generic data.frame functions.
   methods = list(
     
-    #Monthly graphs
-    monthly_graph.fun = function(x,
+    #Monthly regression graph
+    monthly_regression.fun = function(data,
+                                 x,
                                  y,
                                  variable,
                                  title,
@@ -184,42 +185,30 @@ Blockr_vis <- setRefClass("Blockr_vis",
                                  x_lab){#Abstract strings away
       
       #Rename variables, as specified, to ensure consistency within the plotting environment
-      internal_datastore <- rename(.self$data,replace = c(x = "timestamp", y = "value", variable = "variable"))
+      #Fix data
+      data.df <- data
       
-      line_graph <- ggplot(internal_datastore, aes(time,value)) +
-        geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
-        labs(x = x_lab, Y = y_lab) +
-        ggtitle(title) +
-        scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100)) +
-        scale_y_continuous(expand = c(0,0)) +
-        theme(axis.text.x = element_text(angle = 90, hjust = 1))
-      
-      #Save
-      ggsave(filename = file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,"monthly_line_graph.png",sep = "_")),
-             plot = line_graph,
-             width = 8,
-             height = 8,
-             units = "in")
+      #Rename variables, as specified, to ensure consistency within the plotting environment.
+      data.df <- data.df[,c(x,y,variable)]
+      names(data.df) <- c("time","value","variable")
       
       #Monthly, with points and simple linear regression.
-      regression_graph <- ggplot(internal_datastore, aes(time,value, colour = variable))+
+      regression_graph <- ggplot(data.df, aes(time, value))+
         geom_point(shape=3) +
-        geom_smooth(method = lm, se = TRUE, aes(group= variable)) +
+        geom_smooth(method = lm, se = TRUE, aes(group = 1)) +
         labs(x = x_lab, Y = y_lab) +
         ggtitle(title) +
         scale_x_discrete(breaks = seq(from = as.numeric(sql_start.str), to = as.numeric(sql_end.str), by = 100), expand = c(0,0)) +
-        scale_y_continuous(expand = c(0,0)) +
+        scale_y_continuous() +
+        expand_limits(x = 0, y = 0) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1))
       
-      #Print
-      ggsave(filename = file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,"monthly_linear_regression_graph.png",sep = "_")),
-             plot = monthly_regression_graph,
-             width = 8,
-             height = 8,
-             units = "in")
+      #Return
+      return(regression_graph)
     },
     
-    yearly_graph.fun = function(x,
+    yearly_line_graph.fun = function(data,
+                                x,
                                 y,
                                 variable,
                                 y_lab,
@@ -228,8 +217,9 @@ Blockr_vis <- setRefClass("Blockr_vis",
       #Fix data
       data.df <- .self$data
       
-      #Rename variables, as specified, to ensure consistency within the plotting environment
-      data.df <- rename(.self$data,replace = c(x = "time", y = "value", variable = "variable"))
+      #Rename variables, as specified, to ensure consistency within the plotting environment.
+      data.df <- data.df[,c(x,y,variable)]
+      names(data.df) <- c("time","value","variable")
       
       #Substring and temporarily defactor
       data.df$time <- substring(data.df$time,1,4)
@@ -253,7 +243,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
         labs(x = "Year", y = "Number of blocks") +
         ggtitle(paste("Block rationales on the English-language Wikipedia by year\n (",sql_year_start.str,"-",sql_year_end.str,")",.self$user_group,"users,",.self$data_type,"data",sep = " ")) +
         scale_x_discrete(breaks = seq(from = as.numeric(sql_year_start.str), to = as.numeric(sql_year_end.str), by = 1), expand = c(0,0)) +
-        scale_y_continuous(expand = c(0, 0)) +
+        scale_y_discrete(expand = c(0, 0)) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1))
       
       #Print
@@ -267,11 +257,30 @@ Blockr_vis <- setRefClass("Blockr_vis",
     #Grouping function
     graphing.fun = function(){
       
-      #Run monthly graphing
-      monthly_graph.fun(x = "timestamp", y = "value", variable = "variable",
-                        title = paste("Block rationales on the English-language Wikipedia by month\n(",sql_start.str,"-",sql_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " "),
-                        y_lab = "Number of blocks", x_lab = "Month")
+      #Regression graphs
+      #Grab unique variable values
+      unique_vars <- unique(.self$data$variable[.self$data$variable != "misc"])
       
+      #Initialise holding list
+      holding.ls <- list()
+      
+      #Graph
+      for (i in 1:length(unique_vars)){
+        
+        #Generate regression graph
+        regression_graph <- monthly_regression.fun(data = .self$data[.self$data$variable == unique_vars[i],], x = "timestamp", y = "value", variable = "variable",
+                                                    title = paste(unique_vars[i],"blocks on the English-language Wikipedia by month\n(",sql_start.str,"-",sql_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " "),
+                                                    y_lab = "Number of blocks", x_lab = "Month")
+        #Throw over to the holding list
+        holding.ls[[length(holding.ls)+1]] <- regression_graph
+        
+      }
+      
+      
+      #Save
+      png(file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,"block_graphs.png", sep = "_")), width = 1020, height= 1020)
+      do.call(grid.arrange, holding.ls)
+      dev.off()
     }
   )
 )
