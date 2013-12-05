@@ -215,7 +215,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
                                 x_lab){ #Abstract variables away
       
       #Fix data
-      data.df <- .self$data
+      data.df <- data
       
       #Rename variables, as specified, to ensure consistency within the plotting environment.
       data.df <- data.df[,c(x,y,variable)]
@@ -281,6 +281,9 @@ Blockr_vis <- setRefClass("Blockr_vis",
       png(file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,"block_graphs.png", sep = "_")), width = 1020, height= 1020)
       do.call(grid.arrange, holding.ls)
       dev.off()
+      
+      #Yearly summary
+      
     }
   )
 )
