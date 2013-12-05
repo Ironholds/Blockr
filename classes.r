@@ -212,6 +212,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
                                 y,
                                 variable,
                                 y_lab,
+                                title,
                                 x_lab){ #Abstract variables away
       
       #Fix data
@@ -221,37 +222,17 @@ Blockr_vis <- setRefClass("Blockr_vis",
       data.df <- data.df[,c(x,y,variable)]
       names(data.df) <- c("time","value","variable")
       
-      #Substring and temporarily defactor
-      data.df$time <- substring(data.df$time,1,4)
-      
-      #Aggregate
-      data.df <- ddply(.data = data.df,
-                         .var = c("time","variable"),
-                         .fun = function(x){
-                           
-                           return(sum(x$value))
-                         }
-      )
-      
-      #Renumber, refactorise, rename!
-      data.df$time <- as.factor(data.df$time)
-      data.df <- rename(data.df, replace = c("V1" = "value"))
-      
       #Yearly summary
       year_line_graph <- ggplot(data.df, aes(time, value)) + 
         geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
-        labs(x = "Year", y = "Number of blocks") +
-        ggtitle(paste("Block rationales on the English-language Wikipedia by year\n (",sql_year_start.str,"-",sql_year_end.str,")",.self$user_group,"users,",.self$data_type,"data",sep = " ")) +
+        labs(x = x_lab, y = y_lab) +
+        ggtitle(title) +
         scale_x_discrete(breaks = seq(from = as.numeric(sql_year_start.str), to = as.numeric(sql_year_end.str), by = 1), expand = c(0,0)) +
         scale_y_discrete(expand = c(0, 0)) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1))
       
-      #Print
-      ggsave(filename = file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,"yearly_line_graph.png",sep = "_")),
-             plot = year_line_graph,
-             width = 8,
-             height = 8,
-             units = "in")      
+      #Return
+      return(year_line_graph)
     },
       
     #Grouping function
@@ -282,8 +263,47 @@ Blockr_vis <- setRefClass("Blockr_vis",
       do.call(grid.arrange, holding.ls)
       dev.off()
       
-      #Yearly summary
+      #Substring and temporarily defactor
+      data.df <- .self$data
+      data.df$timestamp <- substring(data.df$timestamp,1,4)
       
+      #Aggregate
+      data.df <- ddply(.data = data.df,
+                       .var = c("time","variable"),
+                       .fun = function(x){
+                         
+                         return(sum(x$value))
+                       }
+      )
+      
+      #Renumber, refactorise, rename!
+      data.df$timestamp <- as.factor(data.df$time)
+      data.df <- rename(data.df, replace = c("V1" = "value"))
+      data.df$value <- as.numeric(data.df$value)
+      
+      #Yearly summary
+      yearly_graph <- yearly_line_graph.fun(data = data.df[data.df$variable != "misc",], x = "timestamp", y = "value", variable = "variable",
+                             title = paste("Blocks on the English-language Wikipedia by year\n(",sql_year_start.str,"-",sql_year_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " "),
+                             y_lab = "Number of blocks", x_lab = "Year")
+      
+      #Print
+      ggsave(filename = file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,"yearly_line_graph.png",sep = "_")),
+             plot = yearly_graph,
+             width = 8,
+             height = 8,
+             units = "in")
+      
+      #Yearly summary
+      total_yearly <- yearly_line_graph.fun(data = data.df[data.df$variable == "Total",], x = "timestamp", y = "value", variable = "variable",
+                                            title = paste("Total blocks on the English-language Wikipedia by year\n(",sql_year_start.str,"-",sql_year_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " "),
+                                            y_lab = "Number of blocks", x_lab = "Year")
+      
+      #Print
+      ggsave(filename = file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,"total_yearly_blocks.png",sep = "_")),
+             plot = total_yearly,
+             width = 8,
+             height = 8,
+             units = "in")
     }
   )
 )
