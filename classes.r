@@ -222,25 +222,26 @@ Blockr_vis <- setRefClass("Blockr_vis",
       #Rename variables, as specified, to ensure consistency within the plotting environment.
       data.df <- data.df[,c(x,y,variable)]
       names(data.df) <- c("time","value","variable")
-
-      #Substring and temporarily defactor
-      data.df$time <- substring(data.df$time,1,4)
       
-      #Aggregate
-      data.df <- ddply(.data = data.df,
-                       .var = c("time","variable"),
-                       .fun = function(x){
-                         
-                         return(sum(x$value))
-                       }
-      )
-      
-      #Renumber, refactorise, rename!
-      data.df$time <- as.factor(data.df$time)
-      if("V1" %in% names(data.df)){
+      if(nchar(as.character(data.df$time)[1]) > 4){
+        
+        #Substring and temporarily defactor
+        data.df$time <- substring(data.df$time,1,4)
+        
+        #Aggregate
+        data.df <- ddply(.data = data.df,
+                         .var = c("time","variable"),
+                         .fun = function(x){
+                           
+                           return(sum(x$value))
+                         }
+        )
+        
+        #Renumber, refactorise, rename!
+        data.df$time <- as.factor(data.df$time)
         data.df <- rename(data.df, replace = c("V1" = "value"))
+        data.df$value <- as.numeric(data.df$value)
       }
-      data.df$value <- as.numeric(data.df$value)
       
       #Yearly summary
       year_line_graph <- ggplot(data.df, aes(time, value)) + 
