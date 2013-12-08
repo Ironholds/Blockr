@@ -296,7 +296,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
              units = "in")
       
       #Yearly summary
-      total_yearly <- yearly_line_graph.fun(data = .self$data[.self$data$variable == "Total",], x = "timestamp", y = "value", variable = "variable",
+      total_yearly <- yearly_line_graph.fun(data = .self$data[.self$data$variable == "total",], x = "timestamp", y = "value", variable = "variable",
                                             title = paste("Total blocks on the English-language Wikipedia by year\n(",sql_year_start.str,"-",sql_year_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " "),
                                             y_lab = "Number of blocks", x_lab = "Year")
       
