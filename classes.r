@@ -246,8 +246,8 @@ Blockr_vis <- setRefClass("Blockr_vis",
       #Yearly summary
       year_line_graph <- ggplot(data.df, aes(time, value)) + 
         geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
-        labs(x = "x_lab", y = "y_lab") +
-        ggtitle("title") +
+        labs(x = x_lab, y = y_lab) +
+        ggtitle(title) +
         scale_x_discrete(breaks = seq(from = as.numeric(sql_year_start.str), to = as.numeric(sql_year_end.str), by = 1), expand = c(0,0)) +
         scale_y_continuous(expand = c(0, 0)) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1))
@@ -271,7 +271,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
         
         #Generate regression graph
         regression_graph <- monthly_regression.fun(data = .self$data[.self$data$variable == unique_vars[i],], x = "timestamp", y = "value", variable = "variable",
-                                                    title = paste(unique_vars[i],"blocks on the English-language Wikipedia by month\n(",sql_start.str,"-",sql_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " "),
+                                                    title = paste(unique_vars[i],"blocks"),
                                                     y_lab = "Number of blocks", x_lab = "Month")
         #Throw over to the holding list
         holding.ls[[length(holding.ls)+1]] <- regression_graph
@@ -281,12 +281,12 @@ Blockr_vis <- setRefClass("Blockr_vis",
       
       #Save
       png(file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,"block_graphs.png", sep = "_")), width = 1020, height= 1020)
-      do.call(grid.arrange, holding.ls)
+      do.call(grid.arrange, c(holding.ls, main = paste("Blocks on the English-language Wikipedia by month (",sql_start.str," - ",sql_end.str,")\n", .self$user_group," users\n",.self$data_type," data", sep = "")))
       dev.off()
       
       #Yearly summary
       yearly_graph <- yearly_line_graph.fun(data = .self$data[.self$data$variable != "misc",], x = "timestamp", y = "value", variable = "variable",
-                             title = paste("Blocks on the English-language Wikipedia by year\n(",sql_year_start.str,"-",sql_year_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " "),
+                             title = paste("Blocks on the English-language Wikipedia by year\n(",sql_year_start.str,"-",sql_year_end.str,") ", .self$user_group," users\n",.self$data_type," data", sep = ""),
                              y_lab = "Number of blocks", x_lab = "Year")
       
       #Print
