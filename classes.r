@@ -310,3 +310,37 @@ Blockr_vis <- setRefClass("Blockr_vis",
     }
   )
 )
+
+Blockr_vis_proportionate <- setRefClass("Blockr_vis_proportionate",
+                                        contains = "Blockr_vis",
+                                        fields = list(data = "data.frame", data_type = "character", user_group = "character"), #Includes generic data.frame functions.
+  methods = list(
+    graphing.fun = function(){
+      
+      #Regression graphs
+      #Grab unique variable values
+      unique_vars <- unique(.self$data$variable[.self$data$variable != "misc"])
+      
+      #Initialise holding list
+      holding.ls <- list()
+      
+      #Graph
+      for (i in 1:length(unique_vars)){
+        
+        #Generate regression graph
+        regression_graph <- monthly_regression.fun(data = .self$data[.self$data$variable == unique_vars[i],], x = "timestamp", y = "value", variable = "variable",
+                                                   title = paste(unique_vars[i],"blocks"),
+                                                   y_lab = "Number of blocks", x_lab = "Month")
+        #Throw over to the holding list
+        holding.ls[[length(holding.ls)+1]] <- regression_graph
+        
+      }
+      
+      #Save
+      png(file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,"block_graphs.png", sep = "_")), width = 1020, height= 1020)
+      do.call(grid.arrange, c(holding.ls, main = paste("Proportionately sampled blocks on the English-language Wikipedia by month (",sql_start.str," - ",sql_end.str,")\n", .self$user_group," users\n",.self$data_type," data", sep = "")))
+      dev.off()
+      
+    }
+  )
+)
