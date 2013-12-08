@@ -177,12 +177,13 @@ Blockr_vis <- setRefClass("Blockr_vis",
     
     #Monthly regression graph
     monthly_regression.fun = function(data,
-                                 x,
-                                 y,
-                                 variable,
-                                 title,
-                                 y_lab,
-                                 x_lab){#Abstract strings away
+                              x,
+                              y,
+                              variable,
+                              title,
+                              y_lab,
+                              layer,
+                              x_lab){#Abstract strings away
       
       #Rename variables, as specified, to ensure consistency within the plotting environment
       #Fix data
@@ -213,22 +214,41 @@ Blockr_vis <- setRefClass("Blockr_vis",
                                 variable,
                                 y_lab,
                                 title,
+                                layer,
                                 x_lab){ #Abstract variables away
       
-      #Fix data
       data.df <- data
       
       #Rename variables, as specified, to ensure consistency within the plotting environment.
       data.df <- data.df[,c(x,y,variable)]
       names(data.df) <- c("time","value","variable")
+
+      #Substring and temporarily defactor
+      data.df$time <- substring(data.df$time,1,4)
+      
+      #Aggregate
+      data.df <- ddply(.data = data.df,
+                       .var = c("time","variable"),
+                       .fun = function(x){
+                         
+                         return(sum(x$value))
+                       }
+      )
+      
+      #Renumber, refactorise, rename!
+      data.df$time <- as.factor(data.df$time)
+      if("V1" %in% names(data.df)){
+        data.df <- rename(data.df, replace = c("V1" = "value"))
+      }
+      data.df$value <- as.numeric(data.df$value)
       
       #Yearly summary
       year_line_graph <- ggplot(data.df, aes(time, value)) + 
         geom_freqpoly(aes(group = variable, colour = variable), stat = "identity") +
-        labs(x = x_lab, y = y_lab) +
-        ggtitle(title) +
+        labs(x = "x_lab", y = "y_lab") +
+        ggtitle("title") +
         scale_x_discrete(breaks = seq(from = as.numeric(sql_year_start.str), to = as.numeric(sql_year_end.str), by = 1), expand = c(0,0)) +
-        scale_y_discrete(expand = c(0, 0)) +
+        scale_y_continuous(expand = c(0, 0)) +
         theme(axis.text.x = element_text(angle = 90, hjust = 1))
       
       #Return
@@ -263,26 +283,8 @@ Blockr_vis <- setRefClass("Blockr_vis",
       do.call(grid.arrange, holding.ls)
       dev.off()
       
-      #Substring and temporarily defactor
-      data.df <- .self$data
-      data.df$timestamp <- substring(data.df$timestamp,1,4)
-      
-      #Aggregate
-      data.df <- ddply(.data = data.df,
-                       .var = c("time","variable"),
-                       .fun = function(x){
-                         
-                         return(sum(x$value))
-                       }
-      )
-      
-      #Renumber, refactorise, rename!
-      data.df$timestamp <- as.factor(data.df$time)
-      data.df <- rename(data.df, replace = c("V1" = "value"))
-      data.df$value <- as.numeric(data.df$value)
-      
       #Yearly summary
-      yearly_graph <- yearly_line_graph.fun(data = data.df[data.df$variable != "misc",], x = "timestamp", y = "value", variable = "variable",
+      yearly_graph <- yearly_line_graph.fun(data = .self$data[.self$data$variable != "misc",], x = "timestamp", y = "value", variable = "variable",
                              title = paste("Blocks on the English-language Wikipedia by year\n(",sql_year_start.str,"-",sql_year_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " "),
                              y_lab = "Number of blocks", x_lab = "Year")
       
@@ -294,7 +296,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
              units = "in")
       
       #Yearly summary
-      total_yearly <- yearly_line_graph.fun(data = data.df[data.df$variable == "Total",], x = "timestamp", y = "value", variable = "variable",
+      total_yearly <- yearly_line_graph.fun(data = .self$data[.self$data$variable == "Total",], x = "timestamp", y = "value", variable = "variable",
                                             title = paste("Total blocks on the English-language Wikipedia by year\n(",sql_year_start.str,"-",sql_year_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " "),
                                             y_lab = "Number of blocks", x_lab = "Year")
       
