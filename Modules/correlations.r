@@ -36,23 +36,56 @@ correlations_enclosure.fun <- function(){
       input.df <- input.df[! input.df$variable %in% c("misc","proxy"),]
       
       #Add distinguishing characteristic
-      input.df$data_type <- as.character(x)
-      input.df$user_type <- "proportionate"
+      input.df$data_type <- "blocks"
+      input.df$user_type <- as.character(x)
       
       return(input.df)
     })
     
-    #Grab edit filter data
-    filter.df <- sql.fun(paste("SELECT SUBSTRING(afl_timestamp,1,6) AS timestamp,
-                          afl_user AS user,
-                          afl_actions AS action
-                          FROM abuse_filter_log INNER JOIN abuse_filter
-                          ON afl_filter = af_id
-                          WHERE af_public_comments NOT LIKE '%test%'
-                          AND afl_action = 'edit'
-                          AND SUBSTRING(afl_timestamp,1,6) BETWEEN ",sql_start.str," AND ",sql_end.str,
-                          " AND afl_actions NOT IN ('','tag')",sep = ""))
+    filter.fun <- function(){
+      
+      #Grab edit filter data
+      filter.df <- sql.fun(paste("SELECT SUBSTRING(afl_timestamp,1,6) AS timestamp,
+                            afl_user AS user,
+                            afl_actions AS action
+                            FROM abuse_filter_log INNER JOIN abuse_filter
+                            ON afl_filter = af_id
+                            WHERE af_public_comments NOT LIKE '%test%'
+                            AND afl_action = 'edit'
+                            AND SUBSTRING(afl_timestamp,1,6) BETWEEN ",sql_start.str," AND ",sql_end.str,
+                            " AND afl_actions NOT IN ('','tag')",sep = ""))
+      
+      #Subset and bind together
+      filter_subset.df <- data.frame(table(filter.df$timestamp), #All hits
+                        table(filter.df[filter.df$user > 0,]$timestamp)[[2]], #Registered users
+                        table(filter.df[filter.df$user == 0,]$timestamp)[[2]], #Anonymous users
+                        table(filter.df[grepl(pattern = "disallow", x = filter.df$action),]$timestamp)[[2]], #Disallowed edits
+                        table(filter.df[grepl(pattern = "disallow", x = filter.df$action) & filter.df$user > 0,]$timestamp)[[2]], #Disallowed edits, registered users
+                        table(filter.df[grepl(pattern = "disallow", x = filter.df$action) & filter.df$user == 0,]$timestamp)[[2]]) #Disallowed edits, anonymous users
+      
+      #Rename
+      names(filter_subset.df) <- c("timestamp","all","all registered","all anonymous","disallowed","anonymous disallowed","registered disallowed")
+      
+      #Add columns and reshape
+      filter_subset.df$data_type <- "edit filter"
+      filter_subset.df$user_type <- NA
+      filter_subset.df <- melt(filter_subset.df, id.vars = c(1,8,9), measure.vars = 2:7)
+      
+      #Defactor
+      filter_subset.df$timestamp <- as.numeric(as.character(filter_subset.df$timestamp))
+      filter_subset.df$variable <- as.character(filter_subset.df$variable)
+      
+      #Return
+      return(filter_subset.df)
+    }
     
+    #Bind
+    resulting_data.df <- rbind(filter.fun(),
+                               as.data.frame(generated_data.ls[[1]]),
+                               as.data.frame(generated_data.ls[[2]]))
+    
+    #Return
+    return(resulting_data.df)
   }
   
   
