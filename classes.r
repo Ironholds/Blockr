@@ -270,7 +270,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
       for (i in 1:length(unique_vars)){
         
         #Generate regression graph
-        regression_graph <- monthly_regression.fun(data = .self$data[.self$data$variable == unique_vars[i],], x = "timestamp", y = "value", variable = "variable",
+        regression_graph <- .self$monthly_regression.fun(data = .self$data[.self$data$variable == unique_vars[i],], x = "timestamp", y = "value", variable = "variable",
                                                     title = paste(unique_vars[i],"blocks"),
                                                     y_lab = "Number of blocks", x_lab = "Month")
         #Throw over to the holding list
@@ -278,14 +278,13 @@ Blockr_vis <- setRefClass("Blockr_vis",
         
       }
       
-      
       #Save
       png(file.path(getwd(),"Graphs",paste(.self$user_group,.self$data_type,"block_graphs.png", sep = "_")), width = 1020, height= 1020)
       do.call(grid.arrange, c(holding.ls, main = paste("Blocks on the English-language Wikipedia by month (",sql_start.str," - ",sql_end.str,")\n", .self$user_group," users\n",.self$data_type," data", sep = "")))
       dev.off()
       
       #Yearly summary
-      yearly_graph <- yearly_line_graph.fun(data = .self$data[.self$data$variable != "misc",], x = "timestamp", y = "value", variable = "variable",
+      yearly_graph <- .self$yearly_line_graph.fun(data = .self$data[.self$data$variable != "misc",], x = "timestamp", y = "value", variable = "variable",
                              title = paste("Blocks on the English-language Wikipedia by year\n(",sql_year_start.str,"-",sql_year_end.str,") ", .self$user_group," users\n",.self$data_type," data", sep = ""),
                              y_lab = "Number of blocks", x_lab = "Year")
       
@@ -297,7 +296,7 @@ Blockr_vis <- setRefClass("Blockr_vis",
              units = "in")
       
       #Yearly summary
-      total_yearly <- yearly_line_graph.fun(data = .self$data[.self$data$variable == "total",], x = "timestamp", y = "value", variable = "variable",
+      total_yearly <- .self$yearly_line_graph.fun(data = .self$data[.self$data$variable == "total",], x = "timestamp", y = "value", variable = "variable",
                                             title = paste("Total blocks on the English-language Wikipedia by year\n(",sql_year_start.str,"-",sql_year_end.str,")", .self$user_group,"users\n",.self$data_type,"data", sep = " "),
                                             y_lab = "Number of blocks", x_lab = "Year")
       
@@ -328,7 +327,7 @@ Blockr_vis_proportionate <- setRefClass("Blockr_vis_proportionate",
       for (i in 1:length(unique_vars)){
         
         #Generate regression graph
-        regression_graph <- monthly_regression.fun(data = .self$data[.self$data$variable == unique_vars[i],], x = "timestamp", y = "value", variable = "variable",
+        regression_graph <- .self$monthly_regression.fun(data = .self$data[.self$data$variable == unique_vars[i],], x = "timestamp", y = "value", variable = "variable",
                                                    title = paste(unique_vars[i],"blocks"),
                                                    y_lab = "Number of blocks", x_lab = "Month")
         #Throw over to the holding list
