@@ -56,18 +56,18 @@ correlations_enclosure.fun <- function(){
                             " AND afl_actions NOT IN ('','tag')",sep = ""))
       
       #Subset and bind together
-      filter_subset.df <- data.frame(table(filter.df$timestamp), #All hits
-                        table(filter.df[filter.df$user > 0,]$timestamp)[[2]], #Registered users
-                        table(filter.df[filter.df$user == 0,]$timestamp)[[2]], #Anonymous users
-                        table(filter.df[grepl(pattern = "disallow", x = filter.df$action),]$timestamp)[[2]], #Disallowed edits
-                        table(filter.df[grepl(pattern = "disallow", x = filter.df$action) & filter.df$user > 0,]$timestamp)[[2]], #Disallowed edits, registered users
-                        table(filter.df[grepl(pattern = "disallow", x = filter.df$action) & filter.df$user == 0,]$timestamp)[[2]]) #Disallowed edits, anonymous users
+      filter_subset.df <- cbind(as.data.frame(table(filter.df$timestamp)), #All hits
+                                as.data.frame(table(filter.df[filter.df$user > 0,]$timestamp))[,2], #Registered users
+                                as.data.frame(table(filter.df[filter.df$user == 0,]$timestamp))[,2], #Anonymous users
+                                as.data.frame(table(filter.df[grepl(pattern = "disallow", x = filter.df$action),]$timestamp))[,2], #Disallowed edits
+                                as.data.frame(table(filter.df[grepl(pattern = "disallow", x = filter.df$action) & filter.df$user > 0,]$timestamp))[,2], #Disallowed edits, registered users
+                                as.data.frame(table(filter.df[grepl(pattern = "disallow", x = filter.df$action) & filter.df$user == 0,]$timestamp))[,2]) #Disallowed edits, anonymous users
       
       #Rename
       names(filter_subset.df) <- c("timestamp","all","all registered","all anonymous","disallowed","anonymous disallowed","registered disallowed")
       
       #Add columns and reshape
-      filter_subset.df$data_type <- "edit filter"
+      filter_subset.df$data_type <- "edit filter hits"
       filter_subset.df$user_type <- NA
       filter_subset.df <- melt(filter_subset.df, id.vars = c(1,8,9), measure.vars = 2:7)
       
