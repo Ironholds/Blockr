@@ -79,8 +79,39 @@ correlations_enclosure.fun <- function(){
       return(filter_subset.df)
     }
     
+    registration.fun <- function(){
+      
+      #Query
+      registration.df <- sql.fun(paste("
+                            SELECT substring(log_timestamp,1,6) AS timestamp,
+                            user_editcount AS edits
+                            FROM
+                            logging INNER JOIN user
+                            ON log_title = user_name
+                            WHERE
+                            log_type = 'newusers'
+                            AND log_action NOT IN ('autocreate')
+                            AND substring(log_timestamp,1,6) BETWEEN ",sql_start.str," AND ",sql_end.str,sep = ""))
+      
+      #Aggregate and bind
+      registration_subset.df <- cbind(as.data.frame(table(registration.df$timestamp)),
+                                      as.data.frame(table(registration.df[registration.df$edits > 0,]$timestamp))[,2])
+
+      #Rename and add columns
+      names(registration_subset.df) <- c("timestamp","all",">1 edit")
+      registration_subset.df$data_type <- "registrations"
+      registration_subset.df$user_type <- NA
+      
+      #Melt, normalise and return
+      registration_subset.df <- melt(registration_subset.df, id.vars = c(1,4,5), measure.vars = 2:3)
+      registration_subset.df$timestamp <- as.numeric(as.character(filter_subset.df$timestamp))
+      registration_subset.df$variable <- as.character(filter_subset.df$variable)
+      return(registration_subset.df)
+    }
+    
     #Bind
     resulting_data.df <- rbind(filter.fun(),
+                               registration.fun(),
                                as.data.frame(generated_data.ls[[1]]),
                                as.data.frame(generated_data.ls[[2]]))
     
