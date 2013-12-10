@@ -104,8 +104,8 @@ correlations_enclosure.fun <- function(){
       
       #Melt, normalise and return
       registration_subset.df <- melt(registration_subset.df, id.vars = c(1,4,5), measure.vars = 2:3)
-      registration_subset.df$timestamp <- as.numeric(as.character(filter_subset.df$timestamp))
-      registration_subset.df$variable <- as.character(filter_subset.df$variable)
+      registration_subset.df$timestamp <- as.numeric(as.character(registration_subset.df$timestamp))
+      registration_subset.df$variable <- as.character(registration_subset.df$variable)
       return(registration_subset.df)
     }
     
