@@ -37,7 +37,7 @@ correlations_enclosure.fun <- function(){
       
       #Add distinguishing characteristic
       input.df$data_type <- "blocks"
-      input.df$user_type <- as.character(x)
+      input.df$variable <- paste(as.character(x),input.df$variable)
       
       return(input.df)
     })
@@ -68,7 +68,6 @@ correlations_enclosure.fun <- function(){
       
       #Add columns and reshape
       filter_subset.df$data_type <- "edit filter hits"
-      filter_subset.df$user_type <- NA
       filter_subset.df <- melt(filter_subset.df, id.vars = c(1,8,9), measure.vars = 2:7)
       
       #Defactor
@@ -100,7 +99,6 @@ correlations_enclosure.fun <- function(){
       #Rename and add columns
       names(registration_subset.df) <- c("timestamp","all",">1 edit")
       registration_subset.df$data_type <- "registrations"
-      registration_subset.df$user_type <- NA
       
       #Melt, normalise and return
       registration_subset.df <- melt(registration_subset.df, id.vars = c(1,4,5), measure.vars = 2:3)
