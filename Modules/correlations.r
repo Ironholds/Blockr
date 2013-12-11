@@ -68,7 +68,7 @@ correlations_enclosure.fun <- function(){
       
       #Add columns and reshape
       filter_subset.df$data_type <- "edit filter hits"
-      filter_subset.df <- melt(filter_subset.df, id.vars = 1, measure.vars = 2:7)
+      filter_subset.df <- melt(filter_subset.df, id.vars = c(1,8), measure.vars = 2:7)
       
       #Defactor
       filter_subset.df$timestamp <- as.numeric(as.character(filter_subset.df$timestamp))
@@ -101,7 +101,7 @@ correlations_enclosure.fun <- function(){
       registration_subset.df$data_type <- "registrations"
       
       #Melt, normalise and return
-      registration_subset.df <- melt(registration_subset.df, id.vars = 1, measure.vars = 2:3)
+      registration_subset.df <- melt(registration_subset.df, id.vars = c(1,4), measure.vars = 2:3)
       registration_subset.df$timestamp <- as.numeric(as.character(registration_subset.df$timestamp))
       registration_subset.df$variable <- as.character(registration_subset.df$variable)
       return(registration_subset.df)
