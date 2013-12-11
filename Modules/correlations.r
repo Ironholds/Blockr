@@ -116,8 +116,57 @@ correlations_enclosure.fun <- function(){
     #Return
     return(resulting_data.df)
   }
+
+#   #Graphing function
+#   graphing.fun <- function(x,y,type1,type2){
+#     
+#     #Standardise data
+#     data.df <- cbind(x,y)
+#     names(data.df) <- c("column1","column2")
+#     
+#     #Plot
+#     correlation_plot <- ggplot(data.df, aes(x = column1,y = column2))+
+#       geom_point(shape=3) +
+#       geom_smooth(method = "lm", se=TRUE, formula = y ~ x) +
+#       labs(x = type1, y = type2) +
+#       ggtitle(paste("Relationship between",as.character(x[i]),
+#                     if(is.na()))) +
+#       scale_x_continuous(expand = c(0,0)) +
+#       scale_y_continuous(expand = c(0,0)) +
+#       geom_text(aes(x = max(column1), y = min(column2), label = trickstr::r2_display(lm = lm(column1 ~ column2, data.df))), parse = TRUE)
+#     
+#   }
   
+  #Retrieve data
+  data.df <- retrieval.fun()
   
+  #Identify uniques
+  unique_vars <- unique(data.df$variable)
+  
+  d_ply(.data = data.df,
+        .variables = "variable",
+        .fun = function(x){
+          
+          for(i in 1:length(unique_vars)){
+              
+            if(unique_vars[i] != x$variable[1]){
+              
+              #Grab data
+              data <- rbind(x$value,data.df[data.df$timestamp %in% x$timestamp & data.df$variable == unique_vars[i],]$value)
+              
+              #Graph
+              graphing.fun(x = data[,1],
+                           y = data[,2],
+                           type1 <- x$variable[1],
+                           type2 <- unique_vars[i])
+              
+            }
+          }
+
+          
+          
+          
+        })
 }
 
 #Run
