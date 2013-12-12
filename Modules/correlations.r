@@ -130,9 +130,8 @@ correlations_enclosure.fun <- function(){
       y <- order(y[y$timestamp %in% y$timestamp,]$timestamp)
         
     }
-      
     
-    data.df <- cbind(x$value,y$value)
+    data.df <- data.frame(x$value,y$value)
     names(data.df) <- c("column1","column2")
      
     #Plot
@@ -144,6 +143,13 @@ correlations_enclosure.fun <- function(){
       scale_x_continuous(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
       geom_text(aes(x = max(column1), y = min(column2), label = trickstr::r2_display(lm = lm(column1 ~ column2, data.df))), parse = TRUE)
+    
+    #Save
+    ggsave(filename = file.path(getwd(),"Graphs",paste(x$variable[i],x$data_type[1],"v",y$variable[1],y$data_type[1],".png",sep = "_")),
+           plot = correlation_plot,
+           width = 8,
+           height = 8,
+           units = "in")
   }
   
   #Retrieve data
