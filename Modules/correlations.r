@@ -140,8 +140,30 @@ correlations_enclosure.fun <- function(){
   #Retrieve data
   data.df <- retrieval.fun()
   
-  #Identify uniques
+  #Identify uniques, pull out value
   unique_vars <- unique(data.df$variable)
+  while_val <- 1
+  
+  while(while_val <= length(unique_vars)){
+    
+    #Grab dataset 1
+    first_dataset <- data.df[data.df$variable == unique_vars[while_val],]
+    
+    #Start iteration loop
+    for(i in 1:length(unique_vars)){
+      
+      if(!unique_vars[i] %in% unique_vars[1:while_val]){
+        
+        second_dataset <- data.df[data.df$variable == unique_vars[i],]
+        
+        graphing.fun(x = first_dataset$value, y = second_dataset$value)
+      }
+      
+    }
+    
+    #Increment while_val
+    while_val <- while_val+1
+  }
   
   d_ply(.data = data.df,
         .variables = "variable",
