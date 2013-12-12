@@ -117,25 +117,34 @@ correlations_enclosure.fun <- function(){
     return(resulting_data.df)
   }
 
-#   #Graphing function
-#   graphing.fun <- function(x,y,type1,type2){
-#     
-#     #Standardise data
-#     data.df <- cbind(x,y)
-#     names(data.df) <- c("column1","column2")
-#     
-#     #Plot
-#     correlation_plot <- ggplot(data.df, aes(x = column1,y = column2))+
-#       geom_point(shape=3) +
-#       geom_smooth(method = "lm", se=TRUE, formula = y ~ x) +
-#       labs(x = type1, y = type2) +
-#       ggtitle(paste("Relationship between",as.character(x[i]),
-#                     if(is.na()))) +
-#       scale_x_continuous(expand = c(0,0)) +
-#       scale_y_continuous(expand = c(0,0)) +
-#       geom_text(aes(x = max(column1), y = min(column2), label = trickstr::r2_display(lm = lm(column1 ~ column2, data.df))), parse = TRUE)
-#     
-#   }
+  #Graphing function
+  graphing.fun <- function(x,y){
+     
+    #Standardise data
+    if(nrow(x) > nrow(y)){
+        
+      x <- order(x[x$timestamp %in% y$timestamp,]$timestamp)
+        
+    } else if(nrow(x) < nrow(y)){
+        
+      y <- order(y[y$timestamp %in% y$timestamp,]$timestamp)
+        
+    }
+      
+    
+    data.df <- cbind(x$value,y$value)
+    names(data.df) <- c("column1","column2")
+     
+    #Plot
+    correlation_plot <- ggplot(data.df, aes(x = column1,y = column2))+
+      geom_point(shape=3) +
+      geom_smooth(method = "lm", se=TRUE, formula = y ~ x) +
+      labs(x = x$data_type[1], y = y$data_type[2]) +
+      ggtitle(paste("Relationship between",x$variable[i],x$data_type[1],"and",y$variable[1],y$data_type[1]                      +
+      scale_x_continuous(expand = c(0,0)) +
+      scale_y_continuous(expand = c(0,0)) +
+      geom_text(aes(x = max(column1), y = min(column2), label = trickstr::r2_display(lm = lm(column1 ~ column2, data.df))), parse = TRUE)     
+  }
   
   #Retrieve data
   data.df <- retrieval.fun()
@@ -156,7 +165,7 @@ correlations_enclosure.fun <- function(){
         
         second_dataset <- data.df[data.df$variable == unique_vars[i],]
         
-        graphing.fun(x = first_dataset$value, y = second_dataset$value)
+        graphing.fun(x = first_dataset, y = second_dataset)
       }
       
     }
