@@ -33,7 +33,7 @@ correlations_enclosure.fun <- function(){
       input.df <- read.delim(file.path(getwd(),"Data",paste(as.character(x),"_disproportionate.tsv",sep = "")), as.is = TRUE, header = TRUE)
       
       #Subset data
-      input.df <- input.df[! input.df$variable %in% c("misc","proxy"),]
+      input.df <- input.df[! input.df$variable == "misc",]
       
       #Add distinguishing characteristic
       input.df$data_type <- "blocks"
