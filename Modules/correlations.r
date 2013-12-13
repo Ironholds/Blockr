@@ -97,7 +97,7 @@ correlations_enclosure.fun <- function(){
                                       as.data.frame(table(registration.df[registration.df$edits > 0,]$timestamp))[,2])
 
       #Rename and add columns
-      names(registration_subset.df) <- c("timestamp","all",">1 edit")
+      names(registration_subset.df) <- c("timestamp",">=0 edits",">=1 edits")
       registration_subset.df$data_type <- "registrations"
       
       #Melt, normalise and return
