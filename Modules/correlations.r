@@ -127,7 +127,7 @@ correlations_enclosure.fun <- function(){
         
     } else if(nrow(x) < nrow(y)){
         
-      y <- order(y[y$timestamp %in% y$timestamp,]$timestamp)
+      y <- order(y[y$timestamp %in% x$timestamp,]$timestamp)
         
     }
     
