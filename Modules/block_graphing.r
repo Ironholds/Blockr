@@ -82,3 +82,6 @@ block_graphing.fun <- function(){
   #Send the user a lovely message.
   cat("Initial graphing complete \n")
 }
+
+#Run
+block_graphing.fun()
