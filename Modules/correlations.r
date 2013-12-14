@@ -180,30 +180,6 @@ correlations_enclosure.fun <- function(){
     while_val <- while_val+1
   }
   
-  d_ply(.data = data.df,
-        .variables = "variable",
-        .fun = function(x){
-          
-          for(i in 1:length(unique_vars)){
-              
-            if(unique_vars[i] != x$variable[1]){
-              
-              #Grab data
-              data <- rbind(x$value,data.df[data.df$timestamp %in% x$timestamp & data.df$variable == unique_vars[i],]$value)
-              
-              #Graph
-              graphing.fun(x = data[,1],
-                           y = data[,2],
-                           type1 <- x$variable[1],
-                           type2 <- unique_vars[i])
-              
-            }
-          }
-
-          
-          
-          
-        })
 }
 
 #Run
