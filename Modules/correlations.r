@@ -167,7 +167,7 @@ correlations_enclosure.fun <- function(){
     #Start iteration loop
     for(i in 1:length(unique_vars)){
       
-      if(!unique_vars[i] %in% unique_vars[1:while_val]){
+      if(!unique_vars[i] == unique_vars[while_val]){
         
         second_dataset <- data.df[data.df$variable == unique_vars[i],]
         
