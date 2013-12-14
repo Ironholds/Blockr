@@ -139,7 +139,7 @@ correlations_enclosure.fun <- function(){
       geom_point(shape=3) +
       geom_smooth(method = "lm", se=TRUE, formula = y ~ x) +
       labs(x = x$data_type[1], y = y$data_type[2]) +
-      ggtitle(paste("Relationship between",x$variable[1],x$data_type[1],"and",y$variable[1],y$data_type[1]))+
+      ggtitle(paste("Relationship between",x$variable[1],x$data_type[1],"\nand\n",y$variable[1],y$data_type[1]))+
       scale_x_continuous(expand = c(0,0)) +
       scale_y_continuous(expand = c(0,0)) +
       geom_text(aes(x = median(column1), y = (max(column2) - (max(column2)/10)), label = trickstr::r2_display(lm = lm(column1 ~ column2, data.df))), parse = TRUE)
