@@ -26,7 +26,7 @@ run.fun <- function(){
     
     if(runtype == "full"){
       
-      to_dispose <- lapply(list.files(path = file.path(getwd(),"Modules")), source)
+      to_dispose <- lapply(list.files(path = file.path(getwd(),"Modules")), function(x){source(file.path(getwd(),"Modules",x))})
     }
     
     cat("Thank you. Run complete.\n")
