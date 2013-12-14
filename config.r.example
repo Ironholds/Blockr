@@ -9,7 +9,6 @@ library(ggplot2)
 library(RMySQL)
 library(plyr)
 library(reshape2)
-library(zoo)
 library(gridExtra)
 
 #My personal Library of Doom (tm) - https://github.com/Ironholds/trickstr
