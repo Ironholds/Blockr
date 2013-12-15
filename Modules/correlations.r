@@ -53,7 +53,7 @@ correlations_enclosure.fun <- function(){
                             WHERE af_public_comments NOT LIKE '%test%'
                             AND afl_action = 'edit'
                             AND SUBSTRING(afl_timestamp,1,6) BETWEEN ",sql_start.str," AND ",sql_end.str,
-                            " AND afl_actions NOT IN ('','tag')",sep = ""))
+                            " AND afl_actions != ''",sep = ""))
       
       #Subset and bind together
       filter_subset.df <- cbind(as.data.frame(table(filter.df$timestamp)), #All hits
