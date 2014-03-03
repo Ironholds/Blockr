@@ -21,7 +21,7 @@
 # THE SOFTWARE.
 
 #Function to enclose RMySQL's querying abilities, given the commonality of names here.
-sql.fun <- function(query_statement){
+querySQL <- function(query_statement){
   
   #Open a connection
   con <- dbConnect(drv = "MySQL",
@@ -41,4 +41,54 @@ sql.fun <- function(query_statement){
   
   #Return output
   return(output)
+}
+
+#Actual regexing function
+regexer(input.df){
+  
+  #For each regex...
+  regex_results.ls <- lapply(regex.ls, function(x)){
+    
+    #If there are more than 0 rows in the dataset...
+    if(nrow(input.df) > 0){
+      
+      #Run the regex that serves as x[2] over the input data
+      grepvec <- grepl(pattern = x[2],
+                       x = input_data.df$reason,
+                       perl = TRUE,
+                       ignore.case = TRUE)
+      
+      #If there are any hits...
+      if(sum(grepvec) > 0){
+        
+        #Create an aggregate table of entries with hits
+        to_return.df <- as.data.frame(table(input_data.df$timestamp[grepvec]))
+        
+        #Export non-matched rows back into the parent environment for use with the next regex
+        assign(x = "input_data.df",
+               value = input_data.df[!grepvec,],
+               envir = parent.env(environment()))
+        
+        #Add regex name to the aggregate table
+        to_return.df$regex <- x[1]
+        
+        #Rename object
+        names(to_return.df) <- c("month","hits","regex")
+        
+        #Return it
+        return(to_return.df)
+      }
+    }
+    
+    
+  }
+  
+  #Aggregate remainder, adding "misc"
+  regex_nonhits.df <- as.data.frame(table(input.df$timestamp))
+  to_return.df$regex <- "misc"
+  names(to_return.df) <- c("month","hits","regex")
+  regex_results.ls[[length(regex_results.ls)+1]] <- regex_nonhits.df
+  
+  #Bind into a single df and return
+  return(do.call("rbind",regex_results.ls))
 }
