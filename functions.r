@@ -43,6 +43,35 @@ querySQL <- function(query_statement){
   return(output)
 }
 
+#Function for retrieving logging entries specifically
+data_reader <- function(){
+  
+  #Query database to retrieve data from the logging table
+  query.df <- querySQL(query_statement = paste("
+                                              SELECT
+                                              substring(logging.log_timestamp,1,6) AS timestamp,
+                                              logging.log_comment AS reason,
+                                              user.user_id AS userid
+                                              FROM logging LEFT JOIN user ON logging.log_title = user.user_name
+                                              WHERE substring(logging.log_timestamp,1,6) BETWEEN",sql_start.str,"AND",sql_end.str,"
+                                              AND logging.log_type = 'block'
+                                              AND logging.log_action = 'block';")
+  )
+  
+  #Normalise and make identifiable
+  query.df$userid[is.na(query.df$userid)] <- 0
+  query.df$timestamp <- as.numeric(query.df$timestamp)
+  
+  #List
+  input.ls <- list(c(query.df[query.df$userid == 0,c("timestamp","reason")],
+                     "anonymous"),
+                   c(query.df[query.df$userid > 0,c("timestamp","reason")],
+                     "registered"))
+  
+  #Return
+  return(input.ls)
+  
+}
 #Actual regexing function
 regexer(input.df){
   
