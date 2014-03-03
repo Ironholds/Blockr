@@ -5,11 +5,11 @@
 # @Copyright: Oliver Keyes
 # @License = MIT (http://opensource.org/licenses/MIT)
 
-#Load in query-dependent config variables 
-source(file = file.path(getwd(),"config.r"))
-
-#Load in global functions
-source(file = file.path(getwd(),"functions.r"))
+#Load
+source(file = file.path(getwd(),"config.r")) #Config variables and packages
+source(file = file.path(getwd(),"functions.r")) #Global functions
+source(file = file.path(getwd(),"globalstrings.r")) #Global strings
+source(file = file.path(getwd(),"classes.r")) #Classes
 
 #Create output folders, if they don't already exist.
 dir.create(file.path(getwd(), "Data"), showWarnings = FALSE)
@@ -21,21 +21,11 @@ run.fun <- function(){
   
   if(runtype %in% c("full","limited")){
     
-    cat("Thank you. Beginning run.\n")
-    
-    source(file.path(getwd(),"Core Scripts","retrieve.r"))
-    
-    cat("initial data retrieved.\n")
-    
-    source(file.path(getwd(),"Core Scripts","initial_graphing.r"))
-    
-    cat("initial graphing complete.\n")
+    source(file.path(getwd(),"exploratory_analysis.r"))
     
     if(runtype == "full"){
-            
-      source(file.path(getwd(),"Optional Scripts","additional_graphing.r"))
       
-      cat("additional retrieval and graphing complete.\n")
+      to_dispose <- lapply(list.files(path = file.path(getwd(),"Modules")), function(x){source(file.path(getwd(),"Modules",x))})
     }
     
     cat("Thank you. Run complete.\n")

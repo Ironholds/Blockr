@@ -1,4 +1,5 @@
 *.Rhistory*
-*config.r
-*hand_codable.tsv
-
+config.r
+*hand_coding.tsv
+*.Rproj*
+.Rproj.user

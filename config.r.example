@@ -1,0 +1,19 @@
+#Objects required to make a valid query
+analytics_server <- "db67.pmtpa.wmnet"
+analytics_database <- "enwiki"
+analytics_user <- "CheeseIsAKindOfMeat"
+analytics_pass <- "ATastyYellowBeef"
+
+#Libraries
+library(ggplot2)
+library(RMySQL)
+library(plyr)
+library(reshape2)
+library(gridExtra)
+
+#My personal Library of Doom (tm) - https://github.com/Ironholds/trickstr
+library(trickstr)
+
+#Options
+options(scipen=500) #Screw with scientific notation
+options(stringsAsFactors = FALSE) #Stop automatically factorising
