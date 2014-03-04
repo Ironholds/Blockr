@@ -1,5 +1,3 @@
-# functions.r centralises miscellaneous functions used throughout the Blockr project
-# 
 # Copyright (c) 2013 Oliver Keyes
 #   
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -70,6 +68,7 @@ data_reader <- function(){
   return(input.ls)
   
 }
+
 #Actual regexing function
 regexer <- function(input_data.df){
   
