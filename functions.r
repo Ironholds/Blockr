@@ -63,17 +63,15 @@ data_reader <- function(){
   query.df$timestamp <- as.numeric(query.df$timestamp)
   
   #List
-  input.ls <- list(c(query.df[query.df$userid == 0,c("timestamp","reason")],
-                     "anonymous"),
-                   c(query.df[query.df$userid > 0,c("timestamp","reason")],
-                     "registered"))
+  input.ls <- list(query.df[query.df$userid == 0,],
+                   query.df[query.df$userid > 0,])
   
   #Return
   return(input.ls)
   
 }
 #Actual regexing function
-regexer(input.df){
+regexer <- function(input.df){
   
   #For each regex...
   regex_results.ls <- lapply(regex.ls, function(x)){
