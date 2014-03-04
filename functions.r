@@ -71,13 +71,13 @@ data_reader <- function(){
   
 }
 #Actual regexing function
-regexer <- function(input.df){
+regexer <- function(input_data.df){
   
   #For each regex...
-  regex_results.ls <- lapply(regex.ls, function(x)){
+  regex_results.ls <- lapply(regex.ls, function(x){
     
     #If there are more than 0 rows in the dataset...
-    if(nrow(input.df) > 0){
+    if(nrow(input_data.df) > 0){
       
       #Run the regex that serves as x[2] over the input data
       grepvec <- grepl(pattern = x[2],
@@ -108,10 +108,10 @@ regexer <- function(input.df){
     }
     
     
-  }
+  })
   
   #Aggregate remainder, adding "misc"
-  regex_nonhits.df <- as.data.frame(table(input.df$timestamp))
+  regex_nonhits.df <- as.data.frame(table(input_data.df$timestamp))
   to_return.df$regex <- "misc"
   names(to_return.df) <- c("month","hits","regex")
   regex_results.ls[[length(regex_results.ls)+1]] <- regex_nonhits.df
