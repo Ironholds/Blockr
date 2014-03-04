@@ -19,8 +19,8 @@
 # THE SOFTWARE.
 
 #Load config files and functions
-source(file = file.path(getwd(),"config.r")) #Config variables and packages
-source(file = file.path(getwd(),"functions.r")) #Global functions
+source(file = file.path(getwd(),"config.R")) #Config variables and packages
+ignore <- lapply(list.files(file.path(getwd(),"Functions"), full.names = TRUE), source)}
 
 blockr <- function(){
   
@@ -31,7 +31,7 @@ blockr <- function(){
   for(i in seq_along(data.ls)){
     
     #If it's anonymous...
-    if(input.ls[[i]]$userid[1] == 0){
+    if(data.ls[[i]]$userid[1] == 0){
       
       #Set anonymous as a user type
       usertype <- "anonymous"
@@ -44,7 +44,7 @@ blockr <- function(){
     }
     
     #Run the regular expressions over the data
-    regex_results.df <- regexer(input.ls[[i]])
+    regex_results.df <- regexer(data.ls[[i]])
     
     #Append the user type
     regex_results.df$usergroup <- usertype
