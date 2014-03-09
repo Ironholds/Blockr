@@ -20,7 +20,7 @@
 
 #Load config files and functions
 source(file = file.path(getwd(),"config.R")) #Config variables and packages
-ignore <- lapply(list.files(file.path(getwd(),"Functions"), full.names = TRUE), source)}
+ignore <- lapply(list.files(file.path(getwd(),"Functions"), full.names = TRUE), source)
 
 blockr <- function(){
   
@@ -58,7 +58,6 @@ blockr <- function(){
     
     #Graph
     grapher(x = regex_results.df)
-    
   }
   
 }
