@@ -22,26 +22,29 @@
 data_reader <- function(){
   
   #Query database to retrieve data from the logging table
-  query.df <- querySQL(query_statement = paste("
+  query_results <- querySQL(query_statement = paste("
                                               SELECT
-                                              substring(logging.log_timestamp,1,6) AS timestamp,
+                                              LEFT(logging.log_timestamp,6) AS timestamp,
                                               logging.log_comment AS reason,
                                               user.user_id AS userid
                                               FROM logging LEFT JOIN user ON logging.log_title = user.user_name
-                                              WHERE substring(logging.log_timestamp,1,6) BETWEEN",sql_start.str,"AND",sql_end.str,"
+                                              WHERE LEFT(logging.log_timestamp,6) BETWEEN",sql_start,"AND",sql_end,"
                                               AND logging.log_type = 'block'
                                               AND logging.log_action = 'block';")
   )
   
-  #Normalise and make identifiable
-  query.df$userid[is.na(query.df$userid)] <- 0
-  query.df$timestamp <- as.numeric(query.df$timestamp)
+  #Replace NAs with 0s to distinguish anonymous/registered users
+  query_results$userid[is.na(query_results$userid)] <- 0
+  
+  #Format into POSIXct timestamps
+  query_results$timestamp <- paste(query_results$timestamp, "01", sep = "")
+  query_results$timestamp <- as.date(query_results$timestamp, format = "%Y%m%d")
   
   #List
-  input.ls <- list(query.df[query.df$userid == 0,],
-                   query.df[query.df$userid > 0,])
+  to_output <- list(query_results[query_results$userid == 0,],
+                   query_results[query_results$userid > 0,])
   
   #Return
-  return(input.ls)
+  return(to_output)
   
 }
