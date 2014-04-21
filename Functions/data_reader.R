@@ -38,7 +38,7 @@ data_reader <- function(){
   
   #Format into POSIXct timestamps
   query_results$timestamp <- paste(query_results$timestamp, "01", sep = "")
-  query_results$timestamp <- as.date(query_results$timestamp, format = "%Y%m%d")
+  query_results$timestamp <- as.Date(query_results$timestamp, format = "%Y%m%d")
   
   #List
   to_output <- list(query_results[query_results$userid == 0,],
