@@ -22,9 +22,10 @@
 source(file = file.path(getwd(),"config.R")) #Config variables and packages
 ignore <- lapply(list.files(file.path(getwd(),"Functions"), full.names = TRUE), source)
 
+#Initial data retrieval and analysis
 blockr_initial <- function(){
   
-  #Read in data
+  #Read in block data
   input_data <- data_reader()
   
   #For each type of data...
@@ -56,12 +57,23 @@ blockr_initial <- function(){
                 sep = "\t",
                 row.names = FALSE)
     
-    #Graph
-    grapher(x = regex_results, usergroup = usertype)
   }
   
+  #Read in registration data
+  registrations <- querySQL(paste("SELECT LEFT(log_timestamp,6) AS month, 
+                                  COUNT(*) AS registrations
+                                  FROM logging
+                                  WHERE log_action != 'autocreate'
+                                  AND LEFT(log_timestamp,6) BETWEEN",sql_start,"AND",sql_end,"
+                                  GROUP BY month;"))
+  
+  #Save to file
+  write.table(x = regex_results,
+              file = file.path(getwd(),"Data","registration_data.tsv"),
+              quote = TRUE,
+              sep = "\t",
+              row.names = FALSE)
 }
-
 
 #Run
 blockr_initial()
