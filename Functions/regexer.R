@@ -22,7 +22,7 @@ regexer <- function(input_data){
   
   #For each regex...
   regex_results <- lapply(regex.ls, function(x){
-    print(x[[1]])
+
     #If there are more than 0 rows in the dataset...
     if(nrow(input_data) > 0){
       
