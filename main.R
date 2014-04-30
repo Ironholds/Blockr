@@ -26,13 +26,20 @@ ignore <- lapply(list.files(file.path(getwd(),"Functions"), full.names = TRUE), 
 blockr_initial <- function(){
   
   #Read in block data
-  input_data <- data_reader()
+  input_data <- data_reader(paste("SELECT
+                                  LEFT(logging.log_timestamp,6) AS month,
+                                  logging.log_comment AS reason,
+                                  user.user_id AS userid
+                                  FROM logging LEFT JOIN user ON logging.log_title = user.user_name
+                                  WHERE LEFT(logging.log_timestamp,6) BETWEEN",sql_start,"AND",sql_end,"
+                                  AND logging.log_type = 'block'
+                                  AND logging.log_action = 'block';"))
   
   #For each type of data...
-  for(i in seq_along(input_data)){
+  ignore <- lapply(input_data,function(x){
     
     #If it's anonymous...
-    if(input_data[[i]]$userid[1] == 0){
+    if(x$userid[1] == 0){
       
       #Set anonymous as a user type
       usergroup <- "anonymous"
@@ -45,7 +52,7 @@ blockr_initial <- function(){
     }
     
     #Run the regular expressions over the data
-    regex_results <- regexer(input_data[[i]])
+    regex_results <- regexer(x)
     
     #Expand to allow for null entries
     regex_results <- fitvals(regex_results)
@@ -57,7 +64,7 @@ blockr_initial <- function(){
                 sep = "\t",
                 row.names = FALSE)
     
-  }
+  })
   
   #Read in registration data
   registrations <- querySQL(paste("SELECT LEFT(log_timestamp,6) AS month, 
@@ -73,6 +80,42 @@ blockr_initial <- function(){
               quote = TRUE,
               sep = "\t",
               row.names = FALSE)
+  
+  #Grab abusefilter data
+  abusefilter <- data_reader(paste("SELECT LEFT(afl_timestamp,6) AS month,
+                                   afl_user AS userid,
+                                   afl_actions AS tag
+                                   FROM abuse_filter_log
+                                   WHERE LEFT(afl_timestamp,6) BETWEEN",sql_start,"AND",sql_end,"
+                                   AND afl_action = 'edit'"))
+  
+  #Parse it
+  ignore <- lapply(abusefilter, function(x){
+    
+    #If it's anonymous...
+    if(x$userid[1] == 0){
+      
+      #Set anonymous as a user type
+      usergroup <- "anonymous"
+      
+    } else {
+      
+      #Otherwise, registered
+      usergroup <- "registered"
+      
+    }
+    
+    #Filter
+    x <- x[grepl(x = x$tag, pattern = "(warn|disallow)", perl = TRUE),]
+    
+    #Write to file
+    write.table(x = regex_results,
+                file = file.path(getwd(),"Data",paste(usergroup,"abusefilter_hits.tsv")),
+                quote = TRUE,
+                sep = "\t",
+                row.names = FALSE)
+    
+  })
 }
 
 #Run

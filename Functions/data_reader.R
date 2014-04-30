@@ -18,19 +18,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#Function for retrieving logging entries specifically
-data_reader <- function(){
+#Function for retrieving specific types of data from the db
+data_reader <- function(statement){
   
   #Query database to retrieve data from the logging table
-  query_results <- querySQL(query_statement = paste("
-                                              SELECT
-                                              LEFT(logging.log_timestamp,6) AS month,
-                                              logging.log_comment AS reason,
-                                              user.user_id AS userid
-                                              FROM logging LEFT JOIN user ON logging.log_title = user.user_name
-                                              WHERE LEFT(logging.log_timestamp,6) BETWEEN",sql_start,"AND",sql_end,"
-                                              AND logging.log_type = 'block'
-                                              AND logging.log_action = 'block';"))
+  query_results <- querySQL(query_statement = statement)
   
   #Replace NAs with 0s to distinguish anonymous/registered users
   query_results$userid[is.na(query_results$userid)] <- 0
