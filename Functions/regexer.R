@@ -58,7 +58,7 @@ regexer <- function(input_data){
   })
   
   #Aggregate remainder, adding "misc"
-  regex_nonhits <- as.data.frame(table(input_data$timestamp))
+  regex_nonhits <- as.data.frame(table(input_data$month))
   regex_nonhits$regex <- "misc"
   names(regex_nonhits) <- c("month","hits","regex")
   regex_results[[length(regex_results)+1]] <- regex_nonhits
