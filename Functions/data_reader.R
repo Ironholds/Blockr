@@ -24,21 +24,19 @@ data_reader <- function(){
   #Query database to retrieve data from the logging table
   query_results <- querySQL(query_statement = paste("
                                               SELECT
-                                              LEFT(logging.log_timestamp,6) AS timestamp,
+                                              LEFT(logging.log_timestamp,6) AS month,
                                               logging.log_comment AS reason,
                                               user.user_id AS userid
                                               FROM logging LEFT JOIN user ON logging.log_title = user.user_name
                                               WHERE LEFT(logging.log_timestamp,6) BETWEEN",sql_start,"AND",sql_end,"
                                               AND logging.log_type = 'block'
-                                              AND logging.log_action = 'block';")
-  )
+                                              AND logging.log_action = 'block';"))
   
   #Replace NAs with 0s to distinguish anonymous/registered users
   query_results$userid[is.na(query_results$userid)] <- 0
   
-  #Format into POSIXct timestamps
-  query_results$timestamp <- paste(query_results$timestamp, "01", sep = "")
-  query_results$timestamp <- as.Date(query_results$timestamp, format = "%Y%m%d")
+  #Format into YDMs
+  query_results$month <- paste(query_results$month, "01", sep = "")
   
   #List
   to_output <- list(query_results[query_results$userid == 0,],

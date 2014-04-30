@@ -22,49 +22,49 @@
 source(file = file.path(getwd(),"config.R")) #Config variables and packages
 ignore <- lapply(list.files(file.path(getwd(),"Functions"), full.names = TRUE), source)
 
-blockr <- function(){
+blockr_initial <- function(){
   
   #Read in data
-  data.ls <- data_reader()
+  input_data <- data_reader()
   
   #For each type of data...
-  for(i in seq_along(data.ls)){
+  for(i in seq_along(input_data)){
     
     #If it's anonymous...
-    if(data.ls[[i]]$userid[1] == 0){
+    if(input_data[[i]]$userid[1] == 0){
       
       #Set anonymous as a user type
-      usertype <- "anonymous"
+      usergroup <- "anonymous"
       
     } else {
       
       #Otherwise, registered
-      usertype <- "registered"
+      usergroup <- "registered"
       
     }
     
     #Run the regular expressions over the data
-    regex_results.df <- regexer(data.ls[[i]])
+    regex_results <- regexer(input_data[[i]])
     
-    #Append the user type
-    regex_results.df$usergroup <- usertype
+    #Expand to allow for null entries
+    regex_results <- fitvals(regex_results)
     
     #Save to file
-    write.table(x = regex_results.df,
-                file = file.path(getwd(),"Data",paste(usertype,"regex_hits.tsv", sep = "_")),
+    write.table(x = regex_results,
+                file = file.path(getwd(),"Data",paste(usergroup,"regex_hits.tsv", sep = "_")),
                 quote = TRUE,
                 sep = "\t",
                 row.names = FALSE)
     
     #Graph
-    grapher(x = regex_results.df)
+    grapher(x = regex_results, usergroup = usertype)
   }
   
 }
 
 
 #Run
-blockr()
+blockr_initial()
 
 #Quit
 q(save = "no")

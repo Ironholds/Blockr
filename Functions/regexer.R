@@ -18,17 +18,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-regexer <- function(input_data.df){
+regexer <- function(input_data){
   
   #For each regex...
-  regex_results.ls <- lapply(regex.ls, function(x){
+  regex_results <- lapply(regex.ls, function(x){
     
     #If there are more than 0 rows in the dataset...
     if(nrow(input_data.df) > 0){
       
       #Run the regex that serves as x[2] over the input data
       grepvec <- grepl(pattern = x[2],
-                       x = input_data.df$reason,
+                       x = input_data$reason,
                        perl = TRUE,
                        ignore.case = TRUE)
       
@@ -36,21 +36,21 @@ regexer <- function(input_data.df){
       if(sum(grepvec) > 0){
         
         #Create an aggregate table of entries with hits
-        to_return.df <- as.data.frame(table(input_data.df$timestamp[grepvec]))
+        to_return <- as.data.frame(table(input_data$timestamp[grepvec]), stringsAsFactors = FALSE)
         
         #Export non-matched rows back into the parent environment for use with the next regex
-        assign(x = "input_data.df",
-               value = input_data.df[!grepvec,],
+        assign(x = "input_data",
+               value = input_data[!grepvec,],
                envir = parent.env(environment()))
         
         #Add regex name to the aggregate table
-        to_return.df$regex <- x[1]
+        to_return$regex <- x[1]
         
         #Rename object
-        names(to_return.df) <- c("month","hits","regex")
+        names(to_return) <- c("month","hits","regex")
         
         #Return it
-        return(to_return.df)
+        return(to_return)
       }
     }
     
@@ -58,11 +58,11 @@ regexer <- function(input_data.df){
   })
   
   #Aggregate remainder, adding "misc"
-  regex_nonhits.df <- as.data.frame(table(input_data.df$timestamp))
-  regex_nonhits.df$regex <- "misc"
-  names(regex_nonhits.df) <- c("month","hits","regex")
-  regex_results.ls[[length(regex_results.ls)+1]] <- regex_nonhits.df
+  regex_nonhits <- as.data.frame(table(input_data$timestamp))
+  regex_nonhits$regex <- "misc"
+  names(regex_nonhits) <- c("month","hits","regex")
+  regex_results[[length(regex_results)+1]] <- regex_nonhits
   
   #Bind into a single df and return
-  return(do.call("rbind",regex_results.ls))
+  return(do.call("rbind",regex_results))
 }
