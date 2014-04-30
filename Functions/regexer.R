@@ -22,9 +22,9 @@ regexer <- function(input_data){
   
   #For each regex...
   regex_results <- lapply(regex.ls, function(x){
-    
+    print(x[[1]])
     #If there are more than 0 rows in the dataset...
-    if(nrow(input_data.df) > 0){
+    if(nrow(input_data) > 0){
       
       #Run the regex that serves as x[2] over the input data
       grepvec <- grepl(pattern = x[2],
@@ -36,7 +36,7 @@ regexer <- function(input_data){
       if(sum(grepvec) > 0){
         
         #Create an aggregate table of entries with hits
-        to_return <- as.data.frame(table(input_data$timestamp[grepvec]), stringsAsFactors = FALSE)
+        to_return <- as.data.frame(table(input_data$month[grepvec]), stringsAsFactors = FALSE)
         
         #Export non-matched rows back into the parent environment for use with the next regex
         assign(x = "input_data",
