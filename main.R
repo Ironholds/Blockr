@@ -29,7 +29,8 @@ blockr_initial <- function(){
   input_data <- data_reader(paste("SELECT
                                   LEFT(logging.log_timestamp,6) AS month,
                                   logging.log_comment AS reason,
-                                  user.user_id AS userid
+                                  user.user_id AS userid,
+                                  logging.log_user AS performer
                                   FROM logging LEFT JOIN user ON logging.log_title = user.user_name
                                   WHERE LEFT(logging.log_timestamp,6) BETWEEN",sql_start,"AND",sql_end,"
                                   AND logging.log_type = 'block'
@@ -64,6 +65,8 @@ blockr_initial <- function(){
                 sep = "\t",
                 row.names = FALSE)
     
+    #Blank return
+    return(invisible())
   })
   
   #Read in registration data
@@ -110,7 +113,7 @@ blockr_initial <- function(){
     
     #Write to file
     write.table(x = regex_results,
-                file = file.path(getwd(),"Data",paste(usergroup,"abusefilter_hits.tsv")),
+                file = file.path(getwd(),"Data",paste(usergroup,"abusefilter_hits.tsv", sep = "_")),
                 quote = TRUE,
                 sep = "\t",
                 row.names = FALSE)
