@@ -26,6 +26,10 @@ parse_reasons <- function(x){
     sd_copy
   }, by = "timestamp"]
   
+  #Write handcoded dataset to file
+  write.table(x = data.table(x$reason, x$reason_category), file = file.path(getwd(),"Datasets",HANDCODE_SAVE),
+              row.names = FALSE, quote = TRUE, sep = "\t")
+  
   #Limit to things we care about
   x <- x[,c("reason","registration") := NULL]
   

@@ -17,4 +17,5 @@ regex_list <- list(
   c("proxy","(torblock|blocked( )?proxy|BlockedProxywebhostblock|\\{\\{tor)"))
 
 #Save file for raw data
-RAW_SAVE <- "block_dataset"
+RAW_SAVE <- "block_dataset.tsv"
+HANDCODE_SAVE <- "block_handcode.tsv"

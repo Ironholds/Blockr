@@ -24,16 +24,14 @@ ignore <- lapply(list.files(file.path(getwd(),"Functions"), full.names = TRUE), 
 
 #Create output dirs
 dir.create(file.path(getwd(),"Output"), showWarnings = FALSE)
-dir.create(file.path(getwd(),"Dataset"), showWarnings = FALSE)
+dir.create(file.path(getwd(),"Datasets"), showWarnings = FALSE)
 
 main <- function(){
   
   #Grab data and parse it
   data <- retrieve_data() %>%
     parse_reasons
-  
-  #Parse it
-  
+    
   #Write out
 }
 
